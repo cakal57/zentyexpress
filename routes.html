@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rota & Fiyat — ZENTY EXPRESS</title>
+<link rel="icon" href="favicon.svg">
+<link rel="preconnect" href="https://{s}.tile.openstreetmap.org">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<header>
+  <div class="container nav">
+    <div class="brand">
+      <a href="./"><img src="assets/logo.svg" alt="ZENTY EXPRESS AI"></a>
+      <nav>
+        <a class="active" href="routes.html">Rota & Fiyat</a>
+        <a href="about.html">Hakkımızda</a>
+        <a href="faq.html">SSS</a>
+        <a href="contact.html">İletişim</a>
+      </nav>
+    </div>
+    <div class="cta">
+      <a class="btn wa" href="https://wa.me/491625757957?text=ZENTY%20EXPRESS%20ile%20iletişim" target="_blank">💬 WhatsApp</a>
+      <a class="btn tg" href="https://t.me/ZentyExpressBot" target="_blank">✈️ Telegram</a>
+    </div>
+  </div>
+</header>
+
+<section class="container section">
+  <h1>Rota & Fiyat Hesaplama</h1>
+  <div class="card">
+    <div class="grid cols-3 controls">
+      <div><label for="from">Abholort</label><input id="from" placeholder="Ulm, Lonsee…"></div>
+      <div><label for="to">Zielort</label><input id="to" placeholder="Geislingen, Dornstadt…"></div>
+      <div><label for="pax">Kişi/Paket</label><input id="pax" type="number" min="1" value="1"></div>
+      <div><label for="tariff">Tarife</label><select id="tariff"><option value="standard">Standard</option><option value="night">Night/Weekend</option><option value="express">Express</option></select></div>
+      <div style="display:flex;align-items:end;"><button id="btnRoute" class="btn" onclick="doRoute()">Rota Hesapla</button></div>
+    </div>
+    <div class="grid cols-2" style="margin-top:12px">
+      <div id="map" class="map-wrap"></div>
+      <div class="card">
+        <div><small id="estLabel">Tahmini Ücret</small></div>
+        <div class="price" id="estVal">–</div>
+        <div><small class="muted" id="kmVal">–</small> • <small class="muted" id="minVal">–</small></div>
+        <hr class="gold">
+        <div class="grid cols-2">
+          <div><small>WhatsApp</small><br><a id="sendWA" class="btn wa" href="#" target="_blank">Rezervasyon</a></div>
+          <div><small>Telegram</small><br><a id="sendTG" class="btn tg" href="#" target="_blank">Rezervasyon</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="muted">Not: Bu bir ön hesaplama aracıdır. Kesin fiyat rezervasyonda onaylanır.</p>
+</section>
+
+<section class="container footer">
+  <div>© 2025 ZENTY EXPRESS AI Mobility & Transport</div>
+</section>
+
+<script src="assets/app-routes.js"></script>
+</body></html>
