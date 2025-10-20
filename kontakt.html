@@ -1,1 +1,65 @@
-<html><body><h1>Kontakt</h1></body></html>
+<!doctype html><html lang="de"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kontakt & Angebot – Zenty Express AI</title>
+<link rel="stylesheet" href="style.css">
+</head><body class="theme-dark">
+<header class="site-header">
+  <a class="brand" href="index.html"><img src="assets/logo.png" alt="Zenty Express AI" height="40"></a>
+  <nav class="nav">
+    <a href="index.html">Start</a><a href="ueber-uns.html">Über uns</a>
+    <a href="fahrzeuge.html">Fahrzeuge</a><a href="leistungen.html">Leistungen</a>
+    <a href="ki-system.html">KI-System</a><a href="preise.html">Preise</a><a class="active btn btn-primary" href="kontakt.html">Kontakt</a>
+  </nav><button id="navToggle" class="hamburger">☰</button>
+</header>
+
+<main>
+  <section class="page-hero" style="--bg:url('assets/cover-rueckseite.jpg')"><h1>Kontakt & Angebot</h1></section>
+
+  <section class="content narrow">
+    <div class="contact-cards grid cols-3">
+      <a class="card contact-card" target="_blank" rel="noopener" href="https://wa.me/491625757957?text=ZENTY%20EXPRESS%20AI">💬 WhatsApp<br><small>+49 162 5757957</small></a>
+      <a class="card contact-card" target="_blank" rel="noopener" href="https://t.me/ZentyExpressBot">✈️ Telegram<br><small>@ZentyExpressBot</small></a>
+      <a class="card contact-card" href="mailto:info@zentyexpress.de">✉️ E-Mail<br><small>info@zentyexpress.de</small></a>
+    </div>
+
+    <form class="form" name="angebot" netlify>
+      <div class="form-row">
+        <label>Ihr Name</label>
+        <input required name="name" placeholder="Vor- & Nachname">
+      </div>
+      <div class="form-row">
+        <label>E-Mail</label>
+        <input required type="email" name="email" placeholder="name@mail.de">
+      </div>
+      <div class="form-row">
+        <label>Leistung</label>
+        <select name="service">
+          <option>VIP & Business Transfer</option>
+          <option>Shuttle & Gruppenservice</option>
+          <option>Kurier & Expresslieferung</option>
+          <option>Eil- & Sonderfahrten</option>
+          <option>Seniorenservice & Begleitfahrten</option>
+          <option>Fest- & Eventfahrten</option>
+          <option>Tagestouren & Ausflugsservice</option>
+          <option>KI-Routenoptimierung</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label>Nachricht</label>
+        <textarea name="message" rows="5" placeholder="Ihr Anliegen..."></textarea>
+      </div>
+      <button class="btn btn-primary" type="submit">Angebot anfordern</button>
+    </form>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div>Zenty Express AI — Mobility & Transport • Sitz Lonsee</div>
+  <div class="contact">
+    <a href="https://wa.me/491625757957?text=ZENTY%20EXPRESS%20AI" target="_blank">WhatsApp</a>
+    <a href="https://t.me/ZentyExpressBot" target="_blank">@ZentyExpressBot</a>
+    <a href="mailto:info@zentyexpress.de">info@zentyexpress.de</a>
+  </div>
+</footer>
+<script src="app.js"></script>
+</body></html>
