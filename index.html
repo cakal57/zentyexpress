@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Zenty Express — Modern Pro Website</title>
+  <meta name="description" content="Zenty Express profesyonel taşımacılık ve lojistik çözümleri. WhatsApp & Telegram entegre, modern ve animasyonlu web sitesi." />
+  <meta name="theme-color" content="#0b0f19" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.39/bundled/lenis.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js" defer></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+  <script defer src="assets/js/app.js"></script>
+</head>
+<body class="theme-dark">
+
+  <div id="preloader">
+    <div class="spinner"><span></span><span></span><span></span></div>
+  </div>
+
+  <canvas id="bg-canvas" aria-hidden="true"></canvas>
+
+  <!-- Navbar -->
+  <header class="nav">
+    <a href="#" class="brand">
+      <img src="assets/img/logo.svg" alt="Logo" />
+      <span>Zenty<span class="accent">Express</span></span>
+    </a>
+    <nav class="nav-links">
+      <a href="#home">Ana Sayfa</a>
+      <a href="#features">Hizmetler</a>
+      <a href="#portfolio">Galeri</a>
+      <a href="#pricing">Fiyatlar</a>
+      <a href="#contact">İletişim</a>
+    </nav>
+    <div class="nav-cta">
+      <button id="themeToggle" class="btn ghost">Tema</button>
+      <a class="btn" href="#contact">Teklif Al</a>
+    </div>
+    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+  </header>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#home">Ana Sayfa</a>
+    <a href="#features">Hizmetler</a>
+    <a href="#portfolio">Galeri</a>
+    <a href="#pricing">Fiyatlar</a>
+    <a href="#contact">İletişim</a>
+  </div>
+
+  <!-- Hero -->
+  <section id="home" class="section hero">
+    <div class="container grid-2">
+      <div class="hero-copy">
+        <h1 class="title">
+          <span class="title-line">Zenty Express</span>
+          <span class="title-line">Profesyonel</span>
+          <span class="title-grad">Taşımacılık</span>
+        </h1>
+        <p class="lead">
+          Modern, hızlı ve güvenilir taşımacılık çözümleri. WhatsApp ve Telegram üzerinden anında teklif alın.
+        </p>
+        <div class="cta-row">
+          <a class="btn xl" href="#features">Hizmetler</a>
+          <a class="btn ghost xl" target="_blank" href="https://wa.me/491625757957?text=Merhaba%20Zenty%20Express%2C%20taşımacılık%20hizmeti%20için%20bilgi%20almak%20istiyorum.">💬 WhatsApp</a>
+          <a class="btn ghost xl" target="_blank" href="https://t.me/ZentyExpressBot">✈️ Telegram</a>
+        </div>
+        <div class="stats">
+          <div><strong>+50</strong><span>Müşteri</span></div>
+          <div><strong>100%</strong><span>Memnuniyet</span></div>
+          <div><strong>24/7</strong><span>Destek</span></div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="glass-card">
+          <div class="tag">Canlı Sistem</div>
+          <div class="chart" id="heroChart"></div>
+          <div class="chip-row">
+            <div class="chip success">Hızlı 🚀</div>
+            <div class="chip info">Modern 🎨</div>
+            <div class="chip warn">Güvenli 🔒</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-badges">
+      <div class="badge">GitHub Pages Uyumlu</div>
+      <div class="badge">Tam Responsive</div>
+      <div class="badge">Profesyonel Görünüm</div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section id="features" class="section">
+    <div class="container">
+      <h2 class="section-title">Hizmetlerimiz</h2>
+      <p class="section-sub">Zenty Express ile hızlı, güvenilir ve ekonomik taşıma çözümleri.</p>
+      <div class="cards grid-3">
+        <article class="card">
+          <div class="icon">🚐</div>
+          <h3>Şehir İçi Transfer</h3>
+          <p>Ulm ve çevresinde öğrenci, işçi ve özel transfer hizmeti.</p>
+        </article>
+        <article class="card">
+          <div class="icon">📦</div>
+          <h3>Kargo & Paket Teslim</h3>
+          <p>Hızlı ve sigortalı paket teslimatı. Almanya geneli teslim.</p>
+        </article>
+        <article class="card">
+          <div class="icon">🕓</div>
+          <h3>7/24 Destek</h3>
+          <p>Her zaman ulaşılabilir destek hattı ve anlık iletişim.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section id="pricing" class="section alt">
+    <div class="container">
+      <h2 class="section-title">Fiyatlandırma</h2>
+      <div class="pricing grid-3">
+        <div class="price-card">
+          <div class="price-header"><h3>Ekonomik</h3><p>Kısa Mesafe</p></div>
+          <div class="price">€20+</div>
+          <ul class="features-list">
+            <li>Şehir içi</li><li>Bagaj dahil</li><li>7/24 ulaşım</li>
+          </ul>
+          <a class="btn block" href="https://wa.me/491625757957?text=Zenty%20Express%20ekonomik%20paket%20hakkında%20bilgi%20almak%20istiyorum.">WhatsApp</a>
+        </div>
+        <div class="price-card featured">
+          <div class="price-header"><h3>Standart</h3><p>Popüler Seçim</p></div>
+          <div class="price">€49+</div>
+          <ul class="features-list">
+            <li>Orta mesafe</li><li>Sigortalı taşıma</li><li>Hızlı teslim</li>
+          </ul>
+          <a class="btn block" href="https://t.me/ZentyExpressBot">Telegram</a>
+        </div>
+        <div class="price-card">
+          <div class="price-header"><h3>Premium</h3><p>Kurumsal</p></div>
+          <div class="price">€99+</div>
+          <ul class="features-list">
+            <li>VIP taşıma</li><li>Özel planlama</li><li>Öncelikli destek</li>
+          </ul>
+          <a class="btn block" href="mailto:info@zentyexpress.de?subject=Premium%20Taşıma%20Talebi&body=Merhaba%20Zenty%20Express...">E-posta</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" class="section">
+    <div class="container grid-2">
+      <div>
+        <h2 class="section-title">Bize Ulaşın</h2>
+        <p class="section-sub">Tek tıkla iletişim kurun — hızlı dönüş garantili!</p>
+        <div class="contact-cta">
+          <a class="btn xl" target="_blank" href="https://wa.me/491625757957?text=Merhaba%20Zenty%20Express%2C%20taşıma%20talebim%20var.">💬 WhatsApp</a>
+          <a class="btn ghost xl" target="_blank" href="https://t.me/ZentyExpressBot">✈️ Telegram</a>
+          <a class="btn ghost xl" href="mailto:info@zentyexpress.de">📧 E-posta</a>
+        </div>
+        <div class="map-card">
+          <iframe title="Harita" loading="lazy" src="https://maps.google.com/maps?q=Ulm&z=12&output=embed"></iframe>
+        </div>
+      </div>
+      <form class="contact-form" name="contact" method="POST" data-netlify="true">
+        <input type="hidden" name="form-name" value="contact">
+        <label>Adınız<input required name="name" placeholder="Ad Soyad"></label>
+        <label>E-posta<input type="email" required name="email" placeholder="ornek@mail.com"></label>
+        <label>Mesaj<textarea required name="message" rows="5" placeholder="İletişim talebinizi yazın..."></textarea></label>
+        <button class="btn block" type="submit">Gönder</button>
+      </form>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div>
+        <a href="#" class="brand small"><img src="assets/img/logo.svg" alt="Logo"/><span>Zenty<span class="accent">Express</span></span></a>
+        <p class="tiny">© <span id="year"></span> Zenty Express — info@zentyexpress.de</p>
+      </div>
+      <div class="footer-links">
+        <a href="#features">Hizmetler</a>
+        <a href="#pricing">Fiyatlar</a>
+        <a href="#contact">İletişim</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
