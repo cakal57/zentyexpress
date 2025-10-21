@@ -459,3 +459,26 @@ Gesendet von Zenty Express AI Website.`
   </script>
 </body>
 </html>
+// Tooltip + pin click to open quote prefilled
+const tooltip = document.createElement('div');
+tooltip.className='tooltip';
+document.body.appendChild(tooltip);
+
+document.querySelectorAll('.map svg .pin').forEach(pin=>{
+  const label = pin.nextElementSibling?.textContent || 'Route';
+  pin.setAttribute('title', label);
+  pin.style.cursor='pointer';
+
+  pin.addEventListener('mouseenter',(e)=>{
+    const r = e.target.getBoundingClientRect();
+    tooltip.textContent = `${label} — Route anfragen`;
+    tooltip.style.left = (r.left + r.width/2) + 'px';
+    tooltip.style.top  = (r.top - 6) + 'px';
+    tooltip.style.display='block';
+  });
+  pin.addEventListener('mouseleave',()=>{ tooltip.style.display='none'; });
+  pin.addEventListener('click',()=>{
+    qModal.classList.add('show');
+    document.querySelector('#quoteForm [name=from]').value = label;
+  });
+});
