@@ -3,58 +3,200 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Zenty Express AI – Startseite</title>
+  <title>Zenty Express AI – Mobility & Transport</title>
+  <meta name="description" content="VIP & Business Transfer, Shuttle & Gruppen, Kurier & Express, KI-Routenoptimierung. Sitz Lonsee (BW). WhatsApp: +49 162 5757957" />
+  <link rel="icon" href="assets/logo.png" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body class="theme-dark">
+
+  <!-- Top mini bar -->
+  <div class="topbar">
+    <div class="container flex between center">
+      <div class="brand"><img src="assets/logo.png" alt="Zenty Express AI" height="40" /></div>
+      <div class="contact-mini">
+        <a class="link" target="_blank" href="https://wa.me/491625757957?text=ZENTY%20EXPRESS%20AI">WhatsApp</a>
+        <span class="sep">·</span>
+        <a class="link" target="_blank" href="https://t.me/ZentyExpressBot">Telegram</a>
+        <span class="sep">·</span>
+        <a class="link" href="mailto:info@zentyexpress.de">info@zentyexpress.de</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
   <header class="site-header">
-    <a class="brand" href="index.html">
-      <img src="assets/logo.png?v=3" alt="Zenty Express AI Logo" height="40">
-    </a>
-    <nav class="nav">
-      <a href="index.html">Start</a>
-      <a href="ueber-uns.html">Über uns</a>
-      <a href="fahrzeuge.html">Fahrzeuge</a>
-      <a href="leistungen.html">Leistungen</a>
-      <a href="ki-system.html">KI-System</a>
-      <a href="preise.html">Preise</a>
-      <a class="btn btn-primary" href="kontakt.html">Kontakt</a>
-    </nav>
+    <div class="container flex between center">
+      <a href="#home" class="logo"><img src="assets/logo.png" alt="Zenty" height="36" /></a>
+      <nav class="nav" id="nav">
+        <a href="#services">Leistungen</a>
+        <a href="#fleet">Fahrzeuge</a>
+        <a href="#pricing">Preise</a>
+        <a href="#ai">KI-System</a>
+        <a href="#prospekt">Prospekt</a>
+        <a href="#contact" class="btn btn-primary">Kontakt</a>
+      </nav>
+      <button id="menu" class="hamburger" aria-label="Menü"><span></span><span></span><span></span></button>
+    </div>
   </header>
 
-  <main>
-    <section class="hero" style="--bg:url('assets/cover-titelblatt.jpg?v=3')">
-      <div class="hero__content">
-        <h1>Zenty Express AI</h1>
-        <p>Intelligente Mobilität & Transportlösungen<br>– Powered by AI –</p>
-        <a class="btn btn-primary" href="preise.html">Preise ansehen</a>
-        <a class="btn" href="kontakt.html">Kontakt aufnehmen</a>
+  <!-- Hero -->
+  <section id="home" class="hero" style="--bg:url('assets/cover-titelblatt.jpg')">
+    <div class="container hero__content">
+      <h1>AI-Powered Mobility.<br>Intelligent Transport.<br>Made in Germany.</h1>
+      <p class="muted">Schnell, sicher und transparent – unterstützt durch KI.</p>
+      <div class="cta">
+        <a href="#pricing" class="btn btn-primary">Preise ansehen</a>
+        <a href="#contact" class="btn">Angebot anfordern</a>
       </div>
-    </section>
+      <div class="chips">
+        <span class="chip">VIP & Business</span>
+        <span class="chip">Shuttle & Gruppen</span>
+        <span class="chip">Kurier & Express</span>
+        <span class="chip">KI-Routenoptimierung</span>
+      </div>
+    </div>
+  </section>
 
-    <section class="grid cols-3">
-      <article class="card">
-        <h3>VIP & Business</h3>
-        <p>Exklusiver Fahrservice mit höchstem Komfort.</p>
-      </article>
-      <article class="card">
-        <h3>Kurier & Express</h3>
-        <p>Schnelle & sichere Zustellung – lokal & europaweit.</p>
-      </article>
-      <article class="card">
-        <h3>Fest- & Tagestouren</h3>
-        <p>Events und Tagesausflüge – KI-optimiert.</p>
-      </article>
-    </section>
-  </main>
+  <!-- Leistungen -->
+  <section id="services" class="section">
+    <div class="container">
+      <h2>Unsere Leistungen</h2>
+      <div class="grid cards-4">
+        <article class="card"><h3>VIP & Business</h3><p class="muted">Exklusiver, diskreter Fahrservice mit höchstem Komfort.</p></article>
+        <article class="card"><h3>Shuttle & Gruppen</h3><p class="muted">Flughafentransfer, Mitarbeiter-Shuttle & Events.</p></article>
+        <article class="card"><h3>Kurier & Express</h3><p class="muted">Sichere Zustellung – lokal & europaweit. 24/7 Sonderfahrten.</p></article>
+        <article class="card"><h3>Fest- & Tagestouren</h3><p class="muted">Events & Ausflüge – smart geplant mit KI.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Fahrzeuge -->
+  <section id="fleet" class="section alt">
+    <div class="container">
+      <h2>Unsere Fahrzeuge</h2>
+      <div class="grid cards-4">
+        <article class="card card-media">
+          <img src="assets/vito.jpg" alt="Mercedes Vito" loading="lazy">
+          <div class="card__body"><h3>Mercedes Vito <span class="tag">schwarz</span></h3><p class="muted">Eleganter Shuttle, bis 8 Personen.</p></div>
+        </article>
+        <article class="card card-media">
+          <img src="assets/caddy.jpg" alt="VW Caddy" loading="lazy">
+          <div class="card__body"><h3>VW Caddy <span class="tag">schwarz</span></h3><p class="muted">Kompakt & wendig.</p></div>
+        </article>
+        <article class="card card-media">
+          <img src="assets/trafic.jpg" alt="Renault Trafic" loading="lazy">
+          <div class="card__body"><h3>Renault Trafic <span class="tag">weiß</span></h3><p class="muted">Viel Platz für Team & Gepäck.</p></div>
+        </article>
+        <article class="card card-media">
+          <img src="assets/sprinter.jpg" alt="Mercedes Sprinter" loading="lazy">
+          <div class="card__body"><h3>Mercedes Sprinter <span class="tag">weiß</span></h3><p class="muted">Gruppen- & Sondertransporte.</p></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Preise -->
+  <section id="pricing" class="section">
+    <div class="container">
+      <h2>Preise</h2>
+      <div class="grid cards-3">
+        <article class="card price"><h3>Basic</h3><div class="h1">€1,00/km</div><ul class="muted"><li>Kurzstrecken</li><li>Transparente Tarife</li></ul><a class="btn btn-primary" href="#contact">Anfragen</a></article>
+        <article class="card price"><h3>Standard</h3><div class="h1">€0,90/km</div><ul class="muted"><li>20–100 km</li><li>Schnelle Verfügbarkeit</li></ul><a class="btn btn-primary" href="#contact">Anfragen</a></article>
+        <article class="card price"><h3>Premium</h3><div class="h1">€0,80/km</div><ul class="muted"><li>Langstrecke, VIP</li><li>Priorisierter Support</li></ul><a class="btn btn-primary" href="#contact">Anfragen</a></article>
+      </div>
+      <p class="micro muted">Preise sind Richtwerte; Endpreise je nach Route & Zeitplan.</p>
+    </div>
+  </section>
+
+  <!-- KI -->
+  <section id="ai" class="section alt" style="--bg:url('assets/page-ki.jpg')">
+    <div class="container">
+      <h2>Zenty AI Route Intelligence</h2>
+      <div class="grid cols-2">
+        <div class="card"><h3>Wie funktioniert’s?</h3><p class="muted">Unsere KI analysiert Verkehr, Entfernung und Zeit in Echtzeit, optimiert Routen und reduziert Kosten.</p></div>
+        <div class="card list">
+          <ul>
+            <li>Live-Verkehrs- & Sensordaten</li>
+            <li>KI-basierte Prognosen</li>
+            <li>Automatische Fahrtenplanung</li>
+            <li>CO₂- & Kostenoptimierung</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Prospekt / Poster (8 görsel kesin) -->
+  <section id="prospekt" class="section">
+    <div class="container">
+      <h2>Prospekt & Poster</h2>
+      <div class="grid cards-4 gallery">
+        <a class="card card-media" href="assets/prospekt-ai-system.jpg" target="_blank">
+          <img src="assets/prospekt-ai-system.jpg" alt="AI System" loading="lazy">
+        </a>
+        <a class="card card-media" href="assets/prospekt-leistungen.jpg" target="_blank">
+          <img src="assets/prospekt-leistungen.jpg" alt="Leistungen" loading="lazy">
+        </a>
+        <a class="card card-media" href="assets/prospekt-ueber-uns.jpg" target="_blank">
+          <img src="assets/prospekt-ueber-uns.jpg" alt="Über uns" loading="lazy">
+        </a>
+        <a class="card card-media" href="assets/prospekt-fahrzeuge.jpg" target="_blank">
+          <img src="assets/prospekt-fahrzeuge.jpg" alt="Fahrzeuge" loading="lazy">
+        </a>
+        <a class="card card-media" href="assets/prospekt-route-vans.jpg" target="_blank">
+          <img src="assets/prospekt-route-vans.jpg" alt="Route Intelligence – Vans" loading="lazy">
+        </a>
+        <a class="card card-media" href="assets/prospekt-route-clean.jpg" target="_blank">
+          <img src="assets/prospekt-route-clean.jpg" alt="Route Intelligence – Clean" loading="lazy">
+        </a>
+        <a class="card card-media" href="assets/prospekt-cover-fleet.jpg" target="_blank">
+          <img src="assets/prospekt-cover-fleet.jpg" alt="Cover Fleet" loading="lazy">
+        </a>
+        <a class="card card-media" href="assets/prospekt-cover-brochure.jpg" target="_blank">
+          <img src="assets/prospekt-cover-brochure.jpg" alt="Brochure Cover" loading="lazy">
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Kontakt -->
+  <section id="contact" class="section">
+    <div class="container">
+      <h2>Kontakt</h2>
+      <div class="grid cols-2">
+        <div class="card">
+          <form class="form" onsubmit="return false;">
+            <label><span>Name</span><input type="text" placeholder="Ihr Name" required></label>
+            <label><span>E-Mail</span><input type="email" placeholder="name@mail.de" required></label>
+            <label><span>Nachricht</span><textarea rows="4" placeholder="Ihre Nachricht…"></textarea></label>
+            <div class="flex gap">
+              <a class="btn" href="mailto:info@zentyexpress.de">E-Mail</a>
+              <a class="btn btn-primary" target="_blank" href="https://wa.me/491625757957?text=ZENTY%20EXPRESS%20AI">WhatsApp</a>
+              <a class="btn" target="_blank" href="https://t.me/ZentyExpressBot">Telegram</a>
+            </div>
+          </form>
+        </div>
+        <div class="card">
+          <h3>Zenty Express AI</h3>
+          <p class="muted">Sitz Lonsee (Baden-Württemberg)</p>
+          <p class="muted">info@zentyexpress.de · +49 162 5757957</p>
+          <img class="map" src="assets/cover-rueckseite.jpg" alt="Map" loading="lazy">
+        </div>
+      </div>
+    </div>
+  </section>
 
   <footer class="site-footer">
-    <div>Zenty Express AI — Mobility & Transport • Sitz Lonsee (Baden-Württemberg)</div>
-    <div class="contact">
-      <a href="https://wa.me/491625757957?text=ZENTY%20EXPRESS%20AI" target="_blank">WhatsApp</a>
-      <a href="https://t.me/ZentyExpressBot" target="_blank">@ZentyExpressBot</a>
-      <a href="mailto:info@zentyexpress.de">info@zentyexpress.de</a>
+    <div class="container flex between center wrap">
+      <small>© <span id="year"></span> Zenty Express AI — Mobility & Transport</small>
+      <small class="muted">Powered by Artificial Intelligence</small>
     </div>
   </footer>
+
+  <!-- Floating CTA -->
+  <div class="fab"><a class="fab__btn" target="_blank" href="https://wa.me/491625757957?text=ZENTY%20EXPRESS%20AI">💬</a></div>
+
+  <script src="app.js"></script>
 </body>
 </html>
