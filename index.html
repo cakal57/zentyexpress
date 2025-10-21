@@ -2,201 +2,220 @@
 <html lang="de">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Zenty Express AI – Mobility & Transport</title>
-  <meta name="description" content="VIP & Business Transfer, Shuttle & Gruppen, Kurier & Express, KI-Routenoptimierung. Sitz Lonsee (BW). WhatsApp: +49 162 5757957" />
-  <link rel="icon" href="assets/logo.png" />
-  <link rel="stylesheet" href="style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Zenty Express AI — Mobility & Transport</title>
+  <meta name="description" content="Zenty Express AI · Mobility & Transport · VIP Shuttle · Kurier · Intelligente Routen · AI Powered Mobility" />
+  <style>
+    :root{
+      --charcoal:#0f1115; /* page bg */
+      --ink:#151821;      /* cards */
+      --ink-2:#1b1f2a;    /* hover */
+      --gold:#d4af37;     /* gold */
+      --silver:#c0c5d0;   /* silver text */
+      --neon:#29a7ff;     /* AI neon */
+      --soft:#0a0c10dd;   /* soft overlay */
+      --radius:22px;
+      --shadow:0 10px 28px rgba(0,0,0,.35), 0 2px 8px rgba(0,0,0,.35);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;background:radial-gradient(1200px 700px at 70% -10%, #1b2030 0%, var(--charcoal) 55%), var(--charcoal);
+      color:#e8ecf3;font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;
+    }
+    a{color:inherit;text-decoration:none}
+    .container{max-width:1200px;margin:0 auto;padding:28px}
+    /* Header */
+    header{position:sticky;top:0;z-index:50;background:linear-gradient(180deg, rgba(10,12,16,.9), rgba(10,12,16,.2));backdrop-filter:blur(8px);}
+    .nav{display:flex;align-items:center;gap:20px;padding:14px 28px}
+    .spacer{flex:1}
+    .btn{display:inline-flex;align-items:center;gap:10px;padding:12px 18px;border-radius:999px;border:1px solid #262b39;background:linear-gradient(180deg,#181c26,#10131a);color:#e8ecf3;box-shadow:var(--shadow);transition:.2s}
+    .btn:hover{transform:translateY(-1px);background:linear-gradient(180deg,#1b2130,#121722)}
+    .btn.gold{border-color:#3a2c09;background:linear-gradient(180deg,#2a2311,#1a1409);color:#f6f2e6}
+    .btn.gold:hover{box-shadow:0 10px 24px rgba(212,175,55,.25)}
+
+    /* Hero */
+    .hero{display:grid;grid-template-columns:1.2fr 1fr;gap:28px;align-items:center;padding:48px 28px 24px}
+    .hero-card{background:linear-gradient(180deg, #131722, #0e1118);border:1px solid #252a36;border-radius:calc(var(--radius) + 6px);box-shadow:var(--shadow);padding:36px;position:relative;overflow:hidden}
+    .hero-card:before{content:"";position:absolute;inset:-20% -20% auto auto;width:60%;height:220%;background:radial-gradient(600px 300px at 90% 10%, rgba(41,167,255,.18), transparent 60%);filter:blur(12px);pointer-events:none}
+    .logo-wrap{display:flex;align-items:center;justify-content:center}
+    .logo{width:min(560px,90%); /* BIGGER LOGO */
+          height:auto; filter:drop-shadow(0 10px 24px rgba(0,0,0,.55))}
+    .chip{display:inline-flex;gap:8px;align-items:center;border:1px solid #2c3242;border-radius:999px;padding:8px 12px;color:var(--silver);background:#0c0f16}
+    .chip b{color:var(--neon)}
+    .hero h1{margin:16px 0 8px;font-weight:800;letter-spacing:.4px;font-size:clamp(28px,3.2vw,44px)}
+    .hero p{color:#c9cfdb;margin:0 0 18px}
+
+    /* Sections */
+    .section{padding:36px 28px}
+    .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+    @media (max-width:1000px){.hero{grid-template-columns:1fr}.cards{grid-template-columns:repeat(2,1fr)}}
+    @media (max-width:640px){.cards{grid-template-columns:1fr}}
+    .card{background:linear-gradient(180deg,#151a26,#0f1219);border:1px solid #232838;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+    .card img{width:100%;height:190px;object-fit:cover;display:block}
+    .card h3{margin:12px 16px 0;font-size:18px}
+    .card p{margin:6px 16px 16px;color:#c7cfdb;font-size:14px}
+
+    /* Prospekt trigger */
+    .prospekt-bar{display:flex;flex-wrap:wrap;gap:12px;margin-top:16px}
+
+    /* Modal Flipbook */
+    .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.6);backdrop-filter:blur(6px);z-index:100}
+    .modal.show{display:flex}
+    .book{width:min(1100px,95vw);height:min(720px,80vh);display:grid;grid-template-columns:1fr 1fr;border-radius:var(--radius);overflow:hidden;border:1px solid #2a3143;background:linear-gradient(180deg,#0f131a,#0b0f14)}
+    .page{position:relative;overflow:hidden}
+    .page img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+    .page.turn{animation:flip .6s ease both}
+    @keyframes flip{from{transform:rotateY(-12deg) scale(.98);opacity:.8}to{transform:rotateY(0) scale(1);opacity:1}}
+    .book-ui{position:absolute;inset:auto 0 0 0;display:flex;justify-content:center;gap:10px;padding:12px;background:linear-gradient(180deg,transparent,rgba(0,0,0,.45))}
+    .ghost{position:absolute;inset:16px 16px auto auto;display:flex;gap:8px}
+    .circle{width:38px;height:38px;border-radius:999px;border:1px solid #2c3242;background:#121622;display:grid;place-items:center;cursor:pointer}
+    .circle:hover{background:#161b27}
+    .hint{position:absolute;left:16px;bottom:12px;color:#c6cede;font-size:13px;opacity:.85}
+
+    footer{padding:28px;color:#aeb7c7;border-top:1px solid #232838}
+  </style>
 </head>
-<body class="theme-dark">
-
-  <!-- Top mini bar -->
-  <div class="topbar">
-    <div class="container flex between center">
-      <div class="brand"><img src="assets/logo.png" alt="Zenty Express AI" height="40" /></div>
-      <div class="contact-mini">
-        <a class="link" target="_blank" href="https://wa.me/491625757957?text=ZENTY%20EXPRESS%20AI">WhatsApp</a>
-        <span class="sep">·</span>
-        <a class="link" target="_blank" href="https://t.me/ZentyExpressBot">Telegram</a>
-        <span class="sep">·</span>
-        <a class="link" href="mailto:info@zentyexpress.de">info@zentyexpress.de</a>
-      </div>
-    </div>
-  </div>
-
-  <!-- Header -->
-  <header class="site-header">
-    <div class="container flex between center">
-      <a href="#home" class="logo"><img src="assets/logo.png" alt="Zenty" height="36" /></a>
-      <nav class="nav" id="nav">
-        <a href="#services">Leistungen</a>
-        <a href="#fleet">Fahrzeuge</a>
-        <a href="#pricing">Preise</a>
-        <a href="#ai">KI-System</a>
-        <a href="#prospekt">Prospekt</a>
-        <a href="#contact" class="btn btn-primary">Kontakt</a>
-      </nav>
-      <button id="menu" class="hamburger" aria-label="Menü"><span></span><span></span><span></span></button>
+<body>
+  <header>
+    <div class="nav container">
+      <span class="chip">Zenty Express <b>AI</b> · Mobility & Transport</span>
+      <div class="spacer"></div>
+      <a class="btn" href="#fahrzeuge">Fahrzeuge</a>
+      <button class="btn" id="openProspekt">Prospekt</button>
+      <a class="btn gold" href="#kontakt">Kontakt</a>
     </div>
   </header>
 
-  <!-- Hero -->
-  <section id="home" class="hero" style="--bg:url('assets/cover-titelblatt.jpg')">
-    <div class="container hero__content">
-      <h1>AI-Powered Mobility.<br>Intelligent Transport.<br>Made in Germany.</h1>
-      <p class="muted">Schnell, sicher und transparent – unterstützt durch KI.</p>
-      <div class="cta">
-        <a href="#pricing" class="btn btn-primary">Preise ansehen</a>
-        <a href="#contact" class="btn">Angebot anfordern</a>
+  <!-- HERO -->
+  <section class="hero container">
+    <div class="hero-card">
+      <div class="logo-wrap">
+        <!-- BIG LOGO -->
+        <img class="logo" src="assets/logo.png" alt="Zenty Express AI Logo" />
       </div>
-      <div class="chips">
-        <span class="chip">VIP & Business</span>
-        <span class="chip">Shuttle & Gruppen</span>
-        <span class="chip">Kurier & Express</span>
-        <span class="chip">KI-Routenoptimierung</span>
+      <h1>AI Powered Mobility — Premium Shuttle · Kurier · Fleet</h1>
+      <p>Intelligente Routen, Echtzeit-Analyse, zuverlässige Transporte. <b>Zenty Express AI</b> setzt neue Maßstäbe in Mobilität & Transport.</p>
+      <div class="prospekt-bar">
+        <button class="btn" id="openProspekt2">📖 Prospekti Aç</button>
+        <a class="btn" href="#fahrzeuge">🚐 Filomuz</a>
       </div>
+    </div>
+    <div class="hero-card">
+      <img src="assets/prospekt-cover-fleet.jpg" alt="Fleet Cover" style="width:100%;height:100%;object-fit:cover;border-radius:14px"/>
     </div>
   </section>
 
-  <!-- Leistungen -->
-  <section id="services" class="section">
-    <div class="container">
-      <h2>Unsere Leistungen</h2>
-      <div class="grid cards-4">
-        <article class="card"><h3>VIP & Business</h3><p class="muted">Exklusiver, diskreter Fahrservice mit höchstem Komfort.</p></article>
-        <article class="card"><h3>Shuttle & Gruppen</h3><p class="muted">Flughafentransfer, Mitarbeiter-Shuttle & Events.</p></article>
-        <article class="card"><h3>Kurier & Express</h3><p class="muted">Sichere Zustellung – lokal & europaweit. 24/7 Sonderfahrten.</p></article>
-        <article class="card"><h3>Fest- & Tagestouren</h3><p class="muted">Events & Ausflüge – smart geplant mit KI.</p></article>
-      </div>
+  <!-- LEISTUNGEN / CARDS -->
+  <section class="section container" id="leistungen">
+    <h2 style="margin:0 0 12px;font-size:28px">Unsere Leistungen</h2>
+    <p style="margin:0 0 20px;color:#c9cfdb">VIP Shuttle · Kurier · Flughafentransfer · AI-gestützte Streckenoptimierung</p>
+    <div class="cards">
+      <article class="card"><img src="assets/prospekt-leistungen.jpg" alt="Leistungen"><h3>Leistungen</h3><p>VIP & Shuttle, Kurierfahrten, Zeitkritische Lieferungen.</p></article>
+      <article class="card"><img src="assets/prospekt-ai-system.jpg" alt="AI System"><h3>AI System</h3><p>Echtzeit-Daten, intelligente Entscheidungen, Effizienz.</p></article>
+      <article class="card"><img src="assets/prospekt-route-clean.jpg" alt="Route"><h3>Routen</h3><p>Route Intelligence · Stau, Wetter & Nachfrage-Optimierung.</p></article>
+      <article class="card"><img src="assets/prospekt-ueber-uns.jpg" alt="Über uns"><h3>Über uns</h3><p>Zuverlässig, schnell, detailorientiert — Zenty Express AI.</p></article>
     </div>
   </section>
 
-  <!-- Fahrzeuge -->
-  <section id="fleet" class="section alt">
-    <div class="container">
-      <h2>Unsere Fahrzeuge</h2>
-      <div class="grid cards-4">
-        <article class="card card-media">
-          <img src="assets/vito.jpg" alt="Mercedes Vito" loading="lazy">
-          <div class="card__body"><h3>Mercedes Vito <span class="tag">schwarz</span></h3><p class="muted">Eleganter Shuttle, bis 8 Personen.</p></div>
-        </article>
-        <article class="card card-media">
-          <img src="assets/caddy.jpg" alt="VW Caddy" loading="lazy">
-          <div class="card__body"><h3>VW Caddy <span class="tag">schwarz</span></h3><p class="muted">Kompakt & wendig.</p></div>
-        </article>
-        <article class="card card-media">
-          <img src="assets/trafic.jpg" alt="Renault Trafic" loading="lazy">
-          <div class="card__body"><h3>Renault Trafic <span class="tag">weiß</span></h3><p class="muted">Viel Platz für Team & Gepäck.</p></div>
-        </article>
-        <article class="card card-media">
-          <img src="assets/sprinter.jpg" alt="Mercedes Sprinter" loading="lazy">
-          <div class="card__body"><h3>Mercedes Sprinter <span class="tag">weiß</span></h3><p class="muted">Gruppen- & Sondertransporte.</p></div>
-        </article>
-      </div>
+  <!-- FAHRZEUGE -->
+  <section class="section container" id="fahrzeuge">
+    <h2 style="margin:0 0 12px;font-size:28px">Unsere Fahrzeugflotte</h2>
+    <p style="margin:0 0 20px;color:#c9cfdb">Siyah Vito & Caddy · Beyaz Trafic & Sprinter & Ducato — bakımlı, hazır.</p>
+    <div class="cards">
+      <article class="card"><img src="assets/vito.jpg" alt="Mercedes Vito"><h3>Mercedes Vito</h3><p>Siyah · Konfor & geniş iç hacim</p></article>
+      <article class="card"><img src="assets/caddy.jpg" alt="VW Caddy"><h3>VW Caddy</h3><p>Siyah · Ekonomik & şehir içi</p></article>
+      <article class="card"><img src="assets/trafic.jpg" alt="Renault Trafic"><h3>Renault Trafic</h3><p>Beyaz (camlı) · Esnek kullanım</p></article>
+      <article class="card"><img src="assets/sprinter.jpg" alt="Mercedes Sprinter"><h3>Mercedes Sprinter</h3><p>Beyaz (kapalı) · Hacimli yükler</p></article>
+      <article class="card"><img src="assets/ducato.jpg" alt="Fiat Ducato"><h3>Fiat Ducato</h3><p>Beyaz (kapalı) · Uzun mesafe</p></article>
+      <article class="card"><img src="assets/prospekt-fahrzeuge.jpg" alt="Fleet Poster"><h3>Fahrzeuge Poster</h3><p>Filonun genel görünümü</p></article>
+      <article class="card"><img src="assets/prospekt-route-vans.jpg" alt="Route Vans"><h3>Route + Vans</h3><p>Rota zekâsı + araçlar</p></article>
+      <article class="card"><img src="assets/prospekt-cover-brochure.jpg" alt="Brochure Cover"><h3>Prospekt Kapağı</h3><p>Broşür dış kapak</p></article>
     </div>
   </section>
 
-  <!-- Preise -->
-  <section id="pricing" class="section">
-    <div class="container">
-      <h2>Preise</h2>
-      <div class="grid cards-3">
-        <article class="card price"><h3>Basic</h3><div class="h1">€1,00/km</div><ul class="muted"><li>Kurzstrecken</li><li>Transparente Tarife</li></ul><a class="btn btn-primary" href="#contact">Anfragen</a></article>
-        <article class="card price"><h3>Standard</h3><div class="h1">€0,90/km</div><ul class="muted"><li>20–100 km</li><li>Schnelle Verfügbarkeit</li></ul><a class="btn btn-primary" href="#contact">Anfragen</a></article>
-        <article class="card price"><h3>Premium</h3><div class="h1">€0,80/km</div><ul class="muted"><li>Langstrecke, VIP</li><li>Priorisierter Support</li></ul><a class="btn btn-primary" href="#contact">Anfragen</a></article>
-      </div>
-      <p class="micro muted">Preise sind Richtwerte; Endpreise je nach Route & Zeitplan.</p>
+  <!-- CONTACT -->
+  <section class="section container" id="kontakt">
+    <h2 style="margin:0 0 12px;font-size:28px">Kontakt & Standort</h2>
+    <p style="margin:0 0 6px;color:#c9cfdb">E-Mail: info@zentyexpress.de · Web: zentyexpress.de</p>
+    <p style="margin:0 0 20px;color:#c9cfdb">Ulm · Dornstadt · Lonsee · Blaustein · çevresi</p>
+    <div class="prospekt-bar">
+      <a class="btn" href="mailto:info@zentyexpress.de">E-Mail</a>
+      <a class="btn" href="#">Telegram</a>
+      <a class="btn" href="#">WhatsApp</a>
     </div>
   </section>
 
-  <!-- KI -->
-  <section id="ai" class="section alt" style="--bg:url('assets/page-ki.jpg')">
-    <div class="container">
-      <h2>Zenty AI Route Intelligence</h2>
-      <div class="grid cols-2">
-        <div class="card"><h3>Wie funktioniert’s?</h3><p class="muted">Unsere KI analysiert Verkehr, Entfernung und Zeit in Echtzeit, optimiert Routen und reduziert Kosten.</p></div>
-        <div class="card list">
-          <ul>
-            <li>Live-Verkehrs- & Sensordaten</li>
-            <li>KI-basierte Prognosen</li>
-            <li>Automatische Fahrtenplanung</li>
-            <li>CO₂- & Kostenoptimierung</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Prospekt / Poster (8 görsel kesin) -->
-  <section id="prospekt" class="section">
-    <div class="container">
-      <h2>Prospekt & Poster</h2>
-      <div class="grid cards-4 gallery">
-        <a class="card card-media" href="assets/prospekt-ai-system.jpg" target="_blank">
-          <img src="assets/prospekt-ai-system.jpg" alt="AI System" loading="lazy">
-        </a>
-        <a class="card card-media" href="assets/prospekt-leistungen.jpg" target="_blank">
-          <img src="assets/prospekt-leistungen.jpg" alt="Leistungen" loading="lazy">
-        </a>
-        <a class="card card-media" href="assets/prospekt-ueber-uns.jpg" target="_blank">
-          <img src="assets/prospekt-ueber-uns.jpg" alt="Über uns" loading="lazy">
-        </a>
-        <a class="card card-media" href="assets/prospekt-fahrzeuge.jpg" target="_blank">
-          <img src="assets/prospekt-fahrzeuge.jpg" alt="Fahrzeuge" loading="lazy">
-        </a>
-        <a class="card card-media" href="assets/prospekt-route-vans.jpg" target="_blank">
-          <img src="assets/prospekt-route-vans.jpg" alt="Route Intelligence – Vans" loading="lazy">
-        </a>
-        <a class="card card-media" href="assets/prospekt-route-clean.jpg" target="_blank">
-          <img src="assets/prospekt-route-clean.jpg" alt="Route Intelligence – Clean" loading="lazy">
-        </a>
-        <a class="card card-media" href="assets/prospekt-cover-fleet.jpg" target="_blank">
-          <img src="assets/prospekt-cover-fleet.jpg" alt="Cover Fleet" loading="lazy">
-        </a>
-        <a class="card card-media" href="assets/prospekt-cover-brochure.jpg" target="_blank">
-          <img src="assets/prospekt-cover-brochure.jpg" alt="Brochure Cover" loading="lazy">
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Kontakt -->
-  <section id="contact" class="section">
-    <div class="container">
-      <h2>Kontakt</h2>
-      <div class="grid cols-2">
-        <div class="card">
-          <form class="form" onsubmit="return false;">
-            <label><span>Name</span><input type="text" placeholder="Ihr Name" required></label>
-            <label><span>E-Mail</span><input type="email" placeholder="name@mail.de" required></label>
-            <label><span>Nachricht</span><textarea rows="4" placeholder="Ihre Nachricht…"></textarea></label>
-            <div class="flex gap">
-              <a class="btn" href="mailto:info@zentyexpress.de">E-Mail</a>
-              <a class="btn btn-primary" target="_blank" href="https://wa.me/491625757957?text=ZENTY%20EXPRESS%20AI">WhatsApp</a>
-              <a class="btn" target="_blank" href="https://t.me/ZentyExpressBot">Telegram</a>
-            </div>
-          </form>
-        </div>
-        <div class="card">
-          <h3>Zenty Express AI</h3>
-          <p class="muted">Sitz Lonsee (Baden-Württemberg)</p>
-          <p class="muted">info@zentyexpress.de · +49 162 5757957</p>
-          <img class="map" src="assets/cover-rueckseite.jpg" alt="Map" loading="lazy">
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <footer class="site-footer">
-    <div class="container flex between center wrap">
-      <small>© <span id="year"></span> Zenty Express AI — Mobility & Transport</small>
-      <small class="muted">Powered by Artificial Intelligence</small>
-    </div>
+  <footer class="container">
+    © Zenty Express AI — Mobility & Transport · Final Signature Edition v9
   </footer>
 
-  <!-- Floating CTA -->
-  <div class="fab"><a class="fab__btn" target="_blank" href="https://wa.me/491625757957?text=ZENTY%20EXPRESS%20AI">💬</a></div>
+  <!-- PROSPEKT MODAL / FLIPBOOK -->
+  <div class="modal" id="prospektModal" aria-hidden="true">
+    <div class="book" role="dialog" aria-label="Prospekt">
+      <div class="page"><img id="pageLeft" alt="Seite links"></div>
+      <div class="page"><img id="pageRight" alt="Seite rechts" class="turn"></div>
+      <div class="ghost">
+        <button class="circle" id="prev" title="Zurück">◀</button>
+        <button class="circle" id="next" title="Weiter">▶</button>
+        <button class="circle" id="close" title="Schließen">✕</button>
+      </div>
+      <div class="book-ui">
+        <div class="chip">Prospekt · Zenty Express AI</div>
+      </div>
+      <div class="hint">← / → ile sayfa çevir · ESC ile kapat</div>
+    </div>
+  </div>
 
-  <script src="app.js"></script>
+  <script>
+    // Prospekt sayfa listesi (sıra)
+    const PAGES = [
+      'assets/prospekt-cover-brochure.jpg',
+      'assets/prospekt-ai-system.jpg',
+      'assets/prospekt-leistungen.jpg',
+      'assets/prospekt-ueber-uns.jpg',
+      'assets/prospekt-fahrzeuge.jpg',
+      'assets/prospekt-route-vans.jpg',
+      'assets/prospekt-route-clean.jpg',
+      'assets/prospekt-cover-fleet.jpg'
+    ];
+
+    const modal = document.getElementById('prospektModal');
+    const open1 = document.getElementById('openProspekt');
+    const open2 = document.getElementById('openProspekt2');
+    const prev = document.getElementById('prev');
+    const next = document.getElementById('next');
+    const closeBtn = document.getElementById('close');
+    const left = document.getElementById('pageLeft');
+    const right = document.getElementById('pageRight');
+    let idx = 0; // right page index; left = idx-1
+
+    function render(){
+      right.classList.remove('turn');
+      requestAnimationFrame(()=>{
+        right.classList.add('turn');
+      });
+      right.src = PAGES[idx] || '';
+      left.src = PAGES[idx-1] || '';
+    }
+
+    function open(){ modal.classList.add('show'); idx = 1; render(); }
+    function close(){ modal.classList.remove('show'); }
+    function goNext(){ if(idx < PAGES.length-1){ idx++; render(); } }
+    function goPrev(){ if(idx > 1){ idx--; render(); } }
+
+    [open1, open2].forEach(b=> b && b.addEventListener('click', open));
+    closeBtn.addEventListener('click', close);
+    next.addEventListener('click', goNext);
+    prev.addEventListener('click', goPrev);
+    window.addEventListener('keydown', e=>{
+      if(!modal.classList.contains('show')) return;
+      if(e.key==='Escape') close();
+      if(e.key==='ArrowRight') goNext();
+      if(e.key==='ArrowLeft') goPrev();
+    });
+    // Close on outside click
+    modal.addEventListener('click', (e)=>{ if(e.target===modal) close(); });
+  </script>
 </body>
 </html>
