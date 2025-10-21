@@ -7,71 +7,55 @@
   <meta name="description" content="Zenty Express AI · Mobility & Transport · VIP Shuttle · Kurier · Intelligente Routen · AI Powered Mobility" />
   <style>
     :root{
-      --charcoal:#0f1115; /* page bg */
-      --ink:#151821;      /* cards */
-      --ink-2:#1b1f2a;    /* hover */
-      --gold:#d4af37;     /* gold */
-      --silver:#c0c5d0;   /* silver text */
-      --neon:#29a7ff;     /* AI neon */
-      --soft:#0a0c10dd;   /* soft overlay */
-      --radius:22px;
-      --shadow:0 10px 28px rgba(0,0,0,.35), 0 2px 8px rgba(0,0,0,.35);
+      --charcoal:#0e1015; --ink:#141824; --ink2:#1a2030; --gold:#d4af37; --silver:#c8cfdb; --neon:#29a7ff; --radius:22px;
+      --shadow:0 12px 28px rgba(0,0,0,.35), 0 3px 10px rgba(0,0,0,.35);
     }
     *{box-sizing:border-box}
     html,body{height:100%}
-    body{
-      margin:0;background:radial-gradient(1200px 700px at 70% -10%, #1b2030 0%, var(--charcoal) 55%), var(--charcoal);
-      color:#e8ecf3;font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;
-    }
+    body{margin:0;background:radial-gradient(1200px 700px at 70% -10%, #1b2130 0%, var(--charcoal) 55%), var(--charcoal);color:#e8ecf3;font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif}
     a{color:inherit;text-decoration:none}
     .container{max-width:1200px;margin:0 auto;padding:28px}
+
     /* Header */
-    header{position:sticky;top:0;z-index:50;background:linear-gradient(180deg, rgba(10,12,16,.9), rgba(10,12,16,.2));backdrop-filter:blur(8px);}
-    .nav{display:flex;align-items:center;gap:20px;padding:14px 28px}
+    header{position:sticky;top:0;z-index:60;background:linear-gradient(180deg, rgba(10,12,16,.9), rgba(10,12,16,.2));backdrop-filter:blur(8px);border-bottom:1px solid #22293a}
+    .nav{display:flex;align-items:center;gap:18px;padding:10px 18px}
+    .brand{display:flex;align-items:center;gap:12px}
+    .brand img{height:54px; width:auto; filter:drop-shadow(0 10px 24px rgba(0,0,0,.55))} /* BIGGER top-left logo */
+    .brand span{font-weight:700;color:#cfd6e6}
     .spacer{flex:1}
-    .btn{display:inline-flex;align-items:center;gap:10px;padding:12px 18px;border-radius:999px;border:1px solid #262b39;background:linear-gradient(180deg,#181c26,#10131a);color:#e8ecf3;box-shadow:var(--shadow);transition:.2s}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;border:1px solid #262b39;background:linear-gradient(180deg,#181c26,#10131a);color:#e8ecf3;box-shadow:var(--shadow);transition:.2s}
     .btn:hover{transform:translateY(-1px);background:linear-gradient(180deg,#1b2130,#121722)}
     .btn.gold{border-color:#3a2c09;background:linear-gradient(180deg,#2a2311,#1a1409);color:#f6f2e6}
     .btn.gold:hover{box-shadow:0 10px 24px rgba(212,175,55,.25)}
+    .lang{display:flex;gap:8px}
+    .lang button{border:1px solid #2a3143;background:#111522;color:#cfd6e6;border-radius:10px;padding:6px 10px;cursor:pointer}
+    .lang button.active{border-color:#3c92ff;background:#0e1a2a}
 
     /* Hero */
-    .hero{display:grid;grid-template-columns:1.2fr 1fr;gap:28px;align-items:center;padding:48px 28px 24px}
-    .hero-card{background:linear-gradient(180deg, #131722, #0e1118);border:1px solid #252a36;border-radius:calc(var(--radius) + 6px);box-shadow:var(--shadow);padding:36px;position:relative;overflow:hidden}
-    .hero-card:before{content:"";position:absolute;inset:-20% -20% auto auto;width:60%;height:220%;background:radial-gradient(600px 300px at 90% 10%, rgba(41,167,255,.18), transparent 60%);filter:blur(12px);pointer-events:none}
-    .logo-wrap{display:flex;align-items:center;justify-content:center}
-    .logo{width:min(560px,90%); /* BIGGER LOGO */
-          height:auto; filter:drop-shadow(0 10px 24px rgba(0,0,0,.55))}
-    .chip{display:inline-flex;gap:8px;align-items:center;border:1px solid #2c3242;border-radius:999px;padding:8px 12px;color:var(--silver);background:#0c0f16}
-    .chip b{color:var(--neon)}
-    .hero h1{margin:16px 0 8px;font-weight:800;letter-spacing:.4px;font-size:clamp(28px,3.2vw,44px)}
-    .hero p{color:#c9cfdb;margin:0 0 18px}
+    .hero{display:grid;grid-template-columns:1.2fr 1fr;gap:28px;align-items:center;padding:36px 18px 12px}
+    .card{background:linear-gradient(180deg,#151a26,#0f1219);border:1px solid #232838;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+    .card.pad{padding:28px}
+    .hero h1{margin:10px 0 10px;font-weight:800;letter-spacing:.4px;font-size:clamp(28px,3.2vw,44px)}
+    .muted{color:#c9cfdb}
 
     /* Sections */
-    .section{padding:36px 28px}
-    .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
-    @media (max-width:1000px){.hero{grid-template-columns:1fr}.cards{grid-template-columns:repeat(2,1fr)}}
-    @media (max-width:640px){.cards{grid-template-columns:1fr}}
-    .card{background:linear-gradient(180deg,#151a26,#0f1219);border:1px solid #232838;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
-    .card img{width:100%;height:190px;object-fit:cover;display:block}
-    .card h3{margin:12px 16px 0;font-size:18px}
-    .card p{margin:6px 16px 16px;color:#c7cfdb;font-size:14px}
+    .section{padding:28px 18px}
+    h2{font-size:28px;margin:0 0 10px}
+    .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+    @media (max-width:1000px){.hero{grid-template-columns:1fr}.grid-4{grid-template-columns:repeat(2,1fr)}.grid-3{grid-template-columns:repeat(2,1fr)}.grid-2{grid-template-columns:1fr}}
+    .tile img{width:100%;height:190px;object-fit:cover;display:block}
+    .tile .body{padding:14px}
+    .price h3{margin:10px 14px 0}
+    .pill{display:inline-block;border:1px solid #2b3143;border-radius:999px;padding:2px 8px;margin-left:8px;color:#b9c3d6;font-size:12px}
 
-    /* Prospekt trigger */
-    .prospekt-bar{display:flex;flex-wrap:wrap;gap:12px;margin-top:16px}
-
-    /* Modal Flipbook */
-    .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.6);backdrop-filter:blur(6px);z-index:100}
-    .modal.show{display:flex}
-    .book{width:min(1100px,95vw);height:min(720px,80vh);display:grid;grid-template-columns:1fr 1fr;border-radius:var(--radius);overflow:hidden;border:1px solid #2a3143;background:linear-gradient(180deg,#0f131a,#0b0f14)}
-    .page{position:relative;overflow:hidden}
-    .page img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-    .page.turn{animation:flip .6s ease both}
-    @keyframes flip{from{transform:rotateY(-12deg) scale(.98);opacity:.8}to{transform:rotateY(0) scale(1);opacity:1}}
-    .book-ui{position:absolute;inset:auto 0 0 0;display:flex;justify-content:center;gap:10px;padding:12px;background:linear-gradient(180deg,transparent,rgba(0,0,0,.45))}
-    .ghost{position:absolute;inset:16px 16px auto auto;display:flex;gap:8px}
-    .circle{width:38px;height:38px;border-radius:999px;border:1px solid #2c3242;background:#121622;display:grid;place-items:center;cursor:pointer}
-    .circle:hover{background:#161b27}
-    .hint{position:absolute;left:16px;bottom:12px;color:#c6cede;font-size:13px;opacity:.85}
+    /* Map / Route section */
+    .route{position:relative;min-height:380px;display:grid;grid-template-columns:1.1fr 1fr;gap:18px}
+    .map{position:relative;border-radius:var(--radius);border:1px solid #232838;background:radial-gradient(600px 300px at 60% -10%, rgba(41,167,255,.12), transparent 60%), #0e1118;overflow:hidden}
+    .map svg{position:absolute;inset:0;width:100%;height:100%}
+    .dot{fill:#29a7ff}
+    .edge{stroke:#2a7bd9;stroke-width:2;opacity:.7}
 
     footer{padding:28px;color:#aeb7c7;border-top:1px solid #232838}
   </style>
@@ -79,96 +63,199 @@
 <body>
   <header>
     <div class="nav container">
-      <span class="chip">Zenty Express <b>AI</b> · Mobility & Transport</span>
+      <a class="brand" href="#top"><img src="assets/logo.png" alt="Zenty Express AI"/><span>Zenty Express AI · Mobility & Transport</span></a>
       <div class="spacer"></div>
-      <a class="btn" href="#fahrzeuge">Fahrzeuge</a>
-      <button class="btn" id="openProspekt">Prospekt</button>
-      <a class="btn gold" href="#kontakt">Kontakt</a>
+      <a class="btn" href="#fahrzeuge" data-i18n="navVehicles">Fahrzeuge</a>
+      <a class="btn" href="#preise" data-i18n="navPrices">Preise</a>
+      <a class="btn" href="#ki" data-i18n="navAI">KI‑System</a>
+      <button class="btn" id="openProspekt" data-i18n="navProspekt">Prospekt</button>
+      <a class="btn gold" href="#kontakt" data-i18n="navContact">Kontakt</a>
+      <div class="lang" aria-label="Sprachen">
+        <button data-lang="de" class="active">DE</button>
+        <button data-lang="en">EN</button>
+        <button data-lang="tr">TR</button>
+      </div>
     </div>
   </header>
 
   <!-- HERO -->
   <section class="hero container">
-    <div class="hero-card">
-      <div class="logo-wrap">
-        <!-- BIG LOGO -->
-        <img class="logo" src="assets/logo.png" alt="Zenty Express AI Logo" />
-      </div>
-      <h1>AI Powered Mobility — Premium Shuttle · Kurier · Fleet</h1>
-      <p>Intelligente Routen, Echtzeit-Analyse, zuverlässige Transporte. <b>Zenty Express AI</b> setzt neue Maßstäbe in Mobilität & Transport.</p>
-      <div class="prospekt-bar">
-        <button class="btn" id="openProspekt2">📖 Prospekti Aç</button>
-        <a class="btn" href="#fahrzeuge">🚐 Filomuz</a>
+    <div class="card pad">
+      <h1 data-i18n="heroTitle">AI Powered Mobility — Premium Shuttle · Kurier · Fleet</h1>
+      <p class="muted" data-i18n="heroSub">Intelligente Routen, Echtzeit‑Analyse, zuverlässige Transporte. <b>Zenty Express AI</b> setzt neue Maßstäbe in Mobilität & Transport.</p>
+      <div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap">
+        <button class="btn" id="openProspekt2" data-i18n="openProspekt">📖 Prospekt ansehen</button>
+        <a class="btn" href="#fahrzeuge" data-i18n="seeFleet">🚐 Fahrzeugflotte</a>
       </div>
     </div>
-    <div class="hero-card">
-      <img src="assets/prospekt-cover-fleet.jpg" alt="Fleet Cover" style="width:100%;height:100%;object-fit:cover;border-radius:14px"/>
+    <div class="card" style="padding:0">
+      <img src="assets/prospekt-cover-fleet.jpg" alt="Fleet Cover" style="width:100%;height:100%;object-fit:cover"/>
     </div>
   </section>
 
-  <!-- LEISTUNGEN / CARDS -->
+  <!-- LEISTUNGEN -->
   <section class="section container" id="leistungen">
-    <h2 style="margin:0 0 12px;font-size:28px">Unsere Leistungen</h2>
-    <p style="margin:0 0 20px;color:#c9cfdb">VIP Shuttle · Kurier · Flughafentransfer · AI-gestützte Streckenoptimierung</p>
-    <div class="cards">
-      <article class="card"><img src="assets/prospekt-leistungen.jpg" alt="Leistungen"><h3>Leistungen</h3><p>VIP & Shuttle, Kurierfahrten, Zeitkritische Lieferungen.</p></article>
-      <article class="card"><img src="assets/prospekt-ai-system.jpg" alt="AI System"><h3>AI System</h3><p>Echtzeit-Daten, intelligente Entscheidungen, Effizienz.</p></article>
-      <article class="card"><img src="assets/prospekt-route-clean.jpg" alt="Route"><h3>Routen</h3><p>Route Intelligence · Stau, Wetter & Nachfrage-Optimierung.</p></article>
-      <article class="card"><img src="assets/prospekt-ueber-uns.jpg" alt="Über uns"><h3>Über uns</h3><p>Zuverlässig, schnell, detailorientiert — Zenty Express AI.</p></article>
+    <h2 data-i18n="services">Unsere Leistungen</h2>
+    <p class="muted" data-i18n="servicesSub">VIP Shuttle · Kurier · Flughafentransfer · KI‑gestützte Streckenoptimierung</p>
+    <div class="grid-4">
+      <article class="card tile"><img src="assets/prospekt-leistungen.jpg" alt="Leistungen"><div class="body"><h3 data-i18n="svc1">VIP & Business</h3><p class="muted" data-i18n="svc1p">Diskreter Fahrservice mit höchstem Komfort.</p></div></article>
+      <article class="card tile"><img src="assets/prospekt-ai-system.jpg" alt="AI System"><div class="body"><h3 data-i18n="svc2">Shuttle & Gruppen</h3><p class="muted" data-i18n="svc2p">Flughafen, Mitarbeiter, Events — sicher & pünktlich.</p></div></article>
+      <article class="card tile"><img src="assets/prospekt-route-clean.jpg" alt="Route"><div class="body"><h3 data-i18n="svc3">Kurier & Express</h3><p class="muted" data-i18n="svc3p">Zeitkritische Zustellung, europaweit 24/7.</p></div></article>
+      <article class="card tile"><img src="assets/prospekt-ueber-uns.jpg" alt="Über uns"><div class="body"><h3 data-i18n="svc4">Fest‑ & Tagestouren</h3><p class="muted" data-i18n="svc4p">Smart geplant mit KI, flexibel & transparent.</p></div></article>
     </div>
   </section>
 
   <!-- FAHRZEUGE -->
   <section class="section container" id="fahrzeuge">
-    <h2 style="margin:0 0 12px;font-size:28px">Unsere Fahrzeugflotte</h2>
-    <p style="margin:0 0 20px;color:#c9cfdb">Siyah Vito & Caddy · Beyaz Trafic & Sprinter & Ducato — bakımlı, hazır.</p>
-    <div class="cards">
-      <article class="card"><img src="assets/vito.jpg" alt="Mercedes Vito"><h3>Mercedes Vito</h3><p>Siyah · Konfor & geniş iç hacim</p></article>
-      <article class="card"><img src="assets/caddy.jpg" alt="VW Caddy"><h3>VW Caddy</h3><p>Siyah · Ekonomik & şehir içi</p></article>
-      <article class="card"><img src="assets/trafic.jpg" alt="Renault Trafic"><h3>Renault Trafic</h3><p>Beyaz (camlı) · Esnek kullanım</p></article>
-      <article class="card"><img src="assets/sprinter.jpg" alt="Mercedes Sprinter"><h3>Mercedes Sprinter</h3><p>Beyaz (kapalı) · Hacimli yükler</p></article>
-      <article class="card"><img src="assets/ducato.jpg" alt="Fiat Ducato"><h3>Fiat Ducato</h3><p>Beyaz (kapalı) · Uzun mesafe</p></article>
-      <article class="card"><img src="assets/prospekt-fahrzeuge.jpg" alt="Fleet Poster"><h3>Fahrzeuge Poster</h3><p>Filonun genel görünümü</p></article>
-      <article class="card"><img src="assets/prospekt-route-vans.jpg" alt="Route Vans"><h3>Route + Vans</h3><p>Rota zekâsı + araçlar</p></article>
-      <article class="card"><img src="assets/prospekt-cover-brochure.jpg" alt="Brochure Cover"><h3>Prospekt Kapağı</h3><p>Broşür dış kapak</p></article>
+    <h2 data-i18n="fleet">Unsere Fahrzeugflotte</h2>
+    <p class="muted" data-i18n="fleetSub">Siyah Vito & Caddy · Weiß Trafic, Sprinter & Ducato — gepflegt, bereit.</p>
+    <div class="grid-4">
+      <article class="card tile"><img src="assets/vito.jpg" alt="Mercedes Vito"><div class="body"><h3>Mercedes Vito <span class="pill" data-i18n="black">schwarz</span></h3><p class="muted" data-i18n="vitoP">Eleganter Shuttle, bis 8 Personen.</p></div></article>
+      <article class="card tile"><img src="assets/caddy.jpg" alt="VW Caddy"><div class="body"><h3>VW Caddy <span class="pill" data-i18n="black">schwarz</span></h3><p class="muted" data-i18n="caddyP">Kompakt & wendig.</p></div></article>
+      <article class="card tile"><img src="assets/trafic.jpg" alt="Renault Trafic"><div class="body"><h3>Renault Trafic <span class="pill" data-i18n="white">weiß</span></h3><p class="muted" data-i18n="traficP">Viel Platz für Team & Gepäck.</p></div></article>
+      <article class="card tile"><img src="assets/sprinter.jpg" alt="Mercedes Sprinter"><div class="body"><h3>Mercedes Sprinter <span class="pill" data-i18n="white">weiß</span></h3><p class="muted" data-i18n="sprinterP">Gruppen‑ & Sondertransporte.</p></div></article>
+      <article class="card tile"><img src="assets/ducato.jpg" alt="Fiat Ducato"><div class="body"><h3>Fiat Ducato <span class="pill" data-i18n="white">weiß</span></h3><p class="muted" data-i18n="ducatoP">Zuverlässig auf Langstrecke.</p></div></article>
+      <article class="card tile"><img src="assets/prospekt-fahrzeuge.jpg" alt="Poster"><div class="body"><h3 data-i18n="fleetPoster">Fahrzeuge Poster</h3><p class="muted" data-i18n="fleetPosterP">Übersicht der Flotte.</p></div></article>
+      <article class="card tile"><img src="assets/prospekt-route-vans.jpg" alt="Route + Vans"><div class="body"><h3 data-i18n="routeVans">Route + Vans</h3><p class="muted" data-i18n="routeVansP">Routenintelligenz mit Fahrzeugen.</p></div></article>
+      <article class="card tile"><img src="assets/prospekt-cover-brochure.jpg" alt="Brochure"><div class="body"><h3 data-i18n="brochure">Prospekt</h3><p class="muted" data-i18n="brochureP">Außencover.</p></div></article>
     </div>
   </section>
 
-  <!-- CONTACT -->
+  <!-- PREISE -->
+  <section class="section container" id="preise">
+    <h2 data-i18n="prices">Preise</h2>
+    <div class="grid-3">
+      <article class="card price"><h3>Basic</h3><div class="body"><p><b>€ 1,00/km</b></p><p class="muted" data-i18n="p1">Kurzstrecken · Transparente Tarife</p><a class="btn" href="#kontakt" data-i18n="request">Anfragen</a></div></article>
+      <article class="card price"><h3>Standard</h3><div class="body"><p><b>€ 0,90/km</b></p><p class="muted" data-i18n="p2">20–100 km · schnelle Verfügbarkeit</p><a class="btn" href="#kontakt" data-i18n="request">Anfragen</a></div></article>
+      <article class="card price"><h3>Premium</h3><div class="body"><p><b>€ 0,80/km</b></p><p class="muted" data-i18n="p3">Langstrecke · VIP</p><a class="btn" href="#kontakt" data-i18n="request">Anfragen</a></div></article>
+    </div>
+    <p class="muted" style="margin-top:8px" data-i18n="priceNote">Preise sind Richtwerte; Endpreise je nach Route & Zeitplan.</p>
+  </section>
+
+  <!-- KI SYSTEM (How it works) + ROUTE MAP -->
+  <section class="section container" id="ki">
+    <h2>Zenty AI Route Intelligence</h2>
+    <div class="route">
+      <div class="map card">
+        <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+          <g>
+            <line class="edge" x1="10" y1="80" x2="35" y2="60"/>
+            <line class="edge" x1="35" y1="60" x2="60" y2="70"/>
+            <line class="edge" x1="60" y1="70" x2="85" y2="40"/>
+            <line class="edge" x1="35" y1="60" x2="50" y2="35"/>
+            <circle class="dot" cx="10" cy="80" r="2"/>
+            <circle class="dot" cx="35" cy="60" r="2.2"/>
+            <circle class="dot" cx="60" cy="70" r="2"/>
+            <circle class="dot" cx="50" cy="35" r="2"/>
+            <circle class="dot" cx="85" cy="40" r="2.4"/>
+          </g>
+        </svg>
+      </div>
+      <div class="card pad">
+        <h3 data-i18n="how">Wie funktioniert’s?</h3>
+        <ol class="muted">
+          <li data-i18n="h1">Live‑Verkehrs‑ & Sensordaten werden erfasst.</li>
+          <li data-i18n="h2">KI prognostiziert Nachfrage, Stau & Wetter‑Einfluss.</li>
+          <li data-i18n="h3">Automatische Routenplanung & Zeit‑/Kosten‑Optimierung.</li>
+          <li data-i18n="h4">Fahrer erhält klare Instruktionen — effizient & pünktlich.</li>
+        </ol>
+        <p class="muted" data-i18n="howSub">Ergebnis: Schnellere Fahrten, geringere Kosten, weniger CO₂.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- KONTAKT -->
   <section class="section container" id="kontakt">
-    <h2 style="margin:0 0 12px;font-size:28px">Kontakt & Standort</h2>
-    <p style="margin:0 0 6px;color:#c9cfdb">E-Mail: info@zentyexpress.de · Web: zentyexpress.de</p>
-    <p style="margin:0 0 20px;color:#c9cfdb">Ulm · Dornstadt · Lonsee · Blaustein · çevresi</p>
-    <div class="prospekt-bar">
-      <a class="btn" href="mailto:info@zentyexpress.de">E-Mail</a>
-      <a class="btn" href="#">Telegram</a>
-      <a class="btn" href="#">WhatsApp</a>
+    <h2>Kontakt & Standort</h2>
+    <p class="muted">E‑Mail: info@zentyexpress.de · Web: zentyexpress.de</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px">
+      <!-- WhatsApp & Telegram: düzenlenebilir linkler -->
+      <a class="btn" href="https://wa.me/49162575957" target="_blank" rel="noopener">WhatsApp</a>
+      <a class="btn" href="https://t.me/ZentyExpressBot" target="_blank" rel="noopener">Telegram</a>
+      <a class="btn gold" href="mailto:info@zentyexpress.de">E‑Mail</a>
     </div>
   </section>
 
-  <footer class="container">
-    © Zenty Express AI — Mobility & Transport · Final Signature Edition v9
-  </footer>
+  <footer class="container">© Zenty Express AI — Mobility & Transport · Final Signature Edition v9</footer>
 
   <!-- PROSPEKT MODAL / FLIPBOOK -->
-  <div class="modal" id="prospektModal" aria-hidden="true">
-    <div class="book" role="dialog" aria-label="Prospekt">
-      <div class="page"><img id="pageLeft" alt="Seite links"></div>
-      <div class="page"><img id="pageRight" alt="Seite rechts" class="turn"></div>
-      <div class="ghost">
-        <button class="circle" id="prev" title="Zurück">◀</button>
-        <button class="circle" id="next" title="Weiter">▶</button>
-        <button class="circle" id="close" title="Schließen">✕</button>
+  <div class="modal" id="prospektModal" aria-hidden="true" style="position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.6);backdrop-filter:blur(6px);z-index:100">
+    <div class="book" role="dialog" aria-label="Prospekt" style="width:min(1100px,95vw);height:min(720px,80vh);display:grid;grid-template-columns:1fr 1fr;border-radius:var(--radius);overflow:hidden;border:1px solid #2a3143;background:linear-gradient(180deg,#0f131a,#0b0f14)">
+      <div class="page" style="position:relative;overflow:hidden"><img id="pageLeft" alt="Seite links" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></div>
+      <div class="page" style="position:relative;overflow:hidden"><img id="pageRight" alt="Seite rechts" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></div>
+      <div style="position:absolute;inset:16px 16px auto auto;display:flex;gap:8px">
+        <button class="btn" id="prev">◀</button>
+        <button class="btn" id="next">▶</button>
+        <button class="btn" id="close">✕</button>
       </div>
-      <div class="book-ui">
-        <div class="chip">Prospekt · Zenty Express AI</div>
-      </div>
-      <div class="hint">← / → ile sayfa çevir · ESC ile kapat</div>
+      <div style="position:absolute;left:16px;bottom:12px;color:#c6cede;font-size:13px;opacity:.85">← / → umblättern · ESC schließen</div>
     </div>
   </div>
 
   <script>
-    // Prospekt sayfa listesi (sıra)
+    // ===== Translations =====
+    const I18N = {
+      de: {
+        navVehicles:"Fahrzeuge", navPrices:"Preise", navAI:"KI‑System", navProspekt:"Prospekt", navContact:"Kontakt",
+        heroTitle:"AI Powered Mobility — Premium Shuttle · Kurier · Fleet",
+        heroSub:"Intelligente Routen, Echtzeit‑Analyse, zuverlässige Transporte. <b>Zenty Express AI</b> setzt neue Maßstäbe in Mobilität & Transport.",
+        openProspekt:"📖 Prospekt ansehen", seeFleet:"🚐 Fahrzeugflotte",
+        services:"Unsere Leistungen", servicesSub:"VIP Shuttle · Kurier · Flughafentransfer · KI‑gestützte Streckenoptimierung",
+        svc1:"VIP & Business", svc1p:"Diskreter Fahrservice mit höchstem Komfort.",
+        svc2:"Shuttle & Gruppen", svc2p:"Flughafen, Mitarbeiter, Events — sicher & pünktlich.",
+        svc3:"Kurier & Express", svc3p:"Zeitkritische Zustellung, europaweit 24/7.",
+        svc4:"Fest‑ & Tagestouren", svc4p:"Smart geplant mit KI, flexibel & transparent.",
+        fleet:"Unsere Fahrzeugflotte", fleetSub:"Schwarzer Vito & Caddy · Weiße Trafic, Sprinter & Ducato — gepflegt, bereit.",
+        black:"schwarz", white:"weiß", vitoP:"Eleganter Shuttle, bis 8 Personen.", caddyP:"Kompakt & wendig.", traficP:"Viel Platz für Team & Gepäck.", sprinterP:"Gruppen‑ & Sondertransporte.", ducatoP:"Zuverlässig auf Langstrecke.",
+        fleetPoster:"Fahrzeuge Poster", fleetPosterP:"Übersicht der Flotte.", routeVans:"Route + Vans", routeVansP:"Routenintelligenz mit Fahrzeugen.", brochure:"Prospekt", brochureP:"Außencover.",
+        prices:"Preise", p1:"Kurzstrecken · Transparente Tarife", p2:"20–100 km · schnelle Verfügbarkeit", p3:"Langstrecke · VIP", priceNote:"Preise sind Richtwerte; Endpreise je nach Route & Zeitplan.", request:"Anfragen",
+        how:"Wie funktioniert’s?", h1:"Live‑Verkehrs‑ & Sensordaten werden erfasst.", h2:"KI prognostiziert Nachfrage, Stau & Wetter‑Einfluss.", h3:"Automatische Routenplanung & Zeit‑/Kosten‑Optimierung.", h4:"Fahrer erhält klare Instruktionen — effizient & pünktlich.", howSub:"Ergebnis: Schnellere Fahrten, geringere Kosten, weniger CO₂."
+      },
+      en: {
+        navVehicles:"Vehicles", navPrices:"Pricing", navAI:"AI System", navProspekt:"Brochure", navContact:"Contact",
+        heroTitle:"AI‑Powered Mobility — Premium Shuttle · Courier · Fleet",
+        heroSub:"Smart routes, real‑time analytics, reliable transport. <b>Zenty Express AI</b> sets new standards in mobility.",
+        openProspekt:"📖 Open brochure", seeFleet:"🚐 View fleet",
+        services:"Our Services", servicesSub:"VIP shuttle · Courier · Airport transfer · AI‑route optimization",
+        svc1:"VIP & Business", svc1p:"Discreet ride service with top comfort.", svc2:"Shuttle & Groups", svc2p:"Airport, staff, events — safe & on time.",
+        svc3:"Courier & Express", svc3p:"Time‑critical delivery, Europe‑wide 24/7.", svc4:"Festivities & Day tours", svc4p:"AI‑planned, flexible & transparent.",
+        fleet:"Our Fleet", fleetSub:"Black Vito & Caddy · White Trafic, Sprinter & Ducato — maintained and ready.",
+        black:"black", white:"white", vitoP:"Elegant shuttle for up to 8.", caddyP:"Compact & agile.", traficP:"Plenty of room for team & luggage.", sprinterP:"Group & special transports.", ducatoP:"Reliable on long distance.",
+        fleetPoster:"Fleet Poster", fleetPosterP:"Overview of the fleet.", routeVans:"Route + Vans", routeVansP:"Route intelligence with vehicles.", brochure:"Brochure", brochureP:"Outer cover.",
+        prices:"Pricing", p1:"Short distances · Transparent rates", p2:"20–100 km · fast availability", p3:"Long distance · VIP", priceNote:"Prices are guide values; final prices depend on route & schedule.", request:"Request quote",
+        how:"How does it work?", h1:"Live traffic & sensor data are ingested.", h2:"AI forecasts demand, traffic and weather impact.", h3:"Automatic route planning & time/cost optimization.", h4:"Driver gets clear instructions — efficient & on time.", howSub:"Result: Faster trips, lower costs, less CO₂."
+      },
+      tr: {
+        navVehicles:"Araçlar", navPrices:"Fiyatlar", navAI:"AI Sistemi", navProspekt:"Prospekt", navContact:"İletişim",
+        heroTitle:"AI Destekli Mobilite — Premium Shuttle · Kurye · Filo",
+        heroSub:"Akıllı rotalar, gerçek‑zaman analiz, güvenilir taşımacılık. <b>Zenty Express AI</b> yeni standartlar getirir.",
+        openProspekt:"📖 Prospekti Aç", seeFleet:"🚐 Filomuz",
+        services:"Hizmetlerimiz", servicesSub:"VIP shuttle · Kurye · Havalimanı transferi · AI rota optimizasyonu",
+        svc1:"VIP & Business", svc1p:"Üst düzey konforlu, gizli sürüş.", svc2:"Shuttle & Gruplar", svc2p:"Havalimanı, personel, etkinlik — güvenli ve zamanında.",
+        svc3:"Kurye & Express", svc3p:"Zaman kritik teslimat, Avrupa genelinde 7/24.", svc4:"Fest & Günlük turlar", svc4p:"AI ile akıllı planlama, esnek ve şeffaf.",
+        fleet:"Araç Filosu", fleetSub:"Siyah Vito & Caddy · Beyaz Trafic, Sprinter & Ducato — bakımlı ve hazır.",
+        black:"siyah", white:"beyaz", vitoP:"8 kişiye kadar şık shuttle.", caddyP:"Kompakt ve çevik.", traficP:"Ekip & bagaj için geniş alan.", sprinterP:"Grup & özel taşımalar.", ducatoP:"Uzun yolda güvenilir.",
+        fleetPoster:"Araç Posteri", fleetPosterP:"Filonun genel görünümü.", routeVans:"Rota + Araçlar", routeVansP:"Araçlarla rota zekâsı.", brochure:"Prospekt", brochureP:"Dış kapak.",
+        prices:"Fiyatlar", p1:"Kısa mesafe · Şeffaf tarifeler", p2:"20–100 km · hızlı erişim", p3:"Uzun mesafe · VIP", priceNote:"Fiyatlar kılavuz niteliğindedir; nihai fiyat rota ve zamana göre değişir.", request:"Teklif iste",
+        how:"Nasıl çalışır?", h1:"Canlı trafik & sensör verileri alınır.", h2:"AI talep, trafik ve hava etkisini tahmin eder.", h3:"Otomatik rota planı & süre/maliyet optimizasyonu.", h4:"Sürücü net talimat alır — verimli ve zamanında.", howSub:"Sonuç: Daha hızlı sefer, daha düşük maliyet, daha az CO₂."
+      }
+    };
+
+    function applyLang(lang){
+      document.documentElement.lang = lang;
+      document.querySelectorAll('[data-i18n]').forEach(el=>{
+        const k = el.getAttribute('data-i18n');
+        if(I18N[lang] && I18N[lang][k]) el.innerHTML = I18N[lang][k];
+      });
+      document.querySelectorAll('.lang button').forEach(b=> b.classList.toggle('active', b.dataset.lang===lang));
+    }
+
+    document.querySelectorAll('.lang button').forEach(btn=>{
+      btn.addEventListener('click', ()=> applyLang(btn.dataset.lang));
+    });
+    applyLang('de'); // Default German
+
+    // ===== Prospekt Flipbook =====
     const PAGES = [
       'assets/prospekt-cover-brochure.jpg',
       'assets/prospekt-ai-system.jpg',
@@ -179,7 +266,6 @@
       'assets/prospekt-route-clean.jpg',
       'assets/prospekt-cover-fleet.jpg'
     ];
-
     const modal = document.getElementById('prospektModal');
     const open1 = document.getElementById('openProspekt');
     const open2 = document.getElementById('openProspekt2');
@@ -188,33 +274,17 @@
     const closeBtn = document.getElementById('close');
     const left = document.getElementById('pageLeft');
     const right = document.getElementById('pageRight');
-    let idx = 0; // right page index; left = idx-1
-
-    function render(){
-      right.classList.remove('turn');
-      requestAnimationFrame(()=>{
-        right.classList.add('turn');
-      });
-      right.src = PAGES[idx] || '';
-      left.src = PAGES[idx-1] || '';
-    }
-
-    function open(){ modal.classList.add('show'); idx = 1; render(); }
-    function close(){ modal.classList.remove('show'); }
+    let idx = 1;
+    function render(){ right.src = PAGES[idx]||''; left.src = PAGES[idx-1]||''; }
+    function open(){ modal.style.display='flex'; idx=1; render(); }
+    function close(){ modal.style.display='none'; }
     function goNext(){ if(idx < PAGES.length-1){ idx++; render(); } }
     function goPrev(){ if(idx > 1){ idx--; render(); } }
-
     [open1, open2].forEach(b=> b && b.addEventListener('click', open));
     closeBtn.addEventListener('click', close);
     next.addEventListener('click', goNext);
     prev.addEventListener('click', goPrev);
-    window.addEventListener('keydown', e=>{
-      if(!modal.classList.contains('show')) return;
-      if(e.key==='Escape') close();
-      if(e.key==='ArrowRight') goNext();
-      if(e.key==='ArrowLeft') goPrev();
-    });
-    // Close on outside click
+    window.addEventListener('keydown', e=>{ if(modal.style.display==='flex'){ if(e.key==='Escape') close(); if(e.key==='ArrowRight') goNext(); if(e.key==='ArrowLeft') goPrev(); }});
     modal.addEventListener('click', (e)=>{ if(e.target===modal) close(); });
   </script>
 </body>
