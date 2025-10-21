@@ -1,53 +1,60 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Zenty Express AI – Mobility & Transport</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Zenty Express AI – Startseite</title>
   <link rel="stylesheet" href="style.css" />
 </head>
-<body>
-  <header>
-    <img src="assets/logo.png?v=1" alt="Zenty Express AI Logo" class="logo">
-    <nav>
+<body class="theme-dark">
+  <header class="site-header">
+    <a class="brand" href="index.html">
+      <img src="assets/logo.png?v=3" alt="Zenty Express AI Logo" height="40">
+    </a>
+    <nav class="nav">
       <a href="index.html">Start</a>
       <a href="ueber-uns.html">Über uns</a>
       <a href="fahrzeuge.html">Fahrzeuge</a>
       <a href="leistungen.html">Leistungen</a>
       <a href="ki-system.html">KI-System</a>
       <a href="preise.html">Preise</a>
-      <a href="kontakt.html" class="cta">Kontakt</a>
+      <a class="btn btn-primary" href="kontakt.html">Kontakt</a>
     </nav>
   </header>
 
-  <section class="hero" style="background-image:url('assets/cover-titelblatt.jpg?v=1')">
-    <div class="hero-text">
-      <h1>AI-Powered Mobility.<br>Intelligent Transport.<br>Made in Germany.</h1>
-      <p>Effiziente, smarte Fahrten – mit Zenty Express AI.</p>
-      <div class="buttons">
-        <a href="preise.html" class="btn">Preise ansehen</a>
-        <a href="kontakt.html" class="btn secondary">Angebot anfordern</a>
+  <main>
+    <section class="hero" style="--bg:url('assets/cover-titelblatt.jpg?v=3')">
+      <div class="hero__content">
+        <h1>Zenty Express AI</h1>
+        <p>Intelligente Mobilität & Transportlösungen<br>– Powered by AI –</p>
+        <a class="btn btn-primary" href="preise.html">Preise ansehen</a>
+        <a class="btn" href="kontakt.html">Kontakt aufnehmen</a>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="services">
-    <div class="service-box">
-      <h3>🚘 VIP & Business</h3>
-      <p>Exklusiver, diskreter Fahrservice mit höchstem Komfort.</p>
-    </div>
-    <div class="service-box">
-      <h3>📦 Kurier & Express</h3>
-      <p>Schnelle & sichere Zustellung – lokal & europaweit.</p>
-    </div>
-    <div class="service-box">
-      <h3>🧭 Fest- & Tagestouren</h3>
-      <p>Events, Hochzeiten & Ausflüge – smart geplant mit KI.</p>
-    </div>
-  </section>
+    <section class="grid cols-3">
+      <article class="card">
+        <h3>VIP & Business</h3>
+        <p>Exklusiver Fahrservice mit höchstem Komfort.</p>
+      </article>
+      <article class="card">
+        <h3>Kurier & Express</h3>
+        <p>Schnelle & sichere Zustellung – lokal & europaweit.</p>
+      </article>
+      <article class="card">
+        <h3>Fest- & Tagestouren</h3>
+        <p>Events und Tagesausflüge – KI-optimiert.</p>
+      </article>
+    </section>
+  </main>
 
-  <footer>
-    <p>Zenty Express AI – Mobility & Transport · Sitz Lonsee (Baden-Württemberg)</p>
+  <footer class="site-footer">
+    <div>Zenty Express AI — Mobility & Transport • Sitz Lonsee (Baden-Württemberg)</div>
+    <div class="contact">
+      <a href="https://wa.me/491625757957?text=ZENTY%20EXPRESS%20AI" target="_blank">WhatsApp</a>
+      <a href="https://t.me/ZentyExpressBot" target="_blank">@ZentyExpressBot</a>
+      <a href="mailto:info@zentyexpress.de">info@zentyexpress.de</a>
+    </div>
   </footer>
 </body>
 </html>
