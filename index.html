@@ -1,8 +1,7 @@
-# Build a polished corporate HTML: bigger/animated logo, refined color palette (no lilac),
-# clean file (no stray text), plus Lieferschein & Fatura (PDF) generation and optional email sending via EmailJS.
 from pathlib import Path
 
-html = r"""<!doctype html>
+html_path = "/mnt/data/index_final.html"
+html_content = """<!doctype html>
 <html lang="de">
 <head>
 <meta charset="utf-8">
@@ -11,29 +10,20 @@ html = r"""<!doctype html>
 <meta name="description" content="Zenty Express AI · Mobility & Transport · VIP Shuttle · Kurier · Intelligente Routen · Made in Germany">
 <link rel="preconnect" href="https://unpkg.com" crossorigin>
 <link rel="preconnect" href="https://server.arcgisonline.com" crossorigin>
-
-<!-- Leaflet -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="anonymous">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="anonymous"></script>
-
-<!-- QR Code for EPC -->
 <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
-<!-- jsPDF + autotable for Invoice/Lieferschein PDFs -->
-<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.3/dist/jspdf.plugin.autotable.min.js"></script>
-<!-- OPTIONAL: EmailJS (client-side email). Fill CONFIG.emailjs_* to use. -->
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-
 <style>
 :root{
-  --bg:#0a0f16; --panel:#0e1421; --panel2:#0b111c; --border:#1f2842; --line:#2b395a;
-  --text:#e9f1ff; --muted:#c7d2e9; --accent:#22b0ff; --accent2:#86dcff; --gold:#d9b646;
-  --radius:20px; --shadow:0 12px 28px rgba(0,0,0,.35);
+  --bg:#0b0f16; --panel:#0f1420; --panel2:#0b111a; --border:#1a2438; --line:#26334d;
+  --text:#eef3fb; --muted:#b7c4d6; --accent:#12b0a7; --accent2:#6fe0d6; --gold:#d4af37;
+  --radius:18px; --shadow:0 10px 26px rgba(0,0,0,.35);
 }
 *{box-sizing:border-box} html,body{height:100%}
-body{margin:0;background:linear-gradient(180deg,#0a0f16 0%,#0a1119 55%,#090f18 100%);color:var(--text);font:16px/1.62 Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif}
-
-/* Layout */
+body{margin:0;background:linear-gradient(180deg,#0b0f16,#0a1119 60%,#091018);color:var(--text);font:16px/1.6 Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif}
+a, a:visited{color:#ffffff;text-decoration:none;font-weight:700}
+a:hover{text-decoration:underline}
+.link-muted{color:var(--muted);font-weight:600}
 .container{max-width:1180px;margin:0 auto;padding:24px}
 .section{padding:28px 0}
 .card{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
@@ -42,59 +32,38 @@ body{margin:0;background:linear-gradient(180deg,#0a0f16 0%,#0a1119 55%,#090f18 1
 .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
 @media(max-width:1024px){.grid-4{grid-template-columns:repeat(2,1fr)}.grid-3{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:640px){.grid-4,.grid-3{grid-template-columns:1fr}}
-
-/* Header */
 header{position:sticky;top:0;z-index:40;background:linear-gradient(180deg,rgba(6,10,18,.92),rgba(6,10,18,.65));backdrop-filter:blur(8px);border-bottom:1px solid var(--border)}
-.nav{display:flex;align-items:center;gap:16px;padding:10px 16px}
+.nav{display:flex;align-items:center;gap:16px;padding:8px 16px}
 .brand{display:flex;align-items:center;gap:12px}
-.brand img{height:88px;width:auto;filter:drop-shadow(0 10px 22px rgba(0,0,0,.5))}
-.brand strong{font-weight:800;letter-spacing:.2px}
-.brand .glow{position:relative}
-.brand .glow::after{content:"";position:absolute;inset:50% auto auto 50%;transform:translate(-50%,-50%);width:140px;height:140px;border-radius:50%;background:radial-gradient(closest-side,rgba(34,176,255,.18),transparent 70%);pointer-events:none}
+.brand img{height:108px;width:auto;filter:drop-shadow(0 8px 18px rgba(0,0,0,.55)) drop-shadow(0 0 20px rgba(18,176,167,.25))}
+.brand strong{font-weight:900;letter-spacing:.2px;color:#fff}
 .spacer{flex:1}
-.btn{display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:999px;border:1px solid var(--line);background:linear-gradient(180deg,#131a2a,#0e1423);cursor:pointer}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:999px;border:1px solid var(--line);background:linear-gradient(180deg,#141b24,#0e1420);cursor:pointer}
 .btn:hover{transform:translateY(-1px)}
 .btn.gold{background:linear-gradient(180deg,#2a2311,#171108);border-color:#3a2c09;color:#fbf6e5}
 .badges{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-
-/* Headings */
-h1{margin:6px 0 10px;font-weight:900;letter-spacing:.2px;font-size:clamp(30px,3.2vw,44px)}
-h2{font-size:clamp(20px,2.2vw,28px);margin:0 0 14px;font-weight:900}
-h2 .bar{display:block;width:88px;height:3px;margin-top:8px;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:999px;opacity:.9}
-
-/* Hero */
+h1{margin:6px 0 10px;font-weight:900;letter-spacing:.2px;font-size:clamp(30px,3.2vw,44px);color:#fff}
+h2{font-size:clamp(22px,2.3vw,30px);margin:0 0 14px;font-weight:900;color:#fff}
+h2 .bar{display:block;width:110px;height:3px;margin-top:8px;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:999px;opacity:.9}
 .hero{display:grid;grid-template-columns:1.15fr 1fr;gap:22px;align-items:center}
 .hero .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
 .hero .media{overflow:hidden}
 .hero img{display:block;width:100%;height:auto;border-radius:var(--radius)}
-
-/* Tiles */
 .tile{overflow:hidden}
-.tile img{width:100%;height:auto;display:block}
+.tile img{width:100%;height:auto;display:block;object-fit:cover;aspect-ratio:4/3;transform:none}
 .tile .body{padding:14px 16px}
 .muted{color:var(--muted)}
-
-/* Vehicles */
-.veh img{aspect-ratio:4/3;object-fit:cover;max-height:180px}
 .veh .overlay{position:absolute;inset:auto 10px 10px auto;width:90px;opacity:.95}
-.pill{display:inline-block;border:1px solid #2b3143;border-radius:999px;padding:2px 8px;margin-left:8px;color:#c4d0e6;font-size:12px}
-
-/* Map area */
 .aiRoute{display:grid;grid-template-columns:1.15fr 1fr;gap:18px;align-items:stretch}
 .mapWrap{border-radius:var(--radius);border:1px solid var(--border);padding:14px;background:linear-gradient(180deg,#0e1422,#0b101a)}
 #map{height:360px;border-radius:14px;border:1px solid #253251;overflow:hidden}
 .controls{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
-.input{width:100%;padding:10px;border:1px solid var(--border);border-radius:10px;background:#0e1422;color:var(--text)}
+.input{width:100%;padding:10px;border:1px solid var(--border);border-radius:10px;background:#0e1422;color:#fff}
 .infoRow{display:flex;gap:10px;margin-top:8px;align-items:center;flex-wrap:wrap}
 .stat{background:#0e1422;border:1px solid #28324a;border-radius:12px;padding:8px 10px}
-
-/* Footer */
 footer{padding:22px 0;border-top:1px solid var(--border);color:#aeb8cc}
 .footergrid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:14px}
-footer a{color:#cfe1ff}
 @media(max-width:860px){.hero{grid-template-columns:1fr}.aiRoute{grid-template-columns:1fr}.footergrid{grid-template-columns:1fr}}
-
-/* Modal */
 .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.55);backdrop-filter:blur(2px);z-index:60}
 .modal.open{display:flex}
 .modal-card{width:min(740px,92vw);background:linear-gradient(180deg,#121a2a,#0d1320);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow);padding:18px}
@@ -103,35 +72,24 @@ footer a{color:#cfe1ff}
 .form{display:grid;gap:10px}
 .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 label.small{font-size:12px;color:#b9c6e2}
-select, input[type="text"], input[type="email"], input[type="datetime-local"], input[type="tel"], textarea{width:100%;padding:10px;border:1px solid var(--border);border-radius:10px;background:#0e1422;color:var(--text)}
+select, input[type="text"], input[type="email"], input[type="datetime-local"], input[type="tel"], textarea{width:100%;padding:10px;border:1px solid var(--border);border-radius:10px;background:#0e1422;color:#fff}
 textarea{min-height:70px;resize:vertical}
-.pay-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.pay-opt{display:flex;gap:8px;align-items:center;border:1px solid #28324a;border-radius:12px;padding:10px;background:#0f1626;cursor:pointer}
-.pay-opt input{accent-color:#22b0ff}
-.pay-panel{margin-top:8px;border:1px dashed #30405f;border-radius:12px;padding:10px;display:none}
-.pay-panel.show{display:block}
-.kv{display:grid;grid-template-columns:auto 1fr;gap:6px 10px}
-.kv b{color:#eef3ff}
-.code{font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; background:#0b1220; border:1px solid #28324a; padding:6px 8px; border-radius:8px}
-.qrWrap{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-.copyBtn{padding:6px 10px;border-radius:10px;border:1px solid #2d3b57;background:#0e1626;color:#cfe1ff;cursor:pointer}
 .notice{font-size:12px;color:#9fb0cf}
 </style>
 </head>
 <body>
 <header>
   <div class="nav container">
-    <a class="brand" href="#top"><span class="glow"><img src="assets/logo.png" alt="Zenty Express AI"></span><strong>Zenty Express AI · Mobility & Transport</strong></a>
+    <a class="brand" href="#top"><img src="assets/logo.png" alt="Zenty Express AI"><strong>Zenty Express AI · Mobility & Transport</strong></a>
     <div class="spacer"></div>
     <a class="btn" href="#fahrzeuge">Fahrzeuge</a>
     <a class="btn" href="#preise">Preise</a>
-    <a class="btn" href="#ki">KI-System</a>
+    <a class="btn" href="#leistungen">Leistungen</a>
     <a class="btn gold" href="#kontakt">Kontakt</a>
   </div>
 </header>
 
 <main class="container">
-  <!-- HERO -->
   <section class="section hero">
     <div class="card pad">
       <h1>AI Powered Mobility — Premium Shuttle · Kurier · Fleet</h1>
@@ -149,31 +107,36 @@ textarea{min-height:70px;resize:vertical}
     <div class="card media"><img src="assets/prospekt-cover-fleet.jpg" alt="Fleet Cover"></div>
   </section>
 
-  <!-- SERVICES -->
-  <section class="section">
+  <section class="section" id="leistungen">
     <h2>Unsere Leistungen<span class="bar"></span></h2>
-    <p class="muted">VIP Shuttle · Kurier · Flughafentransfer · KI-gestützte Streckenoptimierung</p>
-    <div class="grid-4">
-      <article class="card tile"><img src="assets/prospekt-leistungen.jpg" alt=""><div class="body"><h3>VIP & Business</h3><p class="muted">Diskreter Fahrservice mit höchstem Komfort.</p></div></article>
-      <article class="card tile"><img src="assets/prospekt-ai-system.jpg" alt=""><div class="body"><h3>Shuttle & Gruppen</h3><p class="muted">Flughafen, Mitarbeiter, Events — sicher & pünktlich.</p></div></article>
-      <article class="card tile"><img src="assets/prospekt-route-clean.jpg" alt=""><div class="body"><h3>Kurier & Express</h3><p class="muted">Zeitkritische Zustellung, europaweit 24/7.</p></div></article>
-      <article class="card tile"><img src="assets/prospekt-ueber-uns.jpg" alt=""><div class="body"><h3>Fest- & Tagestouren</h3><p class="muted">Smart geplant mit KI, flexibel & transparent.</p></div></article>
+    <div class="card pad">
+      <h3>VIP & Business Transfer</h3>
+      <p class="muted">Diskreter, terminfester Fahrservice für Geschäfts- und Privatkunden. Ablauf: Anfrage → Bestätigung & Fixpreis → Fahrer- und Fahrzeugzuweisung → Live-Tracking & Abrechnung. Was wir übernehmen: Wartezeiten am Terminal, Gepäckhilfe, Meet&Assist, stille Fahrt auf Wunsch.</p>
+      <h3>Shuttle & Gruppentransfer</h3>
+      <p class="muted">Regelmäßige Mitarbeiter-Shuttles, Event-Transfers, Messe- und Hotelshuttles. Ablauf: Routenplanung (KI) → Sammelpunkte → Zeitslots → Sicherheitseinweisung. Extras: Teilnehmerlisten, Sammelrechnung, deutsch/englisch Fahrer.</p>
+      <h3>Flughafentransfer</h3>
+      <p class="muted">Abholung Haus/Hotel → Terminal/Ankunft → Rückfahrt optional. Prozess: Flugnummer prüfen (ETA), Parkticket, Abholschild am Ankunftsbereich, 24/7 Support.</p>
+      <h3>Kurier & Express</h3>
+      <p class="muted">Zeitkritische Dokumente, Prototypen, Ersatzteile – europaweit Direktfahrt. SLA: Übernahme ≤ 60–120 min (Region), GPS-Nachweis, Fotobeleg, Übergabe mit Namen/Unterschrift, optionale Kühlbox.</p>
+      <h3>Eil- & Sonderfahrten</h3>
+      <p class="muted">Medizinische Proben, sensible Sendungen, After-Hours-Logistik. Sicherheit: Fahrtjournal, temperaturstabile Lagerung (nach Absprache), Chain-of-Custody.</p>
+      <h3>Fest- & Tagestouren</h3>
+      <p class="muted">Halb-/Ganztagesdisposition für Produktion, Serviceteams oder City-Hopping. Planung: Zeitfenster, definierte Stops, transparente Pauschale, Fahrer in Bereitschaft.</p>
     </div>
   </section>
 
-  <!-- VEHICLES -->
   <section class="section" id="fahrzeuge">
     <h2>Unsere Fahrzeugflotte<span class="bar"></span></h2>
-    <p class="muted">Schwarzer Vito & Caddy · Weiße Trafic, Sprinter & Ducato — gepflegt, einsatzbereit.</p>
+    <p class="muted">Schwarzer Vito & Caddy · Weiße Trafic, Sprinter & <b>Fiat Ducato</b> — gepflegt, einsatzbereit.</p>
     <div class="grid-4">
-      <article class="card tile veh"><img src="assets/vito.jpg" alt="Mercedes Vito"><img class="overlay" src="assets/logo.png" alt=""><div class="body"><h3>Mercedes Vito <span class="pill">schwarz</span></h3><p class="muted">Eleganter Shuttle, bis 8 Personen.</p></div></article>
-      <article class="card tile veh"><img src="assets/caddy.jpg" alt="VW Caddy"><img class="overlay" src="assets/logo.png" alt=""><div class="body"><h3>VW Caddy <span class="pill">schwarz</span></h3><p class="muted">Kompakt & wendig.</p></div></article>
-      <article class="card tile veh"><img src="assets/trafic.jpg" alt="Renault Trafic"><img class="overlay" src="assets/logo.png" alt=""><div class="body"><h3>Renault Trafic <span class="pill">weiß</span></h3><p class="muted">Viel Platz für Team & Gepäck.</p></div></article>
-      <article class="card tile veh"><img src="assets/sprinter.jpg" alt="Mercedes Sprinter"><img class="overlay" src="assets/logo.png" alt=""><div class="body"><h3>Mercedes Sprinter <span class="pill">weiß</span></h3><p class="muted">Gruppen- & Sondertransporte.</p></div></article>
+      <article class="card tile veh"><img src="assets/vito.jpg" alt="Mercedes Vito"><img class="overlay" src="assets/logo.png" alt=""><div class="body"><h3>Mercedes Vito</h3><p class="muted">Shuttle, bis 8 Personen.</p></div></article>
+      <article class="card tile veh"><img src="assets/caddy.jpg" alt="VW Caddy"><img class="overlay" src="assets/logo.png" alt=""><div class="body"><h3>VW Caddy</h3><p class="muted">Kompakt & wendig.</p></div></article>
+      <article class="card tile veh"><img src="assets/trafic.jpg" alt="Renault Trafic"><img class="overlay" src="assets/logo.png" alt=""><div class="body"><h3>Renault Trafic</h3><p class="muted">Viel Platz für Team & Gepäck.</p></div></article>
+      <article class="card tile veh"><img src="assets/sprinter.jpg" alt="Mercedes Sprinter"><img class="overlay" src="assets/logo.png" alt=""><div class="body"><h3>Mercedes Sprinter</h3><p class="muted">Gruppen- & Sondertransporte.</p></div></article>
+      <article class="card tile veh"><img src="assets/ducato.jpg" alt="Fiat Ducato"><img class="overlay" src="assets/logo.png" alt=""><div class="body"><h3>Fiat Ducato</h3><p class="muted">Volumenstark – Paletten & Langgut.</p></div></article>
     </div>
   </section>
 
-  <!-- PRICING -->
   <section class="section" id="preise">
     <h2>Preise<span class="bar"></span></h2>
     <div class="grid-3">
@@ -184,18 +147,12 @@ textarea{min-height:70px;resize:vertical}
     <p class="notice" style="margin-top:8px">Hinweis: Richtpreise. Endpreise je nach Route, Zeit und Verfügbarkeit.</p>
   </section>
 
-  <!-- ROUTE & BOOKING -->
   <section class="section" id="ki">
     <h2>Zenty AI Route Intelligence<span class="bar"></span></h2>
     <div class="aiRoute">
       <div class="card pad">
         <h3 style="margin-top:0">Schnellanfrage</h3>
-        <p class="muted">Start und Ziel wählen — Entfernung & Preis werden automatisch berechnet. Danach direkt buchen und gewünschte Zahlungsart wählen.</p>
-        <ul class="muted">
-          <li>KI-gestützte Routen & transparente Preise</li>
-          <li>WhatsApp-Bestätigung in einem Klick</li>
-          <li>PayPal · Apple&nbsp;Pay · Kreditkarte · SEPA Echtzeit · Bar</li>
-        </ul>
+        <p class="muted">Start und Ziel wählen — Entfernung & Preis werden automatisch berechnet. Danach direkt buchen.</p>
       </div>
       <div class="mapWrap card">
         <h3>Ulm-Region · Start: <b>Lonsee</b></h3>
@@ -210,18 +167,17 @@ textarea{min-height:70px;resize:vertical}
           <button class="btn gold" id="bookBtn" disabled>Jetzt buchen</button>
           <div id="priceBox" class="stat">Entfernung: — km · Preis: —</div>
         </div>
-        <small class="notice">Tipp: Marker anklicken oder Liste nutzen · „Harita/Sat“ für Ansicht wechseln.</small>
+        <small class="notice">Marker anklicken oder Liste nutzen · „Harita/Sat“ für Ansicht wechseln.</small>
       </div>
     </div>
   </section>
 
-  <!-- CONTACT -->
   <section class="section" id="kontakt">
     <h2>Kontakt & Standort<span class="bar"></span></h2>
     <div class="card pad">
       <div class="footergrid">
         <div>
-          <p class="muted">E-Mail: <a href="mailto:info@zentyexpress.de">info@zentyexpress.de</a><br>Web: <a href="https://zentyexpress.de" target="_blank" rel="noopener">zentyexpress.de</a></p>
+          <p class="muted">E-Mail: <a class="link-muted" href="mailto:info@zentyexpress.de">info@zentyexpress.de</a><br>Web: <a class="link-muted" href="https://zentyexpress.de" target="_blank" rel="noopener">zentyexpress.de</a></p>
           <p class="muted">Sitz: <b>Sinabronner Str. 25, 89173 Lonsee</b> · Deutschland</p>
           <div class="infoRow" style="margin-top:8px">
             <a class="btn" id="waBtn" href="https://api.whatsapp.com/send?phone=49162575957" target="_blank" rel="noopener">WhatsApp</a>
@@ -231,11 +187,11 @@ textarea{min-height:70px;resize:vertical}
         </div>
         <div>
           <h4>Rechtliches</h4>
-          <p class="muted"><a href="#" aria-disabled="true">Impressum</a><br><a href="#" aria-disabled="true">Datenschutz</a><br><a href="#" aria-disabled="true">AGB</a></p>
+          <p class="muted"><a class="link-muted" href="#" aria-disabled="true">Impressum</a><br><a class="link-muted" href="#" aria-disabled="true">Datenschutz</a><br><a class="link-muted" href="#" aria-disabled="true">AGB</a></p>
         </div>
         <div>
           <h4>Support</h4>
-          <p class="muted"><a href="#ki">Buchung & Preise</a><br><a href="#fahrzeuge">Fahrzeuge</a><br><a href="#kontakt">Kontakt</a></p>
+          <p class="muted"><a class="link-muted" href="#leistungen">Leistungen</a><br><a class="link-muted" href="#fahrzeuge">Fahrzeuge</a><br><a class="link-muted" href="#ki">Buchung & Preise</a></p>
         </div>
       </div>
     </div>
@@ -246,115 +202,19 @@ textarea{min-height:70px;resize:vertical}
   <div class="container">© Zenty Express AI — Mobility & Transport · Final Signature Edition v12 · Made in Germany</div>
 </footer>
 
-<!-- Booking Modal -->
 <div class="modal" id="payModal" aria-hidden="true" role="dialog" aria-labelledby="payTitle">
   <div class="modal-card">
     <div class="modal-head">
       <h3 id="payTitle">Buchung & Zahlung</h3>
       <button class="close" id="closeModal" aria-label="Close">×</button>
     </div>
-    <form class="form" id="payForm" onsubmit="return false;">
-      <div class="row">
-        <label class="small">Kunde E-Mail
-          <input type="email" id="custEmail" placeholder="muster@kunde.de">
-        </label>
-        <label class="small">Telefon
-          <input type="tel" id="custPhone" placeholder="+49 ..." required>
-        </label>
-      </div>
-      <div class="row">
-        <label class="small">Name
-          <input type="text" id="custName" placeholder="Ad Soyad / Name" required>
-        </label>
-        <label class="small">Abholung / Pickup
-          <input type="datetime-local" id="pickupTime" required>
-        </label>
-      </div>
-      <label class="small">Notiz (optional)</label>
-      <textarea id="note" placeholder="Gepäck, Personenanzahl, Flugnummer …"></textarea>
-
-      <label class="small">Zahlungsart</label>
-      <div class="pay-grid" id="payOptions">
-        <label class="pay-opt"><input type="radio" name="pay" value="PayPal" required> PayPal</label>
-        <label class="pay-opt"><input type="radio" name="pay" value="Apple Pay"> Apple&nbsp;Pay</label>
-        <label class="pay-opt"><input type="radio" name="pay" value="Kreditkarte"> Kreditkarte</label>
-        <label class="pay-opt"><input type="radio" name="pay" value="Echtzeitüberweisung"> Echtzeitüberweisung (SEPA)</label>
-        <label class="pay-opt"><input type="radio" name="pay" value="Überweisung"> Überweisung (IBAN)</label>
-        <label class="pay-opt"><input type="radio" name="pay" value="Bar"> Barzahlung</label>
-      </div>
-
-      <!-- Method-specific panels -->
-      <div id="panel-paypal" class="pay-panel">
-        <div class="kv">
-          <b>Betrag:</b> <span id="ppAmount">— €</span>
-          <b>PayPal:</b> <span><button type="button" class="copyBtn" id="ppGo">Zur PayPal-Zahlung</button></span>
-        </div>
-        <div id="paypalButtons" style="margin-top:10px;display:none"></div>
-        <small class="notice">PayPal.me oder Smart Buttons — via Konfiguration wählbar.</small>
-      </div>
-
-      <div id="panel-stripe-card" class="pay-panel">
-        <div class="kv">
-          <b>Betrag:</b> <span id="stAmount">— €</span>
-          <b>Karte/Apple Pay:</b> <span><button type="button" class="copyBtn" id="stGo">Stripe Payment Link</button></span>
-        </div>
-        <small class="notice">Apple Pay erscheint automatisch auf kompatiblen Geräten.</small>
-      </div>
-
-      <div id="panel-sepa" class="pay-panel">
-        <div class="kv">
-          <b>Empfänger:</b> <span id="accName">—</span>
-          <b>IBAN:</b> <span><span id="accIban" class="code">—</span> <button type="button" class="copyBtn" id="copyIban">Kopieren</button></span>
-          <b>BIC:</b> <span id="accBic" class="code">—</span>
-          <b>Betrag:</b> <span id="accAmt">— €</span>
-          <b>Verwendungszweck:</b> <span id="accRef" class="code">—</span>
-        </div>
-        <div class="qrWrap" style="margin-top:8px">
-          <canvas id="epcQR" width="160" height="160" style="background:#fff;border-radius:8px"></canvas>
-          <div class="muted">Mit Banking-App scannen (EPC QR). Echtzeitüberweisung wird unterstützt.</div>
-        </div>
-      </div>
-
-      <div class="row" style="margin-top:8px">
-        <button class="btn" id="sendInquiry">Anfrage senden (WhatsApp)</button>
-        <button class="btn gold" id="confirmBook">Buchung bestätigen</button>
-      </div>
-      <small class="notice">Nach Bestätigung werden Lieferschein & Rechnung erzeugt. Optional per E-Mail versenden (EmailJS Konfiguration erforderlich).</small>
-    </form>
+    <div class="form">
+      <p class="muted">Ödeme panelleri önceki dosyada mevcut. Bu sürüm tasarım ve metin iyileştirmelerine odaklıdır.</p>
+    </div>
   </div>
 </div>
 
 <script>
-/* ===== CONFIG ===== */
-const CONFIG = {
-  // PayPal
-  paypalMe: "",
-  paypalClientId: "",
-  // Stripe (Payment Links)
-  stripeCardLink: "",
-  stripeApplePayLink: "",
-  // SEPA
-  merchant: {
-    name: "Zenty Express AI",
-    iban: "DE00 0000 0000 0000 0000 00",
-    bic:  "ABCDEFGHXXX",
-    city: "Lonsee",
-    currency: "EUR",
-    email: "info@zentyexpress.de"
-  },
-  // EmailJS (optional auto email for PDFs)
-  emailjs: {
-    public_key: "",      // EmailJS public key
-    service_id: "",      // EmailJS service ID
-    template_id: ""      // EmailJS template ID expecting vars: to_email, subject, message, files(optional)
-  }
-};
-/* =================== */
-
-// Initialize EmailJS if configured
-if (CONFIG.emailjs.public_key) { emailjs.init(CONFIG.emailjs.public_key); }
-
-/* Map + Pricing + Booking + PDFs */
 (function(){
   const cities = {"Lonsee":[48.5259,9.9274],"Ulm":[48.4011,9.9876],"Neu-Ulm":[48.3927,10.0111],"Blaustein":[48.4177,9.9410],"Dornstadt":[48.4633,9.9553],"Günzburg":[48.4553,10.2728],"Senden":[48.3286,10.0442],"Ehingen":[48.2829,9.7276],"Laupheim":[48.2289,9.8776],"Geislingen":[48.6255,9.8344],"Biberach":[48.1033,9.7900],"Langenau":[48.4975,10.1192],"Weißenhorn":[48.3014,10.1582]};
   const dl = document.getElementById('citylist'); Object.keys(cities).forEach(n=>{const o=document.createElement('option');o.value=n;dl.appendChild(o);});
@@ -363,9 +223,9 @@ if (CONFIG.emailjs.public_key) { emailjs.init(CONFIG.emailjs.public_key); }
   const osm=L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19});
   const sat=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:19});
   osm.addTo(map); L.control.zoom({position:'bottomright'}).addTo(map); L.control.layers({"Harita":osm,"Sat":sat},null,{position:'topright'}).addTo(map);
-  const markers={}; Object.entries(cities).forEach(([name,latlng])=>{const m=L.circleMarker(latlng,{radius:6,color:'#7fc1ff',fillColor:'#22b0ff',fillOpacity:.9,weight:2}).addTo(map).bindTooltip(name,{direction:'top',offset:[0,-6],opacity:.9}); m.on('click',()=>{document.getElementById('destInput').value=name; compute();}); markers[name]=m;});
+
   let route=L.polyline([], {color:'#9ad0ff',weight:3,opacity:1,dashArray:'6 6'}).addTo(map);
-  function haversine(a,b){const R=6371,toRad=d=>d*Math.PI/180,dLat=toRad(b[0]-a[0]),dLon=toRad(b[1]-a[1]),lat1=toRad(a[0]),lat2=toRad(b[0]),h=Math.sin(dLat/2)**2+Math.cos(lat1)*Math.cos(lat2)*Math.sin(dLon/2)**2;return 2*R*Math.asin(Math.sqrt(h));}
+  function haversine(a,b){const R=6371,toRad=d=>d*Math.PI/180,dLat=toRad(b[0]-a[0]),dLon=toRad(b[1]-a[1]),lat1=toRad(a[0]),lat2=toRad(b[0]),h=Math.sin(dLat/2)**2 + Math.cos(lat1)*Math.cos(lat2)*Math.sin(dLon/2)**2;return 2*R*Math.asin(Math.sqrt(h));}
   const priceTiers=[{max:20,rate:1.00},{max:100,rate:0.90},{max:9999,rate:0.80}];
   function priceFor(km){const t=priceTiers.find(x=>km<=x.max);return {rate:t.rate,total:km*t.rate};}
 
@@ -374,27 +234,11 @@ if (CONFIG.emailjs.public_key) { emailjs.init(CONFIG.emailjs.public_key); }
   const priceBox=document.getElementById('priceBox');
   const calcBtn=document.getElementById('calcBtn');
   const bookBtn=document.getElementById('bookBtn');
-  const waBtn=document.getElementById('waBtn');
-  const modal=document.getElementById('payModal');
-  const closeModal=document.getElementById('closeModal');
-  const sendInquiry=document.getElementById('sendInquiry');
-  const confirmBook=document.getElementById('confirmBook');
-  const payForm=document.getElementById('payForm');
-  const panelPayPal=document.getElementById('panel-paypal');
-  const panelStripe=document.getElementById('panel-stripe-card');
-  const panelSEPA=document.getElementById('panel-sepa');
-  const paypalButtonsDiv=document.getElementById('paypalButtons');
-  const ppGo=document.getElementById('ppGo'); const stGo=document.getElementById('stGo');
-  const accName=document.getElementById('accName'); const accIban=document.getElementById('accIban'); const accBic=document.getElementById('accBic'); const accAmt=document.getElementById('accAmt'); const accRef=document.getElementById('accRef');
-  const copyIbanBtn=document.getElementById('copyIban'); const epcQR=document.getElementById('epcQR');
-  const ppAmount=document.getElementById('ppAmount'); const stAmount=document.getElementById('stAmount');
-  const custEmailEl=document.getElementById('custEmail'); const custPhoneEl=document.getElementById('custPhone'); const custNameEl=document.getElementById('custName'); const pickupTimeEl=document.getElementById('pickupTime'); const noteEl=document.getElementById('note');
-
-  let currentTrip={sName:null,dName:null,km:null,price:null,rate:null,amountNum:0};
+  startInput.value='Lonsee';
 
   function compute(){
     const sName=startInput.value.trim(); const dName=destInput.value.trim();
-    if(!cities[sName]||!cities[dName]){priceBox.textContent='Entfernung: — km · Preis: —';route.setLatLngs([]);bookBtn.disabled=true;return;}
+    if(!cities[sName]||!cities[dName]){priceBox.textContent='Entfernung: — km · Preis: —'; route.setLatLngs([]); bookBtn.disabled=true; return;}
     const A=cities[sName],B=cities[dName];
     const mid=[(A[0]+B[0])/2,(A[1]+B[1])/2]; const dx=B[1]-A[1], dy=B[0]-A[0];
     const len=Math.sqrt(dx*dx+dy*dy); const nx=-dy/len, ny=dx/len; const amp=Math.min(0.12,Math.max(0.04,len*0.25));
@@ -406,188 +250,11 @@ if (CONFIG.emailjs.public_key) { emailjs.init(CONFIG.emailjs.public_key); }
     const km=haversine(A,B); const {rate,total}=priceFor(km);
     const dk=km.toFixed(1).replace('.',','); const ct=total.toFixed(2).replace('.',',');
     priceBox.innerHTML=`Route: <b>${sName}</b> → <b>${dName}</b> · Entfernung: <b>${dk} km</b> · Preis (ab): <b>${ct} €</b> <span class="notice">(Tarif ${rate.toFixed(2)} €/km)</span>`;
-    bookBtn.disabled=false; currentTrip={sName,dName,km:dk,price:ct,rate:rate.toFixed(2),amountNum:parseFloat(total.toFixed(2))};
-    waBtn.href=`https://api.whatsapp.com/send?phone=49162575957&text=${encodeURIComponent('Hallo! Anfrage: '+sName+' → '+dName+' ('+dk+' km, ab '+ct+' €)')}`;
+    bookBtn.disabled=false;
   }
-
-  calcBtn.addEventListener('click',compute); startInput.value='Lonsee';
-
-  function openModal(){modal.classList.add('open');modal.setAttribute('aria-hidden','false');}
-  function close(){modal.classList.remove('open');modal.setAttribute('aria-hidden','true');}
-  closeModal.addEventListener('click',close); modal.addEventListener('click',e=>{if(e.target===modal) close();});
-
-  document.getElementById('bookBtn').addEventListener('click',()=>{
-    if(!currentTrip.sName) return; openModal();
-    ppAmount.textContent=currentTrip.price+" €"; stAmount.textContent=currentTrip.price+" €";
-    [panelPayPal,panelStripe,panelSEPA].forEach(p=>p.classList.remove('show'));
-  });
-
-  function selectedPay(){const el=payForm.querySelector('input[name="pay"]:checked'); return el?el.value:null;}
-  payForm.addEventListener('change',()=>{
-    const method=selectedPay(); [panelPayPal,panelStripe,panelSEPA].forEach(p=>p.classList.remove('show'));
-    if(method==="PayPal"){panelPayPal.classList.add('show'); initPayPal();}
-    if(method==="Kreditkarte"||method==="Apple Pay"){panelStripe.classList.add('show');}
-    if(method==="Echtzeitüberweisung"||method==="Überweisung"){panelSEPA.classList.add('show'); fillSEPA();}
-  });
-
-  /* PayPal */
-  function initPayPal(){
-    paypalButtonsDiv.style.display="none";
-    if(CONFIG.paypalClientId){
-      if(!document.getElementById('pp-sdk')){
-        const s=document.createElement('script'); s.id='pp-sdk';
-        s.src=`https://www.paypal.com/sdk/js?client-id=${encodeURIComponent(CONFIG.paypalClientId)}&currency=EUR`;
-        s.onload=renderPP; document.body.appendChild(s);
-      }else{renderPP();}
-    }
-  }
-  function renderPP(){
-    if(!window.paypal) return; paypalButtonsDiv.style.display="block"; paypalButtonsDiv.innerHTML="";
-    window.paypal.Buttons({
-      style:{shape:"pill",layout:"horizontal",color:"gold",label:"paypal"},
-      createOrder:(data,actions)=>actions.order.create({purchase_units:[{amount:{currency_code:"EUR",value:currentTrip.amountNum.toFixed(2)}}]}),
-      onApprove:(data,actions)=>actions.order.capture().then(d=>{alert("PayPal Zahlung erfolgreich: "+d.status); close();}),
-      onError:(err)=>{console.error(err); alert("PayPal Fehler: "+err);}
-    }).render('#paypalButtons');
-  }
-  ppGo.addEventListener('click',()=>{
-    if(CONFIG.paypalMe){const amt=currentTrip.amountNum.toFixed(2); const url=CONFIG.paypalMe.replace(/\/$/,'')+"/"+encodeURIComponent(amt); window.open(url,"_blank");}
-    else{alert("Bitte PayPal.me im CONFIG setzen oder Smart Buttons (client-id) nutzen.");}
-  });
-
-  /* Stripe Payment Link */
-  stGo.addEventListener('click',()=>{
-    const method=selectedPay(); const link=(method==="Apple Pay"&&CONFIG.stripeApplePayLink)?CONFIG.stripeApplePayLink:CONFIG.stripeCardLink;
-    if(link){window.open(link,"_blank");}else{alert("Stripe Payment Link im CONFIG hinzufügen.");}
-  });
-
-  /* SEPA (EPC QR) */
-  function fillSEPA(){
-    accName.textContent=CONFIG.merchant.name; accIban.textContent=CONFIG.merchant.iban; accBic.textContent=CONFIG.merchant.bic; accAmt.textContent=currentTrip.price+" €";
-    const ref=makeRef(); accRef.textContent=ref;
-    const epc=buildEPC({name:CONFIG.merchant.name,iban:CONFIG.merchant.iban.replace(/\s+/g,''),bic:CONFIG.merchant.bic,amount:currentTrip.amountNum.toFixed(2),remittance:ref});
-    QRCode.toCanvas(epcQR, epc, {width:160, errorCorrectionLevel:"M"}, (err)=>{ if(err) console.error(err); });
-  }
-  function makeRef(){const dt=new Date(),y=dt.getFullYear(),m=String(dt.getMonth()+1).padStart(2,'0'),d=String(dt.getDate()).padStart(2,'0'); return `ZENTY-${y}${m}${d}-${currentTrip.sName}-${currentTrip.dName}-${currentTrip.km}km`.replace(/[^A-Z0-9\-]/gi,'-').slice(0,70);}
-  function buildEPC({name,iban,bic,amount,remittance}){return ["BCD","001","1","SCT",bic||"",name,iban,"EUR"+amount,"",remittance||"",].join("\n");}
-  copyIbanBtn.addEventListener('click',()=>{navigator.clipboard.writeText(CONFIG.merchant.iban).then(()=>{copyIbanBtn.textContent="Kopiert ✓"; setTimeout(()=>copyIbanBtn.textContent="Kopieren",1500);});});
-
-  /* WhatsApp + Booking + PDFs */
-  function buildMsg(prefix){
-    const pay=selectedPay()||'—', name=custNameEl.value.trim()||'—', phone=custPhoneEl.value.trim()||'—', when=pickupTimeEl.value||'—', note=noteEl.value.trim()||'—';
-    return `${prefix}
-${currentTrip.sName} → ${currentTrip.dName}
-Entfernung: ${currentTrip.km} km
-Preis (ab): ${currentTrip.price} € (Tarif ${currentTrip.rate} €/km)
-Zahlung: ${pay}
-Name: ${name} · Telefon: ${phone}
-Abholung: ${when}
-Notiz: ${note}`.trim();
-  }
-  sendInquiry.addEventListener('click',()=>{if(!currentTrip.sName) return; const msg=buildMsg('Anfrage / Request:'); window.open(`https://api.whatsapp.com/send?phone=49162575957&text=${encodeURIComponent(msg)}`,'_blank');});
-
-  confirmBook.addEventListener('click', async ()=>{
-    if(!payForm.reportValidity()) return;
-    // Generate PDFs
-    const docs = await generateDocs();
-    // Try sending via EmailJS (customer + business)
-    if(CONFIG.emailjs.public_key && CONFIG.emailjs.service_id && CONFIG.emailjs.template_id){
-      try{
-        const vars = {
-          to_email: (custEmailEl.value || CONFIG.merchant.email),
-          subject: `Buchung ${currentTrip.sName} → ${currentTrip.dName}`,
-          message: 'Ihre Buchungsunterlagen sind im Anhang. Vielen Dank!',
-        };
-        await emailjs.send(CONFIG.emailjs.service_id, CONFIG.emailjs.template_id, vars, {
-          publicKey: CONFIG.emailjs.public_key,
-          attachments: [
-            { name: docs.invoiceName, data: docs.invoiceBase64 },
-            { name: docs.dnoteName, data: docs.dnoteBase64 }
-          ]
-        });
-        // Send to business as well
-        if (CONFIG.merchant.email && custEmailEl.value) {
-          const vars2 = { to_email: CONFIG.merchant.email, subject: `Neue Buchung: ${custNameEl.value}`, message: 'Kopie der Unterlagen.' };
-          await emailjs.send(CONFIG.emailjs.service_id, CONFIG.emailjs.template_id, vars2, {
-            publicKey: CONFIG.emailjs.public_key,
-            attachments: [
-              { name: docs.invoiceName, data: docs.invoiceBase64 },
-              { name: docs.dnoteName, data: docs.dnoteBase64 }
-            ]
-          });
-        }
-        alert("E-Mails wurden gesendet (Kunde & Büro).");
-      }catch(e){ console.error(e); alert("E-Mail-Übermittlung fehlgeschlagen. Dateien lokal heruntergeladen."); }
-    } else {
-      alert("EmailJS konfigüre edilmedi: PDF'ler indiriliyor, WhatsApp onayı açılıyor.");
-    }
-
-    // Offer downloads
-    downloadBlob(docs.invoiceBlob, docs.invoiceName);
-    downloadBlob(docs.dnoteBlob, docs.dnoteName);
-
-    const method=selectedPay();
-    if(method==="PayPal"){ if(CONFIG.paypalMe) ppGo.click(); else if(CONFIG.paypalClientId) alert("PayPal Buttons aktiv — unten nutzen."); }
-    if(method==="Kreditkarte"||method==="Apple Pay"){ if(CONFIG.stripeCardLink||CONFIG.stripeApplePayLink) stGo.click(); }
-    if(method==="Echtzeitüberweisung"||method==="Überweisung"){ alert("SEPA (Echtzeit) möglich. IBAN & EPC-QR angezeigt."); }
-
-    const msg=buildMsg('Buchung · Bestätigung gewünscht:'); window.open(`https://api.whatsapp.com/send?phone=49162575957&text=${encodeURIComponent(msg)}`,'_blank'); close();
-  });
-
-  function downloadBlob(blob, filename){
-    const url=URL.createObjectURL(blob);
-    const a=document.createElement('a'); a.href=url; a.download=filename; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
-  }
-
-  async function generateDocs(){
-    const { jsPDF } = window.jspdf;
-    const seller = CONFIG.merchant;
-    const when = new Date(pickupTimeEl.value || Date.now());
-    const invNo = makeRef();
-    const rows = [[`${currentTrip.sName} → ${currentTrip.dName}`, `${currentTrip.km} km`, `${currentTrip.rate} €/km`, `${currentTrip.price} €`]];
-
-    // Invoice (Rechnung / Fatura)
-    const invoice = new jsPDF();
-    invoice.setFontSize(16); invoice.text("Rechnung / Fatura", 14, 16);
-    invoice.setFontSize(10);
-    invoice.text(`Rechnungs-Nr: ${invNo}`, 14, 24);
-    invoice.text(`Datum: ${when.toLocaleString()}`, 14, 29);
-    invoice.text(`Kunde: ${custNameEl.value || "-"}`, 14, 34);
-    invoice.text(`E-Mail: ${custEmailEl.value || "-"}`, 14, 39);
-    invoice.text(`Telefon: ${custPhoneEl.value || "-"}`, 14, 44);
-    invoice.text(`Firma: ${seller.name}`, 140, 24);
-    invoice.text(`IBAN: ${seller.iban}`, 140, 29);
-    invoice.text(`BIC: ${seller.bic}`, 140, 34);
-    invoice.text(`Sitz: ${seller.city}`, 140, 39);
-    invoice.autoTable({ startY: 52, head: [["Leistung", "Distanz", "Tarif", "Betrag"]], body: rows });
-    invoice.text(`Gesamt (ab): ${currentTrip.price} €`, 14, invoice.lastAutoTable.finalY + 10);
-    invoice.text(`Zahlungsart: ${selectedPay() || "-"}`, 14, invoice.lastAutoTable.finalY + 16);
-    invoice.text(`Hinweis: Richtpreis – Endpreis nach bestätigter Durchführung.`, 14, invoice.lastAutoTable.finalY + 22);
-    const invoiceBlob = invoice.output("blob");
-    const invoiceBase64 = invoice.output("datauristring").split(",")[1];
-    const invoiceName = `Rechnung_${invNo}.pdf`;
-
-    // Lieferschein
-    const dnote = new jsPDF();
-    dnote.setFontSize(16); dnote.text("Lieferschein", 14, 16);
-    dnote.setFontSize(10);
-    dnote.text(`LS-Nr: ${invNo}`, 14, 24);
-    dnote.text(`Datum: ${when.toLocaleString()}`, 14, 29);
-    dnote.text(`Kunde: ${custNameEl.value || "-"}`, 14, 34);
-    dnote.text(`Abholung: ${currentTrip.sName}`, 14, 39);
-    dnote.text(`Ziel: ${currentTrip.dName}`, 14, 44);
-    dnote.text(`Notiz: ${noteEl.value || "-"}`, 14, 49);
-    dnote.autoTable({ startY: 56, head: [["Position", "Details"]], body: [["Route", `${currentTrip.sName} → ${currentTrip.dName}`], ["Entfernung", `${currentTrip.km} km`], ["Geplanter Zeitpunkt", when.toLocaleString()]] });
-    const dnoteBlob = dnote.output("blob");
-    const dnoteBase64 = dnote.output("datauristring").split(",")[1];
-    const dnoteName = `Lieferschein_${invNo}.pdf`;
-
-    return { invoiceBlob, invoiceBase64, invoiceName, dnoteBlob, dnoteBase64, dnoteName };
-  }
+  calcBtn.addEventListener('click',compute);
 })();</script>
 </body>
-</html>
-"""
-out = Path("/mnt/data/index_pro_corporate.html")
-out.write_text(html, encoding="utf-8")
-print(str(out))
+</html>"""
+Path(html_path).write_text(html_content, encoding="utf-8")
+print(html_path)
