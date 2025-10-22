@@ -1,7 +1,10 @@
-# Create a clean `index.html` with a booking modal and multiple payment options.
+# Create an updated `index.html` that wires up PayPal (PayPal.me or Smart Buttons), Stripe Payment Links
+# (card + Apple Pay), and SEPA (Echtzeitüberweisung/Überweisung) with EPC QR, plus Cash. 
+# All configurable via a CONFIG block at the top of the script.
+
 from pathlib import Path
 
-html = """<!doctype html>
+html = r"""<!doctype html>
 <html lang="de">
 <head>
 <meta charset="utf-8">
@@ -12,6 +15,9 @@ html = """<!doctype html>
 <!-- Leaflet (Map + Satellite Toggle) -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="anonymous">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="anonymous"></script>
+
+<!-- QR Code generator for EPC QR -->
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
 
 <style>
 :root{
@@ -73,7 +79,7 @@ footer{padding:28px;border-top:1px solid var(--border);color:#acb6c9}
 /* Modal */
 .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.55);backdrop-filter:blur(2px);z-index:999}
 .modal.open{display:flex}
-.modal-card{width:min(640px,92vw);background:linear-gradient(180deg,#121a2a,#0d1320);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow);padding:18px}
+.modal-card{width:min(720px,92vw);background:linear-gradient(180deg,#121a2a,#0d1320);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow);padding:18px}
 .modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
 .close{background:transparent;border:0;color:#c9d3e8;font-size:20px;cursor:pointer}
 .form{display:grid;gap:10px}
@@ -84,6 +90,13 @@ textarea{min-height:70px;resize:vertical}
 .pay-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .pay-opt{display:flex;gap:8px;align-items:center;border:1px solid #28324a;border-radius:12px;padding:10px;background:#0f1626;cursor:pointer}
 .pay-opt input{accent-color:#2aa8ff}
+.pay-panel{margin-top:8px;border:1px dashed #30405f;border-radius:12px;padding:10px;display:none}
+.pay-panel.show{display:block}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:6px 10px}
+.kv b{color:#eef3ff}
+.code{font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; background:#0b1220; border:1px solid #28324a; padding:6px 8px; border-radius:8px}
+.qrWrap{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.copyBtn{padding:6px 10px;border-radius:10px;border:1px solid #2d3b57;background:#0e1626;color:#cfe1ff;cursor:pointer}
 </style>
 </head>
 <body>
@@ -206,11 +219,44 @@ textarea{min-height:70px;resize:vertical}
         <label class="pay-opt"><input type="radio" name="pay" value="PayPal" required> PayPal</label>
         <label class="pay-opt"><input type="radio" name="pay" value="Apple Pay"> Apple&nbsp;Pay</label>
         <label class="pay-opt"><input type="radio" name="pay" value="Kreditkarte"> Kreditkarte</label>
-        <label class="pay-opt"><input type="radio" name="pay" value="Echtzeitüberweisung"> Echtzeitüberweisung</label>
+        <label class="pay-opt"><input type="radio" name="pay" value="Echtzeitüberweisung"> Echtzeitüberweisung (SEPA Instant)</label>
         <label class="pay-opt"><input type="radio" name="pay" value="Überweisung"> Überweisung (IBAN)</label>
         <label class="pay-opt"><input type="radio" name="pay" value="Bar"> Barzahlung</label>
       </div>
-      <div class="row">
+
+      <!-- Method-specific panels -->
+      <div id="panel-paypal" class="pay-panel">
+        <div class="kv">
+          <b>Betrag:</b> <span id="ppAmount">— €</span>
+          <b>PayPal:</b> <span><button type="button" class="copyBtn" id="ppGo">Zur PayPal-Zahlung</button></span>
+        </div>
+        <div id="paypalButtons" style="margin-top:10px;display:none"></div>
+        <small class="muted">Not: PayPal.me linki veya PayPal Smart Buttons kullanılabilir (CONFIG’e göre).</small>
+      </div>
+
+      <div id="panel-stripe-card" class="pay-panel">
+        <div class="kv">
+          <b>Betrag:</b> <span id="stAmount">— €</span>
+          <b>Karte/Apple Pay:</b> <span><button type="button" class="copyBtn" id="stGo">Stripe Payment Link</button></span>
+        </div>
+        <small class="muted">Not: Stripe Payment Link’te Apple Pay destekli cihazlarda otomatik görünür.</small>
+      </div>
+
+      <div id="panel-sepa" class="pay-panel">
+        <div class="kv">
+          <b>Empfänger:</b> <span id="accName">—</span>
+          <b>IBAN:</b> <span><span id="accIban" class="code">—</span> <button type="button" class="copyBtn" id="copyIban">Kopyala</button></span>
+          <b>BIC:</b> <span id="accBic" class="code">—</span>
+          <b>Betrag:</b> <span id="accAmt">— €</span>
+          <b>Verwendungszweck:</b> <span id="accRef" class="code">—</span>
+        </div>
+        <div class="qrWrap" style="margin-top:8px">
+          <canvas id="epcQR" width="160" height="160" style="background:#fff;border-radius:8px"></canvas>
+          <div class="muted">Mit Banking-App scannen (EPC QR). Echtzeitüberweisung wird unterstützt.</div>
+        </div>
+      </div>
+
+      <div class="row" style="margin-top:8px">
         <button class="btn" id="sendInquiry">Anfrage senden (WhatsApp)</button>
         <button class="btn gold" id="confirmBook">Buchung bestätigen</button>
       </div>
@@ -220,6 +266,27 @@ textarea{min-height:70px;resize:vertical}
 </div>
 
 <script>
+/* ===== CONFIG (füllen) ===== */
+const CONFIG = {
+  // --- PayPal ---
+  paypalMe: "",           // örn: "https://paypal.me/zentyexpress"  (opsiyonel, miktarı ekleyeceğiz)
+  paypalClientId: "",     // Smart Buttons istiyorsan PayPal client-id (opsiyonel). Boşsa buton gösterilmez.
+
+  // --- Stripe Payment Links --- (ödeme linkleri)
+  stripeCardLink: "",     // Kart/Apple Pay için Payment Link (miktarı müşteri belirleyebilir şekilde ayarlayabilirsin)
+  stripeApplePayLink: "", // İstersen ayrı link; boşsa stripeCardLink kullanılır.
+
+  // --- Banka hesabı (SEPA/Echtzeitüberweisung/Überweisung) ---
+  merchant: {
+    name: "Zenty Express AI",
+    iban: "DE00 0000 0000 0000 0000 00",
+    bic:  "ABCDEFGHXXX",
+    city: "Lonsee",
+    currency: "EUR"
+  }
+};
+/* =========================== */
+
 /* Starfield */
 (function(){
   const canvas = document.getElementById('starfield');
@@ -316,7 +383,32 @@ textarea{min-height:70px;resize:vertical}
   const confirmBook=document.getElementById('confirmBook');
   const payForm=document.getElementById('payForm');
 
-  let currentTrip = {sName:null,dName:null,km:null,price:null,rate:null};
+  // Panels
+  const panelPayPal = document.getElementById('panel-paypal');
+  const panelStripe = document.getElementById('panel-stripe-card');
+  const panelSEPA = document.getElementById('panel-sepa');
+
+  // PayPal buttons container
+  const paypalButtonsDiv = document.getElementById('paypalButtons');
+
+  // Stripe / PayPal triggers
+  const ppGo = document.getElementById('ppGo');
+  const stGo = document.getElementById('stGo');
+
+  // SEPA fields
+  const accName = document.getElementById('accName');
+  const accIban = document.getElementById('accIban');
+  const accBic = document.getElementById('accBic');
+  const accAmt = document.getElementById('accAmt');
+  const accRef = document.getElementById('accRef');
+  const copyIbanBtn = document.getElementById('copyIban');
+  const epcQR = document.getElementById('epcQR');
+
+  // Amount displays
+  const ppAmount = document.getElementById('ppAmount');
+  const stAmount = document.getElementById('stAmount');
+
+  let currentTrip = {sName:null,dName:null,km:null,price:null,rate:null, amountNum:0};
 
   function compute(){
     const sName=startInput.value.trim(); const dName=destInput.value.trim();
@@ -341,14 +433,14 @@ textarea{min-height:70px;resize:vertical}
     priceBox.innerHTML=`Route: <b>${sName}</b> → <b>${dName}</b> · Entfernung: <b>${dk} km</b> · Preis (ab): <b>${ct} €</b> <small class="muted">(Tarif ${rate.toFixed(2)} €/km)</small>`;
     bookBtn.disabled=false;
 
-    currentTrip = {sName,dName,km:dk,price:ct,rate:rate.toFixed(2)};
+    currentTrip = {sName,dName,km:dk,price:ct,rate:rate.toFixed(2), amountNum: parseFloat(total.toFixed(2))};
     waBtn.href = `https://api.whatsapp.com/send?phone=49162575957&text=${encodeURIComponent('Hallo! Anfrage: '+sName+' → '+dName+' ('+dk+' km, ab '+ct+' €)')}`;
   }
 
   calcBtn.addEventListener('click', compute);
   startInput.value='Lonsee';
 
-  // Booking modal logic
+  // Booking modal
   function openModal(){ modal.classList.add('open'); modal.setAttribute('aria-hidden','false'); }
   function close(){ modal.classList.remove('open'); modal.setAttribute('aria-hidden','true'); }
   closeModal.addEventListener('click', close);
@@ -357,12 +449,134 @@ textarea{min-height:70px;resize:vertical}
   bookBtn.addEventListener('click', ()=>{
     if(!currentTrip.sName || !currentTrip.dName){ return; }
     openModal();
+    ppAmount.textContent = currentTrip.price + " €";
+    stAmount.textContent = currentTrip.price + " €";
+    // reset panels
+    [panelPayPal,panelStripe,panelSEPA].forEach(p=>p.classList.remove('show'));
   });
 
   function selectedPay(){
     const el = payForm.querySelector('input[name="pay"]:checked');
     return el ? el.value : null;
   }
+
+  // Panel switching
+  payForm.addEventListener('change', (e)=>{
+    const method = selectedPay();
+    [panelPayPal,panelStripe,panelSEPA].forEach(p=>p.classList.remove('show'));
+    if(method==="PayPal"){ panelPayPal.classList.add('show'); initPayPal(); }
+    if(method==="Kreditkarte" || method==="Apple Pay"){ panelStripe.classList.add('show'); }
+    if(method==="Echtzeitüberweisung" || method==="Überweisung"){ panelSEPA.classList.add('show'); fillSEPA(); }
+  });
+
+  // PayPal
+  function initPayPal(){
+    paypalButtonsDiv.style.display = "none";
+    if(CONFIG.paypalClientId){
+      // Load SDK once
+      if(!document.getElementById('pp-sdk')){
+        const s = document.createElement('script');
+        s.id = 'pp-sdk';
+        s.src = `https://www.paypal.com/sdk/js?client-id=${encodeURIComponent(CONFIG.paypalClientId)}&currency=EUR`;
+        s.onload = renderPP;
+        document.body.appendChild(s);
+      } else {
+        renderPP();
+      }
+    }
+  }
+  function renderPP(){
+    if(!window.paypal) return;
+    paypalButtonsDiv.style.display = "block";
+    paypalButtonsDiv.innerHTML = "";
+    window.paypal.Buttons({
+      style:{shape:"pill", layout:"horizontal", color:"gold", label:"paypal"},
+      createOrder: (data, actions)=> actions.order.create({
+        purchase_units:[{amount:{currency_code:"EUR", value: currentTrip.amountNum.toFixed(2)}},
+        ]
+      }),
+      onApprove: (data, actions)=> actions.order.capture().then(function(details){
+        alert("PayPal Zahlung erfolgreich: " + details.status);
+        close();
+      }),
+      onError: (err)=> { console.error(err); alert("PayPal Fehler: "+err); }
+    }).render('#paypalButtons');
+  }
+
+  ppGo.addEventListener('click', ()=>{
+    if(CONFIG.paypalMe){
+      const amt = currentTrip.amountNum.toFixed(2);
+      const url = CONFIG.paypalMe.replace(/\/$/,'') + "/" + encodeURIComponent(amt);
+      window.open(url, "_blank");
+    } else {
+      alert("PayPal.me linki CONFIG.paypalMe alanına ekleyiniz veya client-id ile Smart Buttons kullanın.");
+    }
+  });
+
+  // Stripe Payment Link
+  stGo.addEventListener('click', ()=>{
+    const link = (selectedPay()==="Apple Pay" && CONFIG.stripeApplePayLink) ? CONFIG.stripeApplePayLink : CONFIG.stripeCardLink;
+    if(link){
+      window.open(link, "_blank");
+    } else {
+      alert("Stripe Payment Link URL'sini CONFIG.stripeCardLink alanına ekleyiniz.");
+    }
+  });
+
+  // SEPA (EPC QR)
+  function fillSEPA(){
+    accName.textContent = CONFIG.merchant.name;
+    accIban.textContent = CONFIG.merchant.iban;
+    accBic.textContent = CONFIG.merchant.bic;
+    accAmt.textContent = currentTrip.price + " €";
+    const ref = makeRef();
+    accRef.textContent = ref;
+
+    const epc = buildEPC({
+      name: CONFIG.merchant.name,
+      iban: CONFIG.merchant.iban.replace(/\s+/g,''),
+      bic: CONFIG.merchant.bic,
+      amount: currentTrip.amountNum.toFixed(2),
+      remittance: ref
+    });
+    // draw QR
+    QRCode.toCanvas(epcQR, epc, {width:160, errorCorrectionLevel:"M"}, function (error) {
+      if (error) console.error(error);
+    });
+  }
+
+  function makeRef(){
+    const dt = new Date();
+    const y = dt.getFullYear();
+    const m = String(dt.getMonth()+1).padStart(2,'0');
+    const d = String(dt.getDate()).padStart(2,'0');
+    const code = `ZENTY-${y}${m}${d}-${currentTrip.sName}-${currentTrip.dName}-${currentTrip.km}km`;
+    return code.replace(/[^A-Z0-9\-]/gi,'-').slice(0,70);
+  }
+
+  function buildEPC({name, iban, bic, amount, remittance}){
+    // EPC069-12 format (SCT)
+    // Lines must be \n separated, no extra spaces.
+    return [
+      "BCD",
+      "001",
+      "1",
+      "SCT",
+      bic || "",
+      name,
+      iban,
+      "EUR"+amount,
+      "",     // Purpose
+      remittance || "",
+      ""      // Empty line at end per some apps (tolerated if missing)
+    ].join("\n");
+  }
+
+  copyIbanBtn.addEventListener('click', ()=>{
+    navigator.clipboard.writeText(CONFIG.merchant.iban).then(()=>{
+      copyIbanBtn.textContent = "Kopyalandı ✓"; setTimeout(()=>copyIbanBtn.textContent="Kopyala",1500);
+    });
+  });
 
   function buildMsg(prefix){
     const pay = selectedPay() || '—';
@@ -387,7 +601,22 @@ Notiz: ${note}`.trim();
   });
 
   confirmBook.addEventListener('click', ()=>{
-    if(!payForm.reportValidity()) return; // ensure required fields
+    if(!payForm.reportValidity()) return;
+    const method = selectedPay();
+    // Try to open the preferred payment if configured, else WhatsApp confirmation
+    if(method==="PayPal"){
+      if(CONFIG.paypalMe){ ppGo.click(); }
+      else if(CONFIG.paypalClientId){ alert("PayPal Smart Buttons üzerinden devam edebilirsiniz."); }
+      else { alert("PayPal yapılandırılmadı, WhatsApp ile teyit edelim."); }
+    }
+    if(method==="Kreditkarte" || method==="Apple Pay"){
+      if(CONFIG.stripeCardLink || CONFIG.stripeApplePayLink){ stGo.click(); }
+      else { alert("Stripe Payment Link ekleyiniz, şu an WhatsApp ile teyit edelim."); }
+    }
+    if(method==="Echtzeitüberweisung" || method==="Überweisung"){
+      // QR zaten gösterildi; kullanıcı bankasından ödeyebilir.
+      alert("Bankanızdan SEPA (Echtzeit) ile gönderebilirsiniz. IBAN ve EPC QR hazır.");
+    }
     const msg = buildMsg('Buchung · Bestätigung gewünscht:');
     window.open(`https://api.whatsapp.com/send?phone=49162575957&text=${encodeURIComponent(msg)}`,'_blank');
     close();
