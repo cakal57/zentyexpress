@@ -1,4 +1,4 @@
-# Write a clean, modern HTML with Leaflet map (map/satellite toggle), route, pricing, and booking.
+# Create a clean `index.html` with a booking modal and multiple payment options.
 from pathlib import Path
 
 html = """<!doctype html>
@@ -69,6 +69,21 @@ h2::after{content:"";display:block;width:90px;height:3px;margin-top:8px;backgrou
 .stat{background:#0e1422;border:1px solid #28324a;border-radius:12px;padding:8px 10px}
 footer{padding:28px;border-top:1px solid var(--border);color:#acb6c9}
 .addr{margin-top:6px;color:#cdd7e9}
+
+/* Modal */
+.modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.55);backdrop-filter:blur(2px);z-index:999}
+.modal.open{display:flex}
+.modal-card{width:min(640px,92vw);background:linear-gradient(180deg,#121a2a,#0d1320);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow);padding:18px}
+.modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.close{background:transparent;border:0;color:#c9d3e8;font-size:20px;cursor:pointer}
+.form{display:grid;gap:10px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+label.small{font-size:12px;color:#b9c6e2}
+select, input[type="text"], input[type="datetime-local"], input[type="tel"], textarea{width:100%;padding:10px;border:1px solid var(--border);border-radius:10px;background:#0e1422;color:var(--text)}
+textarea{min-height:70px;resize:vertical}
+.pay-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.pay-opt{display:flex;gap:8px;align-items:center;border:1px solid #28324a;border-radius:12px;padding:10px;background:#0f1626;cursor:pointer}
+.pay-opt input{accent-color:#2aa8ff}
 </style>
 </head>
 <body>
@@ -162,6 +177,48 @@ footer{padding:28px;border-top:1px solid var(--border);color:#acb6c9}
 
 <footer class="container">© Zenty Express AI — Mobility & Transport · Final Signature Edition v12 · Made in Germany</footer>
 
+<!-- Booking Modal -->
+<div class="modal" id="payModal" aria-hidden="true" role="dialog" aria-labelledby="payTitle">
+  <div class="modal-card">
+    <div class="modal-head">
+      <h3 id="payTitle">Buchung & Zahlung</h3>
+      <button class="close" id="closeModal" aria-label="Close">×</button>
+    </div>
+    <form class="form" id="payForm" onsubmit="return false;">
+      <div class="row">
+        <label class="small">Name
+          <input type="text" id="custName" placeholder="Ad Soyad / Name" required>
+        </label>
+        <label class="small">Telefon
+          <input type="tel" id="custPhone" placeholder="+49 ..." required>
+        </label>
+      </div>
+      <div class="row">
+        <label class="small">Abholung / Pickup
+          <input type="datetime-local" id="pickupTime" required>
+        </label>
+        <label class="small">Notiz (optional)
+          <input type="text" id="note" placeholder="Gepäck, Personenanzahl, Flugnummer …">
+        </label>
+      </div>
+      <label class="small">Zahlungsart</label>
+      <div class="pay-grid" id="payOptions">
+        <label class="pay-opt"><input type="radio" name="pay" value="PayPal" required> PayPal</label>
+        <label class="pay-opt"><input type="radio" name="pay" value="Apple Pay"> Apple&nbsp;Pay</label>
+        <label class="pay-opt"><input type="radio" name="pay" value="Kreditkarte"> Kreditkarte</label>
+        <label class="pay-opt"><input type="radio" name="pay" value="Echtzeitüberweisung"> Echtzeitüberweisung</label>
+        <label class="pay-opt"><input type="radio" name="pay" value="Überweisung"> Überweisung (IBAN)</label>
+        <label class="pay-opt"><input type="radio" name="pay" value="Bar"> Barzahlung</label>
+      </div>
+      <div class="row">
+        <button class="btn" id="sendInquiry">Anfrage senden (WhatsApp)</button>
+        <button class="btn gold" id="confirmBook">Buchung bestätigen</button>
+      </div>
+      <small class="muted">Hinweis: Zahlungslink oder Kartenterminal-Optionen werden nach Bestätigung bereitgestellt.</small>
+    </form>
+  </div>
+</div>
+
 <script>
 /* Starfield */
 (function(){
@@ -253,19 +310,25 @@ footer{padding:28px;border-top:1px solid var(--border);color:#acb6c9}
   const calcBtn=document.getElementById('calcBtn');
   const bookBtn=document.getElementById('bookBtn');
   const waBtn=document.getElementById('waBtn');
+  const modal=document.getElementById('payModal');
+  const closeModal=document.getElementById('closeModal');
+  const sendInquiry=document.getElementById('sendInquiry');
+  const confirmBook=document.getElementById('confirmBook');
+  const payForm=document.getElementById('payForm');
+
+  let currentTrip = {sName:null,dName:null,km:null,price:null,rate:null};
 
   function compute(){
     const sName=startInput.value.trim(); const dName=destInput.value.trim();
     if(!cities[sName] || !cities[dName]){ priceBox.textContent='Entfernung: — km · Preis: —'; route.setLatLngs([]); bookBtn.disabled=true; return;}
     const A=cities[sName], B=cities[dName];
-    // Draw nice curve: create mid control point offset perp to line
+    // Draw nice curve
     const mid=[(A[0]+B[0])/2,(A[1]+B[1])/2];
-    const dx=B[1]-A[1], dy=B[0]-A[0]; // lon diff, lat diff
+    const dx=B[1]-A[1], dy=B[0]-A[0];
     const len=Math.sqrt(dx*dx+dy*dy);
     const nx=-dy/len, ny=dx/len;
-    const amp=Math.min(0.12,Math.max(0.04,len*0.25)); // degrees offset
+    const amp=Math.min(0.12,Math.max(0.04,len*0.25));
     const ctrl=[mid[0]+ny*amp, mid[1]+nx*amp];
-    // sample quadratic Bezier
     function quad(p0,p1,p2,t){const u=1-t;return [u*u*p0[0]+2*u*t*p1[0]+t*t*p2[0], u*u*p0[1]+2*u*t*p1[1]+t*t*p2[1]];}
     const pts=[]; for(let t=0;t<=1.001;t+=0.05) pts.push(quad(A,ctrl,B,t));
     route.setLatLngs(pts);
@@ -277,18 +340,62 @@ footer{padding:28px;border-top:1px solid var(--border);color:#acb6c9}
     const ct=total.toFixed(2).replace('.',',');
     priceBox.innerHTML=`Route: <b>${sName}</b> → <b>${dName}</b> · Entfernung: <b>${dk} km</b> · Preis (ab): <b>${ct} €</b> <small class="muted">(Tarif ${rate.toFixed(2)} €/km)</small>`;
     bookBtn.disabled=false;
-    bookBtn.onclick=()=>{
-      const msg=encodeURIComponent(`Buchung: ${sName} → ${dName} | Entfernung ca. ${dk} km | Preis ab ${ct} € (Tarif ${rate.toFixed(2)} €/km). Bitte um Bestätigung / Termin.`);
-      window.open(`https://api.whatsapp.com/send?phone=49162575957&text=${msg}`,'_blank');
-    };
+
+    currentTrip = {sName,dName,km:dk,price:ct,rate:rate.toFixed(2)};
     waBtn.href = `https://api.whatsapp.com/send?phone=49162575957&text=${encodeURIComponent('Hallo! Anfrage: '+sName+' → '+dName+' ('+dk+' km, ab '+ct+' €)')}`;
   }
 
   calcBtn.addEventListener('click', compute);
   startInput.value='Lonsee';
+
+  // Booking modal logic
+  function openModal(){ modal.classList.add('open'); modal.setAttribute('aria-hidden','false'); }
+  function close(){ modal.classList.remove('open'); modal.setAttribute('aria-hidden','true'); }
+  closeModal.addEventListener('click', close);
+  modal.addEventListener('click', (e)=>{ if(e.target===modal) close(); });
+
+  bookBtn.addEventListener('click', ()=>{
+    if(!currentTrip.sName || !currentTrip.dName){ return; }
+    openModal();
+  });
+
+  function selectedPay(){
+    const el = payForm.querySelector('input[name="pay"]:checked');
+    return el ? el.value : null;
+  }
+
+  function buildMsg(prefix){
+    const pay = selectedPay() || '—';
+    const name = document.getElementById('custName').value.trim() || '—';
+    const phone = document.getElementById('custPhone').value.trim() || '—';
+    const when = document.getElementById('pickupTime').value || '—';
+    const note = document.getElementById('note').value.trim() || '—';
+    return `${prefix}
+${currentTrip.sName} → ${currentTrip.dName}
+Entfernung: ${currentTrip.km} km
+Preis (ab): ${currentTrip.price} € (Tarif ${currentTrip.rate} €/km)
+Zahlung: ${pay}
+Name: ${name} · Telefon: ${phone}
+Abholung: ${when}
+Notiz: ${note}`.trim();
+  }
+
+  sendInquiry.addEventListener('click', ()=>{
+    if(!currentTrip.sName) return;
+    const msg = buildMsg('Anfrage / Request:');
+    window.open(`https://api.whatsapp.com/send?phone=49162575957&text=${encodeURIComponent(msg)}`,'_blank');
+  });
+
+  confirmBook.addEventListener('click', ()=>{
+    if(!payForm.reportValidity()) return; // ensure required fields
+    const msg = buildMsg('Buchung · Bestätigung gewünscht:');
+    window.open(`https://api.whatsapp.com/send?phone=49162575957&text=${encodeURIComponent(msg)}`,'_blank');
+    close();
+  });
 })();</script>
 </body>
 </html>
 """
-Path("/mnt/data/index_modern.html").write_text(html, encoding="utf-8")
-print("/mnt/data/index_modern.html")
+out = Path("/mnt/data/index.html")
+out.write_text(html, encoding="utf-8")
+print(str(out))
