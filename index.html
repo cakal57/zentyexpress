@@ -1,484 +1,274 @@
-<!doctype html>
+# Now write the full HTML content
+from pathlib import Path
+
+html = r"""<!doctype html>
 <html lang="de">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Zenty Express AI — Mobility & Transport</title>
-  <meta name="description" content="Zenty Express AI · Mobility & Transport · VIP Shuttle · Kurier · Intelligente Routen · AI Powered Mobility" />
-  <style>
-    :root{
-      --charcoal:#0e1015; --ink:#141824; --ink2:#1a2030; --gold:#d4af37; --silver:#c8cfdb; --neon:#29a7ff; --radius:22px;
-      --shadow:0 12px 28px rgba(0,0,0,.35), 0 3px 10px rgba(0,0,0,.35);
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{margin:0;background:radial-gradient(1200px 700px at 70% -10%, #1b2130 0%, var(--charcoal) 55%), var(--charcoal);color:#e8ecf3;font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif}
-    a{color:inherit;text-decoration:none}
-    .container{max-width:1200px;margin:0 auto;padding:28px}
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Zenty Express AI — Mobility & Transport</title>
+<meta name="description" content="Zenty Express AI · Mobility & Transport · VIP Shuttle · Kurier · Intelligente Routen · Made in Germany">
+<style>
+:root{
+  --bg:#0b0f16; --panel:#111725; --panel2:#0e1422; --border:#232b3e; --text:#e9eef8; --muted:#bec9dd;
+  --accent:#2aa8ff; --accent2:#6fd0ff; --gold:#d4af37; --radius:22px; --shadow:0 12px 32px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box}
+body{margin:0;background:
+ radial-gradient(1200px 700px at 70% -10%,#182133 0%, transparent 55%),
+ linear-gradient(180deg,#0b0f16,#0c1018);
+ color:var(--text);font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif}
+a{color:inherit;text-decoration:none}
+.container{max-width:1200px;margin:0 auto;padding:28px}
 
-    /* Header */
-    header{position:sticky;top:0;z-index:60;background:linear-gradient(180deg, rgba(10,12,16,.9), rgba(10,12,16,.2));backdrop-filter:blur(8px);border-bottom:1px solid #22293a}
-    .nav{display:flex;align-items:center;gap:18px;padding:10px 18px}
-    .brand{display:flex;align-items:center;gap:12px}
-    .brand img{height:84px; width:auto; filter:drop-shadow(0 10px 24px rgba(0,0,0,.55))}
-    .brand span{font-weight:700;color:#cfd6e6}
-    .spacer{flex:1}
-    .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;border:1px solid #262b39;background:linear-gradient(180deg,#181c26,#10131a);color:#e8ecf3;box-shadow:var(--shadow);transition:.2s}
-    .btn:hover{transform:translateY(-1px);background:linear-gradient(180deg,#1b2130,#121722)}
-    .btn.gold{border-color:#3a2c09;background:linear-gradient(180deg,#2a2311,#1a1409);color:#f6f2e6}
-    .btn.gold:hover{box-shadow:0 10px 24px rgba(212,175,55,.25)}
-    .lang{display:flex;gap:8px}
-    .lang button{border:1px solid #2a3143;background:#111522;color:#cfd6e6;border-radius:10px;padding:6px 10px;cursor:pointer}
-    .lang button.active{border-color:#3c92ff;background:#0e1a2a}
+/* Header */
+header{position:sticky;top:0;z-index:50;background:linear-gradient(180deg,rgba(10,14,22,.9),rgba(10,14,22,.2));backdrop-filter:blur(8px);border-bottom:1px solid var(--border)}
+.nav{display:flex;align-items:center;gap:18px;padding:10px 18px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{height:108px;width:auto;filter:drop-shadow(0 12px 24px rgba(0,0,0,.55))}
+.brand strong{font-weight:800;color:#dce4f5}
+.spacer{flex:1}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;border:1px solid #273148;background:linear-gradient(180deg,#141b2a,#0e1320);box-shadow:var(--shadow)}
+.btn:hover{transform:translateY(-1px)}
+.btn.gold{background:linear-gradient(180deg,#2a2311,#171108);border-color:#3a2c09;color:#fbf6e5}
+.lang{display:flex;gap:8px}
+.lang button{border:1px solid #273148;background:#0d1424;color:#d7def1;border-radius:10px;padding:6px 10px;cursor:pointer}
+.lang button.active{border-color:var(--accent);background:#0a1a2f}
 
-    /* Hero */
-    .hero{display:grid;grid-template-columns:1.2fr 1fr;gap:28px;align-items:center;padding:36px 18px 12px}
-    .card{background:linear-gradient(180deg,#151a26,#0f1219);border:1px solid #232838;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
-    .card.pad{padding:28px}
-    .hero h1{margin:10px 0 10px;font-weight:800;letter-spacing:.4px;font-size:clamp(28px,3.2vw,44px)}
-    .muted{color:#c9cfdb}
+/* Hero */
+.hero{display:grid;grid-template-columns:1.2fr 1fr;gap:28px;align-items:center;padding:36px 18px 12px}
+.card{background:linear-gradient(180deg,#121a2a,#0c111c);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+.card.pad{padding:28px}
+.hero h1{margin:10px 0 12px;font-weight:900;letter-spacing:.3px;font-size:clamp(28px,3.1vw,44px)}
+.muted{color:var(--muted)}
 
-    /* Sections */
-    .section{padding:28px 18px}
-    h2{font-size:28px;margin:0 0 10px}
-    .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-    .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
-    @media (max-width:1000px){.hero{grid-template-columns:1fr}.grid-4{grid-template-columns:repeat(2,1fr)}.grid-3{grid-template-columns:repeat(2,1fr)}.grid-2{grid-template-columns:1fr}}
+/* Sections */
+.section{padding:28px 18px}
+h2{font-size:28px;margin:0 0 10px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media (max-width:1000px){.hero{grid-template-columns:1fr}.grid-4{grid-template-columns:repeat(2,1fr)}.grid-3{grid-template-columns:repeat(2,1fr)}
 
-    /* Thumbnails */
-    .tile img{width:100%;aspect-ratio:3/4;object-fit:cover;display:block}
-    .tile .body{padding:14px}
-    .poster img{aspect-ratio:4/3}
-    .price h3{margin:10px 14px 0}
-    .pill{display:inline-block;border:1px solid #2b3143;border-radius:999px;padding:2px 8px;margin-left:8px;color:#b9c3d6;font-size:12px}
+/* Thumbs */
+.tile{position:relative}
+.tile img{width:100%;aspect-ratio:3/4;object-fit:cover;display:block}
+.tile .body{padding:14px}
+.veh img{aspect-ratio:4/3;max-height:180px}
+/* unified logo overlay on all vehicle thumbs */
+.veh .overlay{position:absolute;inset:auto 10px 10px auto;width:88px;opacity:.9;filter:drop-shadow(0 4px 10px rgba(0,0,0,.6))}
 
-    /* Vehicles should keep original look */
-    .veh img{aspect-ratio:4/3;max-height:180px}
+/* Prices */
+.price h3{margin:10px 14px 0}
+.pill{display:inline-block;border:1px solid #2b3143;border-radius:999px;padding:2px 8px;margin-left:8px;color:#b9c3d6;font-size:12px}
 
-    /* Route + AI section */
-    .route{position:relative;min-height:420px;display:grid;grid-template-columns:1.1fr 1fr;gap:18px}
-    .map{position:relative;border-radius:var(--radius);border:1px solid #232838;background:radial-gradient(600px 300px at 60% -10%, rgba(41,167,255,.12), transparent 60%), #0e1118;overflow:hidden}
-    .map svg{position:absolute;inset:0;width:100%;height:100%}
-    .dot{fill:#29a7ff}
-    .edge{stroke:#2a7bd9;stroke-width:2;opacity:.7}
-    .pulse{animation:pulse 2.5s ease-in-out infinite}
-    @keyframes pulse{0%{opacity:.6;r:2}50%{opacity:1;r:3.2}100%{opacity:.6;r:2}}
+/* AI + Route area */
+.aiRoute{display:grid;grid-template-columns:1.1fr 1fr;gap:18px}
+.canvasWrap{position:relative;height:420px;border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;background:radial-gradient(600px 260px at 60% -10%, rgba(42,168,255,.18), transparent 60%), #0a0f17}
+#starfield{position:absolute;inset:0;width:100%;height:100%}
+.mapWrap{position:relative;border-radius:var(--radius);border:1px solid var(--border);padding:14px;background:linear-gradient(180deg,#0e1422,#0b101a)}
+.mapWrap h3{margin:0 0 8px}
+.map{position:relative;border:1px dashed #264264;border-radius:14px;padding:10px}
+.map svg{width:100%;height:300px;display:block}
+.pin{fill:var(--accent);stroke:#7fc1ff;stroke-width:.4;cursor:pointer}
+.label{font-size:3px;fill:#cfe7ff;opacity:.95}
+.routePath{stroke-dasharray:2.5 2.5;stroke:#9ad0ff;stroke-width:1.2;fill:none}
+.tooltip{position:absolute;pointer-events:none;background:#0b0f17;border:1px solid #2a3143;color:#e6edf7;border-radius:8px;padding:6px 8px;font-size:12px;transform:translate(-50%,-120%);white-space:nowrap;display:none;z-index:150}
 
-    /* Robot (SVG) */
-    .robot{background:radial-gradient(300px 260px at 60% 20%, rgba(41,167,255,.18), transparent 60%), linear-gradient(180deg,#101522,#0b0f17);border:1px solid #232838;border-radius:var(--radius);box-shadow:var(--shadow);display:grid;place-items:center}
-    .robot svg{width:72%;height:auto;filter:drop-shadow(0 10px 24px rgba(25,120,255,.25))}
-
-    /* Tooltip for pins */
-    .pin{fill:#29a7ff;stroke:#7fc1ff;stroke-width:.4}
-    .label{font-size:3px;fill:#cfe7ff;opacity:.9}
-    .tooltip{position:absolute;pointer-events:none;background:#0b0f17;border:1px solid #2a3143;color:#e6edf7;border-radius:8px;padding:6px 8px;font-size:12px;transform:translate(-50%,-120%);white-space:nowrap;display:none;z-index:150}
-
-    /* Modals */
-    .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.6);backdrop-filter:blur(6px);z-index:120}
-    .modal.show{display:flex}
-    .modal .panel{width:min(680px,95vw);border-radius:18px;border:1px solid #2a3143;background:linear-gradient(180deg,#111622,#0b0f17);box-shadow:0 18px 40px rgba(0,0,0,.55);overflow:hidden}
-    .modal header{position:static;background:none;border-bottom:1px solid #232838}
-    .modal h3{margin:0}
-    .form{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:18px}
-    .form label{display:flex;flex-direction:column;gap:6px;font-size:14px;color:#d6deec}
-    .form input,.form select,.form textarea{background:#0f1420;border:1px solid #273047;border-radius:10px;padding:10px;color:#e6edf7}
-    .form textarea{min-height:90px;grid-column:1 / -1}
-    .form .full{grid-column:1 / -1}
-    .form .actions{display:flex;justify-content:flex-end;gap:10px;grid-column:1 / -1}
-
-    footer{padding:28px;color:#aeb7c7;border-top:1px solid #232838}
-  </style>
+/* Footer */
+footer{padding:28px;border-top:1px solid var(--border);color:#acb6c9}
+.addr{margin-top:6px;color:#cdd7e9}}
+</style>
 </head>
 <body>
-  <header>
-    <div class="nav container">
-      <a class="brand" href="#top"><img src="assets/logo.png" alt="Zenty Express AI"/><span>Zenty Express AI · Mobility & Transport</span></a>
-      <div class="spacer"></div>
-      <a class="btn" href="#fahrzeuge" data-i18n="navVehicles">Fahrzeuge</a>
-      <a class="btn" href="#preise" data-i18n="navPrices">Preise</a>
-      <a class="btn" href="#ki" data-i18n="navAI">KI‑System</a>
-      <button class="btn" id="openProspekt" data-i18n="navProspekt">Prospekt</button>
-      <a class="btn gold" href="#kontakt" data-i18n="navContact">Kontakt</a>
-      <div class="lang" aria-label="Sprachen">
-        <button data-lang="de" class="active">DE</button>
-        <button data-lang="en">EN</button>
-        <button data-lang="tr">TR</button>
-      </div>
+<header>
+  <div class="nav container">
+    <a class="brand" href="#top"><img src="assets/logo.png" alt="Zenty Express AI"><strong>Zenty Express AI · Mobility & Transport</strong></a>
+    <div class="spacer"></div>
+    <a class="btn" href="#fahrzeuge">Fahrzeuge</a>
+    <a class="btn" href="#preise">Preise</a>
+    <a class="btn" href="#ki">KI-System</a>
+    <button class="btn" id="openProspekt">Prospekt</button>
+    <a class="btn gold" href="#kontakt">Kontakt</a>
+    <div class="lang">
+      <button data-lang="de" class="active">DE</button>
+      <button data-lang="en">EN</button>
+      <button data-lang="tr">TR</button>
     </div>
-  </header>
+  </div>
+</header>
 
-  <!-- HERO -->
-  <section class="hero container">
-    <div class="card pad">
-      <h1 data-i18n="heroTitle">AI Powered Mobility — Premium Shuttle · Kurier · Fleet</h1>
-      <p class="muted" data-i18n="heroSub">Intelligente Routen, Echtzeit‑Analyse, zuverlässige Transporte. <b>Zenty Express AI</b> setzt neue Maßstäbe in Mobilität & Transport.</p>
-      <div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap">
-        <button class="btn" id="openProspekt2" data-i18n="openProspekt">📖 Prospekt ansehen</button>
-        <a class="btn" href="#fahrzeuge" data-i18n="seeFleet">🚐 Fahrzeugflotte</a>
-      </div>
+<section class="hero container">
+  <div class="card pad">
+    <h1>AI Powered Mobility — Premium Shuttle · Kurier · Fleet</h1>
+    <p class="muted">Intelligente Routen, Echtzeit-Analyse, zuverlässige Transporte. <b>Zenty Express AI</b> setzt neue Maßstäbe in Mobilität & Transport.</p>
+    <div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap">
+      <button class="btn" id="openProspekt2">📖 Prospekt ansehen</button>
+      <a class="btn" href="#fahrzeuge">🚐 Fahrzeugflotte</a>
     </div>
-    <div class="card poster" style="padding:0">
-      <img src="assets/prospekt-cover-fleet.jpg" alt="Fleet Cover" style="width:100%;height:100%;object-fit:cover"/>
-    </div>
-  </section>
+  </div>
+  <div class="card" style="padding:0"><img src="assets/prospekt-cover-fleet.jpg" alt="Fleet Cover" style="width:100%;height:100%;object-fit:cover"></div>
+</section>
 
-  <!-- LEISTUNGEN -->
-  <section class="section container" id="leistungen">
-    <h2 data-i18n="services">Unsere Leistungen</h2>
-    <p class="muted" data-i18n="servicesSub">VIP Shuttle · Kurier · Flughafentransfer · KI‑gestützte Streckenoptimierung</p>
-    <div class="grid-4">
-      <article class="card tile"><img src="assets/prospekt-leistungen.jpg" alt="Leistungen"><div class="body"><h3 data-i18n="svc1">VIP & Business</h3><p class="muted" data-i18n="svc1p">Diskreter Fahrservice mit höchstem Komfort.</p></div></article>
-      <article class="card tile"><img src="assets/prospekt-ai-system.jpg" alt="AI System"><div class="body"><h3 data-i18n="svc2">Shuttle & Gruppen</h3><p class="muted" data-i18n="svc2p">Flughafen, Mitarbeiter, Events — sicher & pünktlich.</p></div></article>
-      <article class="card tile"><img src="assets/prospekt-route-clean.jpg" alt="Route"><div class="body"><h3 data-i18n="svc3">Kurier & Express</h3><p class="muted" data-i18n="svc3p">Zeitkritische Zustellung, europaweit 24/7.</p></div></article>
-      <article class="card tile"><img src="assets/prospekt-ueber-uns.jpg" alt="Über uns"><div class="body"><h3 data-i18n="svc4">Fest‑ & Tagestouren</h3><p class="muted" data-i18n="svc4p">Smart geplant mit KI, flexibel & transparent.</p></div></article>
-    </div>
-  </section>
+<section class="section container">
+  <h2>Unsere Leistungen</h2>
+  <p class="muted">VIP Shuttle · Kurier · Flughafentransfer · KI-gestützte Streckenoptimierung</p>
+  <div class="grid-4">
+    <article class="card tile"><img src="assets/prospekt-leistungen.jpg"><div class="body"><h3>VIP & Business</h3><p class="muted">Diskreter Fahrservice mit höchstem Komfort.</p></div></article>
+    <article class="card tile"><img src="assets/prospekt-ai-system.jpg"><div class="body"><h3>Shuttle & Gruppen</h3><p class="muted">Flughafen, Mitarbeiter, Events — sicher & pünktlich.</p></div></article>
+    <article class="card tile"><img src="assets/prospekt-route-clean.jpg"><div class="body"><h3>Kurier & Express</h3><p class="muted">Zeitkritische Zustellung, europaweit 24/7.</p></div></article>
+    <article class="card tile"><img src="assets/prospekt-ueber-uns.jpg"><div class="body"><h3>Fest- & Tagestouren</h3><p class="muted">Smart geplant mit KI, flexibel & transparent.</p></div></article>
+  </div>
+</section>
 
-  <!-- FAHRZEUGE -->
-  <section class="section container" id="fahrzeuge">
-    <h2 data-i18n="fleet">Unsere Fahrzeugflotte</h2>
-    <p class="muted" data-i18n="fleetSub">Schwarzer Vito & Caddy · Weiße Trafic, Sprinter & Ducato — gepflegt, bereit.</p>
-    <div class="grid-4">
-      <article class="card tile veh"><img src="assets/vito.jpg" alt="Mercedes Vito"><div class="body"><h3>Mercedes Vito <span class="pill" data-i18n="black">schwarz</span></h3><p class="muted" data-i18n="vitoP">Eleganter Shuttle, bis 8 Personen.</p></div></article>
-      <article class="card tile veh"><img src="assets/caddy.jpg" alt="VW Caddy"><div class="body"><h3>VW Caddy <span class="pill" data-i18n="black">schwarz</span></h3><p class="muted" data-i18n="caddyP">Kompakt & wendig.</p></div></article>
-      <article class="card tile veh"><img src="assets/trafic.jpg" alt="Renault Trafic"><div class="body"><h3>Renault Trafic <span class="pill" data-i18n="white">weiß</span></h3><p class="muted" data-i18n="traficP">Viel Platz für Team & Gepäck.</p></div></article>
-      <article class="card tile veh"><img src="assets/sprinter.jpg" alt="Mercedes Sprinter"><div class="body"><h3>Mercedes Sprinter <span class="pill" data-i18n="white">weiß</span></h3><p class="muted" data-i18n="sprinterP">Gruppen‑ & Sondertransporte.</p></div></article>
-      <article class="card tile veh"><img src="assets/ducato.jpg" alt="Fiat Ducato"><div class="body"><h3>Fiat Ducato <span class="pill" data-i18n="white">weiß</span></h3><p class="muted" data-i18n="ducatoP">Zuverlässig auf Langstrecke.</p></div></article>
-      <article class="card tile"><img src="assets/prospekt-fahrzeuge.jpg" alt="Poster"><div class="body"><h3 data-i18n="fleetPoster">Fahrzeuge Poster</h3><p class="muted" data-i18n="fleetPosterP">Übersicht der Flotte.</p></div></article>
-      <article class="card tile"><img src="assets/prospekt-route-vans.jpg" alt="Route + Vans"><div class="body"><h3 data-i18n="routeVans">Route + Vans</h3><p class="muted" data-i18n="routeVansP">Routenintelligenz mit Fahrzeugen.</p></div></article>
-      <article class="card tile"><img src="assets/prospekt-cover-brochure.jpg" alt="Brochure"><div class="body"><h3 data-i18n="brochure">Prospekt</h3><p class="muted" data-i18n="brochureP">Außencover.</p></div></article>
-    </div>
-  </section>
+<section class="section container" id="fahrzeuge">
+  <h2>Unsere Fahrzeugflotte</h2>
+  <p class="muted">Schwarzer Vito & Caddy · Weiße Trafic, Sprinter & Ducato — gepflegt, bereit.</p>
+  <div class="grid-4">
+    <article class="card tile veh"><img src="assets/vito.jpg" alt="Mercedes Vito"><img class="overlay" src="assets/logo.png" alt=""><div class="body"><h3>Mercedes Vito <span class="pill">schwarz</span></h3><p class="muted">Eleganter Shuttle, bis 8 Personen.</p></div></article>
+    <article class="card tile veh"><img src="assets/caddy.jpg" alt="VW Caddy"><img class="overlay" src="assets/logo.png" alt=""><div class="body"><h3>VW Caddy <span class="pill">schwarz</span></h3><p class="muted">Kompakt & wendig.</p></div></article>
+    <article class="card tile veh"><img src="assets/trafic.jpg" alt="Renault Trafic"><img class="overlay" src="assets/logo.png" alt=""><div class="body"><h3>Renault Trafic <span class="pill">weiß</span></h3><p class="muted">Viel Platz für Team & Gepäck.</p></div></article>
+    <article class="card tile veh"><img src="assets/sprinter.jpg" alt="Mercedes Sprinter"><img class="overlay" src="assets/logo.png" alt=""><div class="body"><h3>Mercedes Sprinter <span class="pill">weiß</span></h3><p class="muted">Gruppen- & Sondertransporte.</p></div></article>
+    <article class="card tile veh"><img src="assets/ducato.jpg" alt="Fiat Ducato"><img class="overlay" src="assets/logo.png" alt=""><div class="body"><h3>Fiat Ducato <span class="pill">weiß</span></h3><p class="muted">Zuverlässig auf Langstrecke.</p></div></article>
+    <article class="card tile"><img src="assets/prospekt-fahrzeuge.jpg"><div class="body"><h3>Fahrzeuge Poster</h3><p class="muted">Übersicht der Flotte.</p></div></article>
+    <article class="card tile"><img src="assets/prospekt-route-vans.jpg"><div class="body"><h3>Route + Vans</h3><p class="muted">Routenintelligenz mit Fahrzeugen.</p></div></article>
+    <article class="card tile"><img src="assets/prospekt-cover-brochure.jpg"><div class="body"><h3>Prospekt</h3><p class="muted">Außencover.</p></div></article>
+  </div>
+</section>
 
-  <!-- PREISE -->
-  <section class="section container" id="preise">
-    <h2 data-i18n="prices">Preise</h2>
-    <div class="grid-3">
-      <article class="card price"><h3>Basic</h3><div class="body"><p><b>€ 1,00/km</b></p><p class="muted" data-i18n="p1">Kurzstrecken · Transparente Tarife</p><button class="btn openQuote" data-plan="Basic" data-i18n="request">Anfragen</button></div></article>
-      <article class="card price"><h3>Standard</h3><div class="body"><p><b>€ 0,90/km</b></p><p class="muted" data-i18n="p2">20–100 km · schnelle Verfügbarkeit</p><button class="btn openQuote" data-plan="Standard" data-i18n="request">Anfragen</button></div></article>
-      <article class="card price"><h3>Premium</h3><div class="body"><p><b>€ 0,80/km</b></p><p class="muted" data-i18n="p3">Langstrecke · VIP</p><button class="btn openQuote" data-plan="Premium" data-i18n="request">Anfragen</button></div></article>
-    </div>
-    <p class="muted" style="margin-top:8px" data-i18n="priceNote">Preise sind Richtwerte; Endpreise je nach Route & Zeitplan.</p>
-  </section>
+<section class="section container" id="preise">
+  <h2>Preise</h2>
+  <div class="grid-3">
+    <article class="card price"><h3>Basic</h3><div class="body"><p><b>€ 1,00/km</b></p><p class="muted">Kurzstrecken · Transparente Tarife</p><button class="btn openQuote" data-plan="Basic">Anfragen</button></div></article>
+    <article class="card price"><h3>Standard</h3><div class="body"><p><b>€ 0,90/km</b></p><p class="muted">20–100 km · schnelle Verfügbarkeit</p><button class="btn openQuote" data-plan="Standard">Anfragen</button></div></article>
+    <article class="card price"><h3>Premium</h3><div class="body"><p><b>€ 0,80/km</b></p><p class="muted">Langstrecke · VIP</p><button class="btn openQuote" data-plan="Premium">Anfragen</button></div></article>
+  </div>
+  <p class="muted" style="margin-top:8px">Preise sind Richtwerte; Endpreise je nach Route & Zeitplan.</p>
+</section>
 
-  <!-- KI SYSTEM (How it works) + ROUTE MAP + ROBOT) -->
-  <section class="section container" id="ki">
-    <h2>Zenty AI Route Intelligence</h2>
-    <div class="route">
-      <div class="robot">
-        <svg viewBox="0 0 320 360" xmlns="http://www.w3.org/2000/svg" aria-label="AI Robot">
-          <defs>
-            <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0" stop-color="#29a7ff"/>
-              <stop offset="1" stop-color="#6fd0ff"/>
-            </linearGradient>
-            <linearGradient id="g2" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0" stop-color="#b6c6ff"/>
-              <stop offset="1" stop-color="#e2f0ff"/>
-            </linearGradient>
-          </defs>
-          <rect x="100" y="30" width="120" height="90" rx="20" fill="url(#g2)" opacity=".9"/>
-          <circle cx="130" cy="75" r="12" fill="url(#g1)"><animate attributeName="r" values="10;13;10" dur="2.2s" repeatCount="indefinite"/></circle>
-          <circle cx="190" cy="75" r="12" fill="url(#g1)"><animate attributeName="r" values="13;10;13" dur="2.2s" repeatCount="indefinite"/></circle>
-          <rect x="90" y="120" width="140" height="130" rx="24" fill="#e7eef9" opacity=".9"/>
-          <circle cx="160" cy="185" r="18" fill="url(#g1)"><animate attributeName="r" values="16;22;16" dur="2.8s" repeatCount="indefinite"/></circle>
-          <rect x="60" y="140" width="26" height="100" rx="12" fill="#d9e5ff"/>
-          <rect x="234" y="140" width="26" height="100" rx="12" fill="#d9e5ff"/>
-          <rect x="120" y="250" width="30" height="80" rx="10" fill="#d9e5ff"/>
-          <rect x="170" y="250" width="30" height="80" rx="10" fill="#d9e5ff"/>
-          <line x1="160" y1="20" x2="160" y2="30" stroke="#6fd0ff" stroke-width="3"/>
-          <circle cx="160" cy="16" r="5" fill="#6fd0ff"><animate attributeName="r" values="4;7;4" dur="3s" repeatCount="indefinite"/></circle>
+<section class="section container" id="ki">
+  <h2>Zenty AI Route Intelligence</h2>
+  <div class="aiRoute">
+    <!-- Modern AI starfield -->
+    <div class="canvasWrap card">
+      <canvas id="starfield"></canvas>
+    </div>
+    <!-- Interactive route calculator -->
+    <div class="mapWrap card">
+      <h3>Ulm-Region · 50 km · Start: <b>Lonsee</b></h3>
+      <div class="map">
+        <svg viewBox="0 0 100 70" id="routeSvg" aria-label="Ulm + 50 km">
+          <path id="route" class="routePath"></path>
+          <g id="pins">
+            <g data-name="Lonsee" data-key="lonsee"><circle class="pin" cx="28" cy="36" r="2.4"></circle><text class="label" x="30.5" y="35">Lonsee</text></g>
+            <g data-name="Ulm"><circle class="pin" cx="50" cy="32" r="2.4"></circle><text class="label" x="52" y="31">Ulm</text></g>
+            <g data-name="Neu-Ulm"><circle class="pin" cx="53" cy="34" r="1.8"></circle><text class="label" x="55" y="35.5">Neu-Ulm</text></g>
+            <g data-name="Blaustein"><circle class="pin" cx="40" cy="29" r="1.9"></circle><text class="label" x="33" y="27.5">Blaustein</text></g>
+            <g data-name="Dornstadt"><circle class="pin" cx="38" cy="37" r="1.9"></circle><text class="label" x="30" y="39">Dornstadt</text></g>
+            <g data-name="Günzburg"><circle class="pin" cx="70" cy="26" r="1.9"></circle><text class="label" x="72" y="25">Günzburg</text></g>
+            <g data-name="Senden"><circle class="pin" cx="63" cy="39" r="1.9"></circle><text class="label" x="65" y="40.5">Senden</text></g>
+            <g data-name="Ehingen (Donau)"><circle class="pin" cx="34" cy="54" r="1.9"></circle><text class="label" x="25" y="59">Ehingen</text></g>
+            <g data-name="Laupheim"><circle class="pin" cx="49" cy="49" r="1.9"></circle><text class="label" x="51" y="50.5">Laupheim</text></g>
+            <g data-name="Geislingen a.d.S."><circle class="pin" cx="15" cy="32" r="1.9"></circle><text class="label" x="4" y="31">Geislingen</text></g>
+            <g data-name="Biberach"><circle class="pin" cx="60" cy="55" r="1.9"></circle><text class="label" x="62" y="57">Biberach</text></g>
+            <g data-name="Langenau"><circle class="pin" cx="62" cy="30" r="1.9"></circle><text class="label" x="64" y="29">Langenau</text></g>
+            <g data-name="Weißenhorn"><circle class="pin" cx="68" cy="44" r="1.9"></circle><text class="label" x="70" y="45.5">Weißenhorn</text></g>
+          </g>
         </svg>
       </div>
-      <div class="card pad">
-        <h3 data-i18n="how">Wie funktioniert’s?</h3>
-        <ol class="muted" style="margin-bottom:10px">
-          <li data-i18n="h1">Live‑Verkehrs‑ & Sensordaten werden erfasst.</li>
-          <li data-i18n="h2">KI prognostiziert Nachfrage, Stau & Wetter‑Einfluss.</li>
-          <li data-i18n="h3">Automatische Routenplanung & Zeit‑/Kosten‑Optimierung.</li>
-          <li data-i18n="h4">Fahrer erhält klare Instruktionen — effizient & pünktlich.</li>
-        </ol>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
-          <div class="card" style="padding:12px;text-align:center"><div style="font-size:22px;font-weight:800;color:#eaf2ff">15%</div><div class="muted">weniger Fahrzeit</div></div>
-          <div class="card" style="padding:12px;text-align:center"><div style="font-size:22px;font-weight:800;color:#eaf2ff">‑12%</div><div class="muted">Kraftstoff</div></div>
-          <div class="card" style="padding:12px;text-align:center"><div style="font-size:22px;font-weight:800;color:#eaf2ff">98%</div><div class="muted">Pünktlichkeit</div></div>
-        </div>
-        <p class="muted" style="margin-top:10px" data-i18n="howSub">Ergebnis: Schnellere Fahrten, geringere Kosten, weniger CO₂.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px">
+        <label>Start <input value="Lonsee" id="startInput" readonly style="width:100%;padding:8px;border:1px solid var(--border);border-radius:10px;background:#0e1422;color:var(--text)"></label>
+        <label>Ziel <input placeholder="Ziel wählen…" id="destInput" readonly style="width:100%;padding:8px;border:1px solid var(--border);border-radius:10px;background:#0e1422;color:var(--text)"></label>
       </div>
-    </div>
-
-    <!-- Expanded Ulm area map (abstract) -->
-    <div class="map container" style="margin-top:18px">
-      <svg viewBox="0 0 100 60" preserveAspectRatio="none" aria-label="Ulm + 50 km">
-        <!-- routes -->
-        <g>
-          <line class="edge" x1="50" y1="30" x2="65" y2="20"/>
-          <line class="edge" x1="50" y1="30" x2="35" y2="22"/>
-          <line class="edge" x1="50" y1="30" x2="30" y2="35"/>
-          <line class="edge" x1="50" y1="30" x2="55" y2="40"/>
-          <line class="edge" x1="50" y1="30" x2="70" y2="34"/>
-          <line class="edge" x1="50" y1="30" x2="42" y2="44"/>
-          <line class="edge" x1="50" y1="30" x2="25" y2="28"/>
-        </g>
-        <!-- cities (approx positions) -->
-        <g>
-          <circle class="pin" cx="50" cy="30" r="2.4"/>
-          <text class="label" x="52" y="29">Ulm</text>
-
-          <circle class="pin" cx="52" cy="32" r="1.8"/>
-          <text class="label" x="54" y="33.5">Neu‑Ulm</text>
-
-          <circle class="pin" cx="35" cy="22" r="1.9"/>
-          <text class="label" x="27" y="20">Blaustein</text>
-
-          <circle class="pin" cx="30" cy="35" r="1.9"/>
-          <text class="label" x="22" y="37">Dornstadt</text>
-
-          <circle class="pin" cx="65" cy="20" r="1.9"/>
-          <text class="label" x="66" y="19">Günzburg</text>
-
-          <circle class="pin" cx="70" cy="34" r="1.9"/>
-          <text class="label" x="72" y="35.5">Senden</text>
-
-          <circle class="pin" cx="42" cy="44" r="1.9"/>
-          <text class="label" x="34" y="49">Ehingen (Donau)</text>
-
-          <circle class="pin" cx="55" cy="40" r="1.9"/>
-          <text class="label" x="57" y="41.5">Laupheim</text>
-
-          <circle class="pin" cx="25" cy="28" r="1.9"/>
-          <text class="label" x="13" y="27">Geislingen a.d.S.</text>
-
-          <circle class="pin" cx="60" cy="45" r="1.9"/>
-          <text class="label" x="62" y="47">Biberach</text>
-
-          <circle class="pin" cx="62" cy="28" r="1.9"/>
-          <text class="label" x="64" y="27">Langenau</text>
-
-          <circle class="pin" cx="66" cy="38" r="1.9"/>
-          <text class="label" x="68" y="39.5">Weißenhorn</text>
-        </g>
-      </svg>
-    </div>
-    <p class="muted container" style="margin:6px 0 0">© Zenty Express AI — Route Intelligence · Ulm Region</p>
-  </section>
-
-  <!-- KONTAKT -->
-  <section class="section container" id="kontakt">
-    <h2>Kontakt & Standort</h2>
-    <p class="muted">E‑Mail: info@zentyexpress.de · Web: zentyexpress.de</p>
-    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px">
-      <a class="btn" href="https://wa.me/49162575957" target="_blank" rel="noopener">WhatsApp</a>
-      <a class="btn" href="https://t.me/ZentyExpressBot" target="_blank" rel="noopener">Telegram</a>
-      <a class="btn gold" href="mailto:info@zentyexpress.de">E‑Mail</a>
-    </div>
-  </section>
-
-  <footer class="container">© Zenty Express AI — Mobility & Transport · Final Signature Edition v9 · Made in Germany</footer>
-
-  <!-- PROSPEKT MODAL / FLIPBOOK -->
-  <div class="modal" id="prospektModal" aria-hidden="true" style="position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.6);backdrop-filter:blur(6px);z-index:100">
-    <div class="book" role="dialog" aria-label="Prospekt" style="width:min(1100px,95vw);height:min(720px,80vh);display:grid;grid-template-columns:1fr 1fr;border-radius:var(--radius);overflow:hidden;border:1px solid #2a3143;background:linear-gradient(180deg,#0f131a,#0b0f14)">
-      <div class="page" style="position:relative;overflow:hidden"><img id="pageLeft" alt="Seite links" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></div>
-      <div class="page" style="position:relative;overflow:hidden"><img id="pageRight" alt="Seite rechts" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></div>
-      <div style="position:absolute;inset:16px 16px auto auto;display:flex;gap:8px">
-        <button class="btn" id="prev">◀</button>
-        <button class="btn" id="next">▶</button>
-        <button class="btn" id="close">✕</button>
-      </div>
-      <div style="position:absolute;left:16px;bottom:12px;color:#c6cede;font-size:13px;opacity:.85">← / → umblättern · ESC schließen</div>
+      <div id="priceBox" class="muted" style="margin-top:8px">Entfernung: — km · Preis: —</div>
+      <small class="muted">Tipp: Karte oben — bir şehre tıklayınca rota çizilir ve fiyat görünür.</small>
     </div>
   </div>
+</section>
 
-  <!-- QUOTE (TEKLİF) MODAL -->
-  <div class="modal" id="quoteModal" aria-hidden="true">
-    <div class="panel">
-      <header class="container" style="display:flex;align-items:center;gap:10px;justify-content:space-between;padding:14px 18px">
-        <h3 style="margin:0" data-i18n="quoteTitle">Angebot anfragen</h3>
-        <button class="btn" id="closeQuote">✕</button>
-      </header>
-      <form class="form" id="quoteForm">
-        <label class="full"><span data-i18n="qName">Name</span><input required name="name" placeholder="Max Mustermann"/></label>
-        <label><span data-i18n="qEmail">E‑Mail</span><input required type="email" name="email" placeholder="kunde@mail.de"/></label>
-        <label><span data-i18n="qPhone">Telefon</span><input name="phone" placeholder="+49 ..."/></label>
-        <label><span data-i18n="qFrom">Abfahrt</span><input name="from" placeholder="Ulm"/></label>
-        <label><span data-i18n="qTo">Ziel</span><input name="to" placeholder="München"/></label>
-        <label><span data-i18n="qDate">Datum & Uhrzeit</span><input type="datetime-local" name="when"/></label>
-        <label><span data-i18n="qDistance">Entfernung (km)</span><input name="km" type="number" min="1" step="1"/></label>
-        <label><span data-i18n="qService">Service</span>
-          <select name="service">
-            <option>VIP & Business</option>
-            <option>Shuttle & Gruppen</option>
-            <option>Kurier & Express</option>
-            <option>Fest & Tagestouren</option>
-          </select>
-        </label>
-        <label class="full"><span data-i18n="qNotes">Notizen</span><textarea name="notes" placeholder="Sonderwünsche, Rückfahrt, Wartezeit ..."></textarea></label>
-        <div class="actions">
-          <button type="button" class="btn" id="cancelQuote" data-i18n="cancel">Abbrechen</button>
-          <button type="submit" class="btn gold" data-i18n="send">Anfrage senden</button>
-        </div>
-      </form>
-    </div>
+<section class="section container" id="kontakt">
+  <h2>Kontakt & Standort</h2>
+  <p class="muted">E-Mail: info@zentyexpress.de · Web: zentyexpress.de</p>
+  <p class="addr">Sitz: <b>Sinabronner Str. 25, 89173 Lonsee</b> · Deutschland</p>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px">
+    <a class="btn" href="https://wa.me/49162575957" target="_blank" rel="noopener">WhatsApp</a>
+    <a class="btn" href="https://t.me/ZentyExpressBot" target="_blank" rel="noopener">Telegram</a>
+    <a class="btn gold" href="mailto:info@zentyexpress.de">E-Mail</a>
   </div>
+</section>
 
-  <script>
-    // ===== Translations =====
-    const I18N = {
-      de: {
-        navVehicles:"Fahrzeuge", navPrices:"Preise", navAI:"KI‑System", navProspekt:"Prospekt", navContact:"Kontakt",
-        heroTitle:"AI Powered Mobility — Premium Shuttle · Kurier · Fleet",
-        heroSub:"Intelligente Routen, Echtzeit‑Analyse, zuverlässige Transporte. <b>Zenty Express AI</b> setzt neue Maßstäbe in Mobilität & Transport.",
-        openProspekt:"📖 Prospekt ansehen", seeFleet:"🚐 Fahrzeugflotte",
-        services:"Unsere Leistungen", servicesSub:"VIP Shuttle · Kurier · Flughafentransfer · KI‑gestützte Streckenoptimierung",
-        svc1:"VIP & Business", svc1p:"Diskreter Fahrservice mit höchstem Komfort.",
-        svc2:"Shuttle & Gruppen", svc2p:"Flughafen, Mitarbeiter, Events — sicher & pünktlich.",
-        svc3:"Kurier & Express", svc3p:"Zeitkritische Zustellung, europaweit 24/7.",
-        svc4:"Fest‑ & Tagestouren", svc4p:"Smart geplant mit KI, flexibel & transparent.",
-        fleet:"Unsere Fahrzeugflotte", fleetSub:"Schwarzer Vito & Caddy · Weiße Trafic, Sprinter & Ducato — gepflegt, bereit.",
-        black:"schwarz", white:"weiß", vitoP:"Eleganter Shuttle, bis 8 Personen.", caddyP:"Kompakt & wendig.", traficP:"Viel Platz für Team & Gepäck.", sprinterP:"Gruppen‑ & Sondertransporte.", ducatoP:"Zuverlässig auf Langstrecke.",
-        fleetPoster:"Fahrzeuge Poster", fleetPosterP:"Übersicht der Flotte.", routeVans:"Route + Vans", routeVansP:"Routenintelligenz mit Fahrzeugen.", brochure:"Prospekt", brochureP:"Außencover.",
-        prices:"Preise", p1:"Kurzstrecken · Transparente Tarife", p2:"20–100 km · schnelle Verfügbarkeit", p3:"Langstrecke · VIP", priceNote:"Preise sind Richtwerte; Endpreise je nach Route & Zeitplan.", request:"Anfragen",
-        how:"Wie funktioniert’s?", h1:"Live‑Verkehrs‑ & Sensordaten werden erfasst.", h2:"KI prognostiziert Nachfrage, Stau & Wetter‑Einfluss.", h3:"Automatische Routenplanung & Zeit‑/Kosten‑Optimierung.", h4:"Fahrer erhält klare Instruktionen — effizient & pünktlich.", howSub:"Ergebnis: Schnellere Fahrten, geringere Kosten, weniger CO₂.",
-        quoteTitle:'Angebot anfragen', qName:'Name', qEmail:'E‑Mail', qPhone:'Telefon', qFrom:'Abfahrt', qTo:'Ziel', qDate:'Datum & Uhrzeit', qDistance:'Entfernung (km)', qService:'Service', qNotes:'Notizen', cancel:'Abbrechen', send:'Anfrage senden', sent:'Danke! Ihre Anfrage wurde gesendet.'
-      },
-      en: {
-        navVehicles:"Vehicles", navPrices:"Pricing", navAI:"AI System", navProspekt:"Brochure", navContact:"Contact",
-        heroTitle:"AI‑Powered Mobility — Premium Shuttle · Courier · Fleet",
-        heroSub:"Smart routes, real‑time analytics, reliable transport. <b>Zenty Express AI</b> sets new standards in mobility.",
-        openProspekt:"📖 Open brochure", seeFleet:"🚐 View fleet",
-        services:"Our Services", servicesSub:"VIP shuttle · Courier · Airport transfer · AI‑route optimization",
-        svc1:"VIP & Business", svc1p:"Discreet ride service with top comfort.", svc2:"Shuttle & Groups", svc2p:"Airport, staff, events — safe & on time.",
-        svc3:"Courier & Express", svc3p:"Time‑critical delivery, Europe‑wide 24/7.", svc4:"Festivities & Day tours", svc4p:"AI‑planned, flexible & transparent.",
-        fleet:"Our Fleet", fleetSub:"Black Vito & Caddy · White Trafic, Sprinter & Ducato — maintained and ready.",
-        black:"black", white:"white", vitoP:"Elegant shuttle for up to 8.", caddyP:"Compact & agile.", traficP:"Plenty of room for team & luggage.", sprinterP:"Group & special transports.", ducatoP:"Reliable on long distance.",
-        fleetPoster:"Fleet Poster", fleetPosterP:"Overview of the fleet.", routeVans:"Route + Vans", routeVansP:"Route intelligence with vehicles.", brochure:"Brochure", brochureP:"Outer cover.",
-        prices:"Pricing", p1:"Short distances · Transparent rates", p2:"20–100 km · fast availability", p3:"Long distance · VIP", priceNote:"Prices are guide values; final prices depend on route & schedule.", request:"Request quote",
-        how:"How does it work?", h1:"Live traffic & sensor data are ingested.", h2:"AI forecasts demand, traffic and weather impact.", h3:"Automatic route planning & time/cost optimization.", h4:"Driver gets clear instructions — efficient & on time.", howSub:"Result: Faster trips, lower costs, less CO₂.",
-        quoteTitle:'Request a quote', qName:'Name', qEmail:'Email', qPhone:'Phone', qFrom:'From', qTo:'To', qDate:'Date & time', qDistance:'Distance (km)', qService:'Service', qNotes:'Notes', cancel:'Cancel', send:'Send request', sent:'Thanks! Your request has been sent.'
-      },
-      tr: {
-        navVehicles:"Araçlar", navPrices:"Fiyatlar", navAI:"AI Sistemi", navProspekt:"Prospekt", navContact:"İletişim",
-        heroTitle:"AI Destekli Mobilite — Premium Shuttle · Kurye · Filo",
-        heroSub:"Akıllı rotalar, gerçek‑zaman analiz, güvenilir taşımacılık. <b>Zenty Express AI</b> yeni standartlar getirir.",
-        openProspekt:"📖 Prospekti Aç", seeFleet:"🚐 Filomuz",
-        services:"Hizmetlerimiz", servicesSub:"VIP shuttle · Kurye · Havalimanı transferi · AI rota optimizasyonu",
-        svc1:"VIP & Business", svc1p:"Üst düzey konforlu, gizli sürüş.", svc2:"Shuttle & Gruplar", svc2p:"Havalimanı, personel, etkinlik — güvenli ve zamanında.",
-        svc3:"Kurye & Express", svc3p:"Zaman kritik teslimat, Avrupa genelinde 7/24.", svc4:"Fest & Günlük turlar", svc4p:"AI ile akıllı planlama, esnek ve şeffaf.",
-        fleet:"Araç Filosu", fleetSub:"Siyah Vito & Caddy · Beyaz Trafic, Sprinter & Ducato — bakımlı ve hazır.",
-        black:"siyah", white:"beyaz", vitoP:"8 kişiye kadar şık shuttle.", caddyP:"Kompakt ve çevik.", traficP:"Ekip & bagaj için geniş alan.", sprinterP:"Grup & özel taşımalar.", ducatoP:"Uzun yolda güvenilir.",
-        fleetPoster:"Araç Posteri", fleetPosterP:"Filonun genel görünümü.", routeVans:"Rota + Araçlar", routeVansP:"Araçlarla rota zekâsı.", brochure:"Prospekt", brochureP:"Dış kapak.",
-        prices:"Fiyatlar", p1:"Kısa mesafe · Şeffaf tarifeler", p2:"20–100 km · hızlı erişim", p3:"Uzun mesafe · VIP", priceNote:"Fiyatlar kılavuz niteliğindedir; nihai fiyat rota ve zamana göre değişir.", request:"Teklif iste",
-        how:"Nasıl çalışır?", h1:"Canlı trafik & sensör verileri alınır.", h2:"AI talep, trafik ve hava etkisini tahmin eder.", h3:"Otomatik rota planı & süre/maliyet optimizasyonu.", h4:"Sürücü net talimat alır — verimli ve zamanında.", howSub:"Sonuç: Daha hızlı sefer, daha düşük maliyet, daha az CO₂.",
-        quoteTitle:'Teklif iste', qName:'Ad Soyad', qEmail:'E‑posta', qPhone:'Telefon', qFrom:'Kalkış', qTo:'Varış', qDate:'Tarih & saat', qDistance:'Mesafe (km)', qService:'Hizmet', qNotes:'Notlar', cancel:'İptal', send:'Gönder', sent:'Teşekkürler! Talebiniz iletildi.'
-      }
-    };
+<footer class="container">© Zenty Express AI — Mobility & Transport · Final Signature Edition v10 · Made in Germany</footer>
 
-    function applyLang(lang){
-      document.documentElement.lang = lang;
-      document.querySelectorAll('[data-i18n]').forEach(el=>{
-        const k = el.getAttribute('data-i18n');
-        if(I18N[lang] && I18N[lang][k]) el.innerHTML = I18N[lang][k];
-      });
-      document.querySelectorAll('.lang button').forEach(b=> b.classList.toggle('active', b.dataset.lang===lang));
+<script>
+/* Starfield */
+(function(){
+  const canvas = document.getElementById('starfield');
+  const ctx = canvas.getContext('2d');
+  let W,H,stars=[];
+  function resize(){W=canvas.width=canvas.clientWidth;H=canvas.height=canvas.clientHeight}
+  window.addEventListener('resize',resize); resize();
+  function init(){
+    stars = Array.from({length:160}, _=> ({
+      x: Math.random()*W, y: Math.random()*H, z: Math.random()*1.2+0.2, vx:(Math.random()-.5)*0.2, vy:(Math.random()-.5)*0.2
+    }));
+  }
+  init();
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    const grad = ctx.createRadialGradient(W*0.6, H*0.2, 0, W*0.6, H*0.2, Math.max(W,H));
+    grad.addColorStop(0,'rgba(42,168,255,0.25)'); grad.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=grad; ctx.fillRect(0,0,W,H);
+    ctx.strokeStyle='rgba(140,200,255,0.22)'; ctx.lineWidth=1;
+    ctx.beginPath(); for(let i=0;i<8;i++){ ctx.moveTo(W*0.2+i*40%W,H*0.1+i*22%H); ctx.lineTo(W*0.5,H*0.55); } ctx.stroke();
+    for(const s of stars){
+      s.x+=s.vx; s.y+=s.vy; if(s.x<0) s.x=W; if(s.x>W) s.x=0; if(s.y<0) s.y=H; if(s.y>H) s.y=0;
+      const r=0.6+s.z*1.4; ctx.fillStyle='rgba(200,230,255,.9)'; ctx.beginPath(); ctx.arc(s.x,s.y,r,0,6.283); ctx.fill();
     }
+    ctx.shadowBlur=20; ctx.shadowColor='rgba(80,170,255,.8)';
+    ctx.fillStyle='rgba(60,160,255,.35)'; ctx.beginPath(); ctx.arc(W*0.5,H*0.55,46,0,6.283); ctx.fill();
+    ctx.shadowBlur=0;
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
 
-    document.querySelectorAll('.lang button').forEach(btn=>{
-      btn.addEventListener('click', ()=> applyLang(btn.dataset.lang));
-    });
-    applyLang('de'); // Default German
+/* Route & Pricing */
+(function(){
+  const svg = document.getElementById('routeSvg');
+  const routePath = document.getElementById('route');
+  const startInput = document.getElementById('startInput');
+  const destInput = document.getElementById('destInput');
+  const priceBox = document.getElementById('priceBox');
+  const scaleKm = 1.4;
+  const prices = [{max:20,rate:1.00},{max:100,rate:0.90},{max:9999,rate:0.80}];
+  function pos(el){const c=el.querySelector('circle');return {x:+c.getAttribute('cx'), y:+c.getAttribute('cy')}}
+  const pins=[...svg.querySelectorAll('#pins > g')];
+  const startEl=pins.find(p=>p.dataset.key==='lonsee'); const s=pos(startEl); startInput.value='Lonsee';
+  let t=null, tName='';
+  function draw(){
+    if(!t){ routePath.setAttribute('d',''); priceBox.textContent='Entfernung: — km · Preis: —'; return;}
+    const d=Math.hypot(t.x-s.x, t.y-s.y)*scaleKm;
+    const rate=prices.find(p=>d<=p.max).rate; const cost=(d*rate).toFixed(2).replace('.',','); const dk=d.toFixed(1).replace('.',',');
+    routePath.setAttribute('d',`M ${s.x} ${s.y} L ${t.x} ${t.y}`);
+    priceBox.innerHTML=`Entfernung: <b>${dk} km</b> · Preis (ab): <b>${cost} €</b> <small class="muted">(Tarif ${rate.toFixed(2)} €/km)</small>`;
+  }
+  const tooltip=document.createElement('div'); tooltip.className='tooltip'; document.body.appendChild(tooltip);
+  pins.forEach(p=>{
+    const label=p.dataset.name;
+    p.addEventListener('mouseenter',e=>{const r=e.target.getBoundingClientRect(); tooltip.textContent=label+' — Route anfragen'; tooltip.style.left=(r.left+r.width/2)+'px'; tooltip.style.top=(r.top-6)+'px'; tooltip.style.display='block';});
+    p.addEventListener('mouseleave',()=>tooltip.style.display='none');
+    p.addEventListener('click',()=>{t=pos(p); tName=label; destInput.value=label; draw();});
+  });
+})();
 
-    // ===== Prospekt Flipbook =====
-    const PAGES = [
-      'assets/prospekt-cover-brochure.jpg',
-      'assets/prospekt-ai-system.jpg',
-      'assets/prospekt-leistungen.jpg',
-      'assets/prospekt-ueber-uns.jpg',
-      'assets/prospekt-fahrzeuge.jpg',
-      'assets/prospekt-route-vans.jpg',
-      'assets/prospekt-route-clean.jpg',
-      'assets/prospekt-cover-fleet.jpg'
-    ];
-    const modal = document.getElementById('prospektModal');
-    const open1 = document.getElementById('openProspekt');
-    const open2 = document.getElementById('openProspekt2');
-    const prev = document.getElementById('prev');
-    const next = document.getElementById('next');
-    const closeBtn = document.getElementById('close');
-    const left = document.getElementById('pageLeft');
-    const right = document.getElementById('pageRight');
-    let idx = 1;
-    function render(){ right.src = PAGES[idx]||''; left.src = PAGES[idx-1]||''; }
-    function open(){ modal.style.display='flex'; idx=1; render(); }
-    function close(){ modal.style.display='none'; }
-    function goNext(){ if(idx < PAGES.length-1){ idx++; render(); } }
-    function goPrev(){ if(idx > 1){ idx--; render(); } }
-    [open1, open2].forEach(b=> b && b.addEventListener('click', open));
-    closeBtn.addEventListener('click', close);
-    next.addEventListener('click', goNext);
-    prev.addEventListener('click', goPrev);
-    window.addEventListener('keydown', e=>{ if(modal.style.display==='flex'){ if(e.key==='Escape') close(); if(e.key==='ArrowRight') goNext(); if(e.key==='ArrowLeft') goPrev(); }});
-    modal.addEventListener('click', (e)=>{ if(e.target===modal) close(); });
-
-    // ===== Quote modal open/close =====
-    const qModal = document.getElementById('quoteModal');
-    const qClose = document.getElementById('closeQuote');
-    const qCancel = document.getElementById('cancelQuote');
-    const qForm = document.getElementById('quoteForm');
-    document.querySelectorAll('.openQuote').forEach(btn=>{
-      btn.addEventListener('click', ()=>{
-        qModal.classList.add('show');
-        qForm.dataset.plan = btn.dataset.plan || '';
-      })
-    });
-    function closeQ(){ qModal.classList.remove('show'); }
-    [qClose, qCancel].forEach(b=> b.addEventListener('click', closeQ));
-    qModal.addEventListener('click', (e)=>{ if(e.target===qModal) closeQ(); });
-
-    // ===== Quote submit: backend POST if provided, else mailto fallback =====
-    qForm.addEventListener('submit', (e)=>{
-      e.preventDefault();
-      const d = Object.fromEntries(new FormData(qForm).entries());
-      const subj = encodeURIComponent(`Anfrage (${qForm.dataset.plan||'Tarif'}) — ${d.name}`);
-      const body = encodeURIComponent(
-        `Name: ${d.name}\nE‑Mail: ${d.email}\nTelefon: ${d.phone||''}\n`+
-        `Abfahrt: ${d.from||''}\nZiel: ${d.to||''}\nZeit: ${d.when||''}\n`+
-        `Entfernung: ${d.km||''} km\nService: ${d.service||''}\n`+
-        `Notizen: ${d.notes||''}\n\nGesendet von Zenty Express AI Website.`
-      );
-      const FORM_ENDPOINT = ""; // ör: https://formspree.io/f/XXXX
-      if(FORM_ENDPOINT){
-        fetch(FORM_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({plan:qForm.dataset.plan||'', ...d})})
-          .then(()=>{ alert((I18N[document.documentElement.lang].sent)||'Sent'); closeQ(); })
-          .catch(()=>{ window.location.href = `mailto:info@zentyexpress.de?subject=${subj}&body=${body}`; closeQ(); });
-      } else {
-        window.location.href = `mailto:info@zentyexpress.de?subject=${subj}&body=${body}`;
-        closeQ();
-      }
-    });
-
-    // ===== Map pin tooltips + click to prefill quote =====
-    const tooltip = document.createElement('div');
-    tooltip.className='tooltip';
-    document.body.appendChild(tooltip);
-    document.querySelectorAll('.map svg .pin').forEach(pin=>{
-      const label = pin.nextElementSibling?.textContent || 'Route';
-      pin.setAttribute('title', label);
-      pin.style.cursor='pointer';
-      pin.addEventListener('mouseenter',(e)=>{
-        const r = e.target.getBoundingClientRect();
-        tooltip.textContent = `${label} — Route anfragen`;
-        tooltip.style.left = (r.left + r.width/2) + 'px';
-        tooltip.style.top  = (r.top - 6) + 'px';
-        tooltip.style.display='block';
-      });
-      pin.addEventListener('mouseleave',()=>{ tooltip.style.display='none'; });
-      pin.addEventListener('click',()=>{
-        qModal.classList.add('show');
-        document.querySelector('#quoteForm [name=from]').value = label;
-      });
-    });
-  </script>
+/* Quote buttons => mailto fallback */
+document.querySelectorAll('.openQuote').forEach(b=> b.addEventListener('click', ()=>{
+  const subj=encodeURIComponent('Anfrage — '+b.dataset.plan);
+  const body=encodeURIComponent('Bitte um Angebot.\n\n— Zenty Express AI Website');
+  location.href=`mailto:info@zentyexpress.de?subject=${subj}&body=${body}`;
+}));
+</script>
 </body>
 </html>
+"""
+Path("/mnt/data/index.html").write_text(html, encoding="utf-8")
+print("/mnt/data/index.html written")
