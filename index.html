@@ -1,4 +1,5 @@
-# Write a corrected, stable version of index.html with fixed CSS braces and sane defaults
+# Create an updated HTML with clearer headings, fixed WhatsApp, curved route, 
+# input + booking flow. Writes /mnt/data/index_pro.html
 from pathlib import Path
 
 html = """<!doctype html>
@@ -11,7 +12,7 @@ html = """<!doctype html>
 <style>
 :root{
   --bg:#0b0f16; --panel:#111725; --border:#232b3e; --text:#e9eef8; --muted:#bec9dd;
-  --accent:#2aa8ff; --gold:#d4af37; --radius:22px; --shadow:0 12px 32px rgba(0,0,0,.35);
+  --accent:#2aa8ff; --accent2:#6fd0ff; --gold:#d4af37; --radius:22px; --shadow:0 12px 32px rgba(0,0,0,.35);
 }
 *{box-sizing:border-box}
 html,body{height:100%}
@@ -26,30 +27,32 @@ a{color:inherit;text-decoration:none}
 header{position:sticky;top:0;z-index:50;background:linear-gradient(180deg,rgba(10,14,22,.9),rgba(10,14,22,.2));backdrop-filter:blur(8px);border-bottom:1px solid var(--border)}
 .nav{display:flex;align-items:center;gap:18px;padding:10px 18px}
 .brand{display:flex;align-items:center;gap:12px}
-.brand img{height:108px;width:auto;filter:drop-shadow(0 12px 24px rgba(0,0,0,.55))}
-.brand strong{font-weight:800;color:#dce4f5}
+.brand img{height:114px;width:auto;filter:drop-shadow(0 12px 24px rgba(0,0,0,.55))}
+.brand strong{font-weight:800;color:#f1f5ff;font-size:18px}
 .spacer{flex:1}
-.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;border:1px solid #273148;background:linear-gradient(180deg,#141b2a,#0e1320);box-shadow:var(--shadow)}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;border:1px solid #273148;background:linear-gradient(180deg,#141b2a,#0e1320);box-shadow:var(--shadow);cursor:pointer}
 .btn:hover{transform:translateY(-1px)}
 .btn.gold{background:linear-gradient(180deg,#2a2311,#171108);border-color:#3a2c09;color:#fbf6e5}
 .lang{display:flex;gap:8px}
 .lang button{border:1px solid #273148;background:#0d1424;color:#d7def1;border-radius:10px;padding:6px 10px;cursor:pointer}
 .lang button.active{border-color:var(--accent);background:#0a1a2f}
 
-/* Hero */
+/* Headings */
+h1{margin:10px 0 12px;font-weight:900;letter-spacing:.2px;font-size:clamp(32px,3.6vw,48px);
+  text-shadow:0 2px 0 rgba(0,0,0,.25)}
+h2{font-size:clamp(22px,2.2vw,30px);margin:0 0 14px;font-weight:900;
+  background:linear-gradient(90deg,#fff,#a9c9ff);-webkit-background-clip:text;color:transparent}
+h2::after{content:"";display:block;width:88px;height:3px;margin-top:8px;
+  background:linear-gradient(90deg,#2aa8ff,#6fd0ff);border-radius:999px;opacity:.7}
+
+/* Layout sections */
 .hero{display:grid;grid-template-columns:1.2fr 1fr;gap:28px;align-items:center;padding:36px 18px 12px}
 .card{background:linear-gradient(180deg,#121a2a,#0c111c);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
 .card.pad{padding:28px}
-.hero h1{margin:10px 0 12px;font-weight:900;letter-spacing:.3px;font-size:clamp(28px,3.1vw,44px)}
 .muted{color:var(--muted)}
-
-/* Sections */
 .section{padding:28px 18px}
-h2{font-size:28px;margin:0 0 10px}
 .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
 .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-
-/* Responsive */
 @media (max-width:1000px){
   .hero{grid-template-columns:1fr}
   .grid-4{grid-template-columns:repeat(2,1fr)}
@@ -61,19 +64,14 @@ h2{font-size:28px;margin:0 0 10px}
 .tile img{width:100%;height:auto;display:block}
 .tile .body{padding:14px}
 .veh img{aspect-ratio:4/3;object-fit:cover;max-height:180px}
-/* unified logo overlay on all vehicle thumbs */
-.veh .overlay{position:absolute;inset:auto 10px 10px auto;width:88px;opacity:.9;filter:drop-shadow(0 4px 10px rgba(0,0,0,.6))}
-
-/* Prices */
-.price h3{margin:10px 14px 0}
+.veh .overlay{position:absolute;inset:auto 10px 10px auto;width:92px;opacity:.95;filter:drop-shadow(0 4px 10px rgba(0,0,0,.6))}
 .pill{display:inline-block;border:1px solid #2b3143;border-radius:999px;padding:2px 8px;margin-left:8px;color:#b9c3d6;font-size:12px}
 
-/* AI + Route area */
+/* AI + Route */
 .aiRoute{display:grid;grid-template-columns:1.1fr 1fr;gap:18px}
 .canvasWrap{position:relative;height:420px;border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;background:radial-gradient(600px 260px at 60% -10%, rgba(42,168,255,.18), transparent 60%), #0a0f17}
 #starfield{position:absolute;inset:0;width:100%;height:100%}
 .mapWrap{position:relative;border-radius:var(--radius);border:1px solid var(--border);padding:14px;background:linear-gradient(180deg,#0e1422,#0b101a)}
-.mapWrap h3{margin:0 0 8px}
 .map{position:relative;border:1px dashed #264264;border-radius:14px;padding:10px}
 .map svg{width:100%;height:300px;display:block}
 .pin{fill:var(--accent);stroke:#7fc1ff;stroke-width:.4;cursor:pointer}
@@ -84,6 +82,7 @@ h2{font-size:28px;margin:0 0 10px}
 /* Footer */
 footer{padding:28px;border-top:1px solid var(--border);color:#acb6c9}
 .addr{margin-top:6px;color:#cdd7e9}
+.input{width:100%;padding:10px;border:1px solid var(--border);border-radius:10px;background:#0e1422;color:var(--text)}
 </style>
 </head>
 <body>
@@ -96,11 +95,6 @@ footer{padding:28px;border-top:1px solid var(--border);color:#acb6c9}
     <a class="btn" href="#ki">KI-System</a>
     <button class="btn" id="openProspekt">Prospekt</button>
     <a class="btn gold" href="#kontakt">Kontakt</a>
-    <div class="lang">
-      <button data-lang="de" class="active">DE</button>
-      <button data-lang="en">EN</button>
-      <button data-lang="tr">TR</button>
-    </div>
   </div>
 </header>
 
@@ -179,11 +173,25 @@ footer{padding:28px;border-top:1px solid var(--border);color:#acb6c9}
         </svg>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px">
-        <label>Start <input value="Lonsee" id="startInput" readonly style="width:100%;padding:8px;border:1px solid var(--border);border-radius:10px;background:#0e1422;color:var(--text)"></label>
-        <label>Ziel <input placeholder="Ziel wählen…" id="destInput" readonly style="width:100%;padding:8px;border:1px solid var(--border);border-radius:10px;background:#0e1422;color:var(--text)"></label>
+        <label>Start
+          <input list="cities" value="Lonsee" id="startInput" class="input">
+        </label>
+        <label>Ziel
+          <input list="cities" placeholder="Ziel wählen…" id="destInput" class="input">
+        </label>
+        <datalist id="cities">
+          <option>Lonsee</option><option>Ulm</option><option>Neu-Ulm</option><option>Blaustein</option>
+          <option>Dornstadt</option><option>Günzburg</option><option>Senden</option><option>Ehingen</option>
+          <option>Laupheim</option><option>Geislingen</option><option>Biberach</option><option>Langenau</option>
+          <option>Weißenhorn</option>
+        </datalist>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:8px;flex-wrap:wrap">
+        <button class="btn" id="calcBtn">Preis berechnen</button>
+        <button class="btn gold" id="bookBtn" disabled>Jetzt buchen</button>
       </div>
       <div id="priceBox" class="muted" style="margin-top:8px">Entfernung: — km · Preis: —</div>
-      <small class="muted">Tipp: Karte oben — bir şehre tıklayınca rota çizilir ve fiyat görünür.</small>
+      <small class="muted">Tipp: Karte — bir şehre tıklayınca rota çizilir; Start/Ziel kutularını da kullanabilirsiniz.</small>
     </div>
   </div>
 </section>
@@ -193,13 +201,13 @@ footer{padding:28px;border-top:1px solid var(--border);color:#acb6c9}
   <p class="muted">E-Mail: info@zentyexpress.de · Web: zentyexpress.de</p>
   <p class="addr">Sitz: <b>Sinabronner Str. 25, 89173 Lonsee</b> · Deutschland</p>
   <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px">
-    <a class="btn" href="https://wa.me/49162575957" target="_blank" rel="noopener">WhatsApp</a>
+    <a class="btn" id="waBtn" href="https://api.whatsapp.com/send?phone=49162575957" target="_blank" rel="noopener">WhatsApp</a>
     <a class="btn" href="https://t.me/ZentyExpressBot" target="_blank" rel="noopener">Telegram</a>
     <a class="btn gold" href="mailto:info@zentyexpress.de">E-Mail</a>
   </div>
 </section>
 
-<footer class="container">© Zenty Express AI — Mobility & Transport · Final Signature Edition v10.1 · Made in Germany</footer>
+<footer class="container">© Zenty Express AI — Mobility & Transport · Final Signature Edition v11 · Made in Germany</footer>
 
 <script>
 /* Starfield */
@@ -234,45 +242,96 @@ footer{padding:28px;border-top:1px solid var(--border);color:#acb6c9}
   draw();
 })();
 
-/* Route & Pricing */
+/* Route & Pricing (curved path + booking) */
 (function(){
   const svg = document.getElementById('routeSvg');
   const routePath = document.getElementById('route');
   const startInput = document.getElementById('startInput');
   const destInput = document.getElementById('destInput');
   const priceBox = document.getElementById('priceBox');
+  const calcBtn = document.getElementById('calcBtn');
+  const bookBtn = document.getElementById('bookBtn');
+  const waBtn = document.getElementById('waBtn');
+
   const scaleKm = 1.4;
   const prices = [{max:20,rate:1.00},{max:100,rate:0.90},{max:9999,rate:0.80}];
-  function pos(el){const c=el.querySelector('circle');return {x:+c.getAttribute('cx'), y:+c.getAttribute('cy')}}
-  const pins=[...svg.querySelectorAll('#pins > g')];
-  const startEl=pins.find(p=>p.dataset.key==='lonsee'); const s=pos(startEl); startInput.value='Lonsee';
-  let t=null;
-  function draw(){
-    if(!t){ routePath.setAttribute('d',''); priceBox.textContent='Entfernung: — km · Preis: —'; return;}
-    const d=Math.hypot(t.x-s.x, t.y-s.y)*scaleKm;
-    const rate=prices.find(p=>d<=p.max).rate; const cost=(d*rate).toFixed(2).replace('.',',');
-    const dk=d.toFixed(1).replace('.',',');
-    routePath.setAttribute('d',`M ${s.x} ${s.y} L ${t.x} ${t.y}`);
-    priceBox.innerHTML=`Entfernung: <b>${dk} km</b> · Preis (ab): <b>${cost} €</b> <small class="muted">(Tarif ${rate.toFixed(2)} €/km)</small>`;
+
+  function posByName(name){
+    const p = [...svg.querySelectorAll('#pins > g')].find(g=> g.dataset.name.replace(/\\s*\\(.+\\)/,'') === name || g.dataset.name === name);
+    if(!p) return null;
+    const c = p.querySelector('circle');
+    return {x:+c.getAttribute('cx'), y:+c.getAttribute('cy')};
   }
+
+  function drawCurve(a,b){
+    // Midpoint + perpendicular offset for smooth professional curve
+    const mx = (a.x+b.x)/2, my=(a.y+b.y)/2;
+    const dx = b.x-a.x, dy=b.y-a.y;
+    const len = Math.hypot(dx,dy);
+    const nx = -dy/len, ny=dx/len;
+    const amp = Math.min(8, Math.max(3, len*0.12)); // adaptive bulge
+    const cx = mx + nx*amp, cy = my + ny*amp;
+    routePath.setAttribute('d', `M ${a.x} ${a.y} Q ${cx} ${cy} ${b.x} ${b.y}`);
+  }
+
+  function priceFor(distanceKm){
+    const rate = prices.find(p=> distanceKm<=p.max).rate;
+    return {rate, total: distanceKm*rate};
+  }
+
+  function compute(){
+    const sName = startInput.value.trim();
+    const dName = destInput.value.trim();
+    const s = posByName(sName);
+    const t = posByName(dName);
+    if(!s || !t){ priceBox.textContent = 'Entfernung: — km · Preis: —'; routePath.setAttribute('d',''); bookBtn.disabled=true; return; }
+    // distance in svg units -> km
+    const dSvg = Math.hypot(t.x-s.x, t.y-s.y);
+    const dKm = dSvg * scaleKm;
+    drawCurve(s,t);
+    const {rate,total} = priceFor(dKm);
+    const dk = dKm.toFixed(1).replace('.',',');
+    const ct = total.toFixed(2).replace('.',',');
+    priceBox.innerHTML = `Route: <b>${sName}</b> → <b>${dName}</b> · Entfernung: <b>${dk} km</b> · Preis (ab): <b>${ct} €</b> <small class="muted">(Tarif ${rate.toFixed(2)} €/km)</small>`;
+    // enable booking
+    bookBtn.disabled=false;
+    bookBtn.onclick = () => {
+      const msg = encodeURIComponent(`Buchung: ${sName} → ${dName} | Entfernung ca. ${dk} km | Preis ab ${ct} € (Tarif ${rate.toFixed(2)} €/km).\\nBitte um Bestätigung / Termin.`);
+      window.open(`https://api.whatsapp.com/send?phone=49162575957&text=${msg}`,'_blank');
+    };
+    // also update WhatsApp contact button to include context
+    waBtn.href = `https://api.whatsapp.com/send?phone=49162575957&text=${encodeURIComponent('Hallo! Anfrage: '+sName+' → '+dName+' ('+dk+' km, ab '+ct+' €)')}`;
+  }
+
+  calcBtn.addEventListener('click', compute);
+
+  // Pin interactions
+  const pins=[...svg.querySelectorAll('#pins > g')];
   const tooltip=document.createElement('div'); tooltip.className='tooltip'; document.body.appendChild(tooltip);
   pins.forEach(p=>{
     const label=p.dataset.name;
-    p.addEventListener('mouseenter',e=>{const r=e.target.getBoundingClientRect(); tooltip.textContent=label+' — Route anfragen'; tooltip.style.left=(r.left+r.width/2)+'px'; tooltip.style.top=(r.top-6)+'px'; tooltip.style.display='block';});
+    p.addEventListener('mouseenter',e=>{const r=e.target.getBoundingClientRect(); tooltip.textContent=label; tooltip.style.left=(r.left+r.width/2)+'px'; tooltip.style.top=(r.top-6)+'px'; tooltip.style.display='block';});
     p.addEventListener('mouseleave',()=>tooltip.style.display='none');
-    p.addEventListener('click',()=>{t=pos(p); destInput.value=label; draw();});
+    p.addEventListener('click',()=>{
+      // if destination empty, set as Ziel; otherwise toggle: set Start->Lonsee, Ziel->clicked
+      if(!destInput.value) destInput.value = label; else { startInput.value='Lonsee'; destInput.value=label; }
+      compute();
+    });
   });
+
+  // Initial state
+  startInput.value = 'Lonsee';
 })();
 
-/* Quote buttons => mailto */
+/* Quote buttons => mailto fallback */
 document.querySelectorAll('.openQuote').forEach(b=> b.addEventListener('click', ()=>{
   const subj=encodeURIComponent('Anfrage — '+b.dataset.plan);
-  const body=encodeURIComponent('Bitte um Angebot.\n\n— Zenty Express AI Website');
+  const body=encodeURIComponent('Bitte um Angebot.\\n\\n— Zenty Express AI Website');
   location.href=`mailto:info@zentyexpress.de?subject=${subj}&body=${body}`;
 }));
 </script>
 </body>
 </html>
 """
-Path('/mnt/data/index_fixed.html').write_text(html, encoding='utf-8')
-print('/mnt/data/index_fixed.html')
+Path("/mnt/data/index_pro.html").write_text(html, encoding="utf-8")
+print("/mnt/data/index_pro.html")
