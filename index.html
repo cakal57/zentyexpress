@@ -1,7 +1,7 @@
-# Now write the full HTML content
+# Write a corrected, stable version of index.html with fixed CSS braces and sane defaults
 from pathlib import Path
 
-html = r"""<!doctype html>
+html = """<!doctype html>
 <html lang="de">
 <head>
 <meta charset="utf-8">
@@ -10,10 +10,11 @@ html = r"""<!doctype html>
 <meta name="description" content="Zenty Express AI · Mobility & Transport · VIP Shuttle · Kurier · Intelligente Routen · Made in Germany">
 <style>
 :root{
-  --bg:#0b0f16; --panel:#111725; --panel2:#0e1422; --border:#232b3e; --text:#e9eef8; --muted:#bec9dd;
-  --accent:#2aa8ff; --accent2:#6fd0ff; --gold:#d4af37; --radius:22px; --shadow:0 12px 32px rgba(0,0,0,.35);
+  --bg:#0b0f16; --panel:#111725; --border:#232b3e; --text:#e9eef8; --muted:#bec9dd;
+  --accent:#2aa8ff; --gold:#d4af37; --radius:22px; --shadow:0 12px 32px rgba(0,0,0,.35);
 }
 *{box-sizing:border-box}
+html,body{height:100%}
 body{margin:0;background:
  radial-gradient(1200px 700px at 70% -10%,#182133 0%, transparent 55%),
  linear-gradient(180deg,#0b0f16,#0c1018);
@@ -47,13 +48,19 @@ header{position:sticky;top:0;z-index:50;background:linear-gradient(180deg,rgba(1
 h2{font-size:28px;margin:0 0 10px}
 .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
 .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-@media (max-width:1000px){.hero{grid-template-columns:1fr}.grid-4{grid-template-columns:repeat(2,1fr)}.grid-3{grid-template-columns:repeat(2,1fr)}
+
+/* Responsive */
+@media (max-width:1000px){
+  .hero{grid-template-columns:1fr}
+  .grid-4{grid-template-columns:repeat(2,1fr)}
+  .grid-3{grid-template-columns:repeat(2,1fr)}
+}
 
 /* Thumbs */
 .tile{position:relative}
-.tile img{width:100%;aspect-ratio:3/4;object-fit:cover;display:block}
+.tile img{width:100%;height:auto;display:block}
 .tile .body{padding:14px}
-.veh img{aspect-ratio:4/3;max-height:180px}
+.veh img{aspect-ratio:4/3;object-fit:cover;max-height:180px}
 /* unified logo overlay on all vehicle thumbs */
 .veh .overlay{position:absolute;inset:auto 10px 10px auto;width:88px;opacity:.9;filter:drop-shadow(0 4px 10px rgba(0,0,0,.6))}
 
@@ -76,7 +83,7 @@ h2{font-size:28px;margin:0 0 10px}
 
 /* Footer */
 footer{padding:28px;border-top:1px solid var(--border);color:#acb6c9}
-.addr{margin-top:6px;color:#cdd7e9}}
+.addr{margin-top:6px;color:#cdd7e9}
 </style>
 </head>
 <body>
@@ -113,10 +120,10 @@ footer{padding:28px;border-top:1px solid var(--border);color:#acb6c9}
   <h2>Unsere Leistungen</h2>
   <p class="muted">VIP Shuttle · Kurier · Flughafentransfer · KI-gestützte Streckenoptimierung</p>
   <div class="grid-4">
-    <article class="card tile"><img src="assets/prospekt-leistungen.jpg"><div class="body"><h3>VIP & Business</h3><p class="muted">Diskreter Fahrservice mit höchstem Komfort.</p></div></article>
-    <article class="card tile"><img src="assets/prospekt-ai-system.jpg"><div class="body"><h3>Shuttle & Gruppen</h3><p class="muted">Flughafen, Mitarbeiter, Events — sicher & pünktlich.</p></div></article>
-    <article class="card tile"><img src="assets/prospekt-route-clean.jpg"><div class="body"><h3>Kurier & Express</h3><p class="muted">Zeitkritische Zustellung, europaweit 24/7.</p></div></article>
-    <article class="card tile"><img src="assets/prospekt-ueber-uns.jpg"><div class="body"><h3>Fest- & Tagestouren</h3><p class="muted">Smart geplant mit KI, flexibel & transparent.</p></div></article>
+    <article class="card tile"><img src="assets/prospekt-leistungen.jpg" alt=""><div class="body"><h3>VIP & Business</h3><p class="muted">Diskreter Fahrservice mit höchstem Komfort.</p></div></article>
+    <article class="card tile"><img src="assets/prospekt-ai-system.jpg" alt=""><div class="body"><h3>Shuttle & Gruppen</h3><p class="muted">Flughafen, Mitarbeiter, Events — sicher & pünktlich.</p></div></article>
+    <article class="card tile"><img src="assets/prospekt-route-clean.jpg" alt=""><div class="body"><h3>Kurier & Express</h3><p class="muted">Zeitkritische Zustellung, europaweit 24/7.</p></div></article>
+    <article class="card tile"><img src="assets/prospekt-ueber-uns.jpg" alt=""><div class="body"><h3>Fest- & Tagestouren</h3><p class="muted">Smart geplant mit KI, flexibel & transparent.</p></div></article>
   </div>
 </section>
 
@@ -129,9 +136,9 @@ footer{padding:28px;border-top:1px solid var(--border);color:#acb6c9}
     <article class="card tile veh"><img src="assets/trafic.jpg" alt="Renault Trafic"><img class="overlay" src="assets/logo.png" alt=""><div class="body"><h3>Renault Trafic <span class="pill">weiß</span></h3><p class="muted">Viel Platz für Team & Gepäck.</p></div></article>
     <article class="card tile veh"><img src="assets/sprinter.jpg" alt="Mercedes Sprinter"><img class="overlay" src="assets/logo.png" alt=""><div class="body"><h3>Mercedes Sprinter <span class="pill">weiß</span></h3><p class="muted">Gruppen- & Sondertransporte.</p></div></article>
     <article class="card tile veh"><img src="assets/ducato.jpg" alt="Fiat Ducato"><img class="overlay" src="assets/logo.png" alt=""><div class="body"><h3>Fiat Ducato <span class="pill">weiß</span></h3><p class="muted">Zuverlässig auf Langstrecke.</p></div></article>
-    <article class="card tile"><img src="assets/prospekt-fahrzeuge.jpg"><div class="body"><h3>Fahrzeuge Poster</h3><p class="muted">Übersicht der Flotte.</p></div></article>
-    <article class="card tile"><img src="assets/prospekt-route-vans.jpg"><div class="body"><h3>Route + Vans</h3><p class="muted">Routenintelligenz mit Fahrzeugen.</p></div></article>
-    <article class="card tile"><img src="assets/prospekt-cover-brochure.jpg"><div class="body"><h3>Prospekt</h3><p class="muted">Außencover.</p></div></article>
+    <article class="card tile"><img src="assets/prospekt-fahrzeuge.jpg" alt=""><div class="body"><h3>Fahrzeuge Poster</h3><p class="muted">Übersicht der Flotte.</p></div></article>
+    <article class="card tile"><img src="assets/prospekt-route-vans.jpg" alt=""><div class="body"><h3>Route + Vans</h3><p class="muted">Routenintelligenz mit Fahrzeugen.</p></div></article>
+    <article class="card tile"><img src="assets/prospekt-cover-brochure.jpg" alt=""><div class="body"><h3>Prospekt</h3><p class="muted">Außencover.</p></div></article>
   </div>
 </section>
 
@@ -148,11 +155,7 @@ footer{padding:28px;border-top:1px solid var(--border);color:#acb6c9}
 <section class="section container" id="ki">
   <h2>Zenty AI Route Intelligence</h2>
   <div class="aiRoute">
-    <!-- Modern AI starfield -->
-    <div class="canvasWrap card">
-      <canvas id="starfield"></canvas>
-    </div>
-    <!-- Interactive route calculator -->
+    <div class="canvasWrap card"><canvas id="starfield"></canvas></div>
     <div class="mapWrap card">
       <h3>Ulm-Region · 50 km · Start: <b>Lonsee</b></h3>
       <div class="map">
@@ -196,7 +199,7 @@ footer{padding:28px;border-top:1px solid var(--border);color:#acb6c9}
   </div>
 </section>
 
-<footer class="container">© Zenty Express AI — Mobility & Transport · Final Signature Edition v10 · Made in Germany</footer>
+<footer class="container">© Zenty Express AI — Mobility & Transport · Final Signature Edition v10.1 · Made in Germany</footer>
 
 <script>
 /* Starfield */
@@ -243,11 +246,12 @@ footer{padding:28px;border-top:1px solid var(--border);color:#acb6c9}
   function pos(el){const c=el.querySelector('circle');return {x:+c.getAttribute('cx'), y:+c.getAttribute('cy')}}
   const pins=[...svg.querySelectorAll('#pins > g')];
   const startEl=pins.find(p=>p.dataset.key==='lonsee'); const s=pos(startEl); startInput.value='Lonsee';
-  let t=null, tName='';
+  let t=null;
   function draw(){
     if(!t){ routePath.setAttribute('d',''); priceBox.textContent='Entfernung: — km · Preis: —'; return;}
     const d=Math.hypot(t.x-s.x, t.y-s.y)*scaleKm;
-    const rate=prices.find(p=>d<=p.max).rate; const cost=(d*rate).toFixed(2).replace('.',','); const dk=d.toFixed(1).replace('.',',');
+    const rate=prices.find(p=>d<=p.max).rate; const cost=(d*rate).toFixed(2).replace('.',',');
+    const dk=d.toFixed(1).replace('.',',');
     routePath.setAttribute('d',`M ${s.x} ${s.y} L ${t.x} ${t.y}`);
     priceBox.innerHTML=`Entfernung: <b>${dk} km</b> · Preis (ab): <b>${cost} €</b> <small class="muted">(Tarif ${rate.toFixed(2)} €/km)</small>`;
   }
@@ -256,11 +260,11 @@ footer{padding:28px;border-top:1px solid var(--border);color:#acb6c9}
     const label=p.dataset.name;
     p.addEventListener('mouseenter',e=>{const r=e.target.getBoundingClientRect(); tooltip.textContent=label+' — Route anfragen'; tooltip.style.left=(r.left+r.width/2)+'px'; tooltip.style.top=(r.top-6)+'px'; tooltip.style.display='block';});
     p.addEventListener('mouseleave',()=>tooltip.style.display='none');
-    p.addEventListener('click',()=>{t=pos(p); tName=label; destInput.value=label; draw();});
+    p.addEventListener('click',()=>{t=pos(p); destInput.value=label; draw();});
   });
 })();
 
-/* Quote buttons => mailto fallback */
+/* Quote buttons => mailto */
 document.querySelectorAll('.openQuote').forEach(b=> b.addEventListener('click', ()=>{
   const subj=encodeURIComponent('Anfrage — '+b.dataset.plan);
   const body=encodeURIComponent('Bitte um Angebot.\n\n— Zenty Express AI Website');
@@ -270,5 +274,5 @@ document.querySelectorAll('.openQuote').forEach(b=> b.addEventListener('click', 
 </body>
 </html>
 """
-Path("/mnt/data/index.html").write_text(html, encoding="utf-8")
-print("/mnt/data/index.html written")
+Path('/mnt/data/index_fixed.html').write_text(html, encoding='utf-8')
+print('/mnt/data/index_fixed.html')
