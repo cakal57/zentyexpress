@@ -1,5 +1,5 @@
-# Write a cleaner, more corporate/professional HTML with no stray text and a refined layout.
-# Payment options remain (PayPal, Stripe/ApplePay, SEPA QR, Cash). Map, pricing, booking modal included.
+# Build a polished corporate HTML: bigger/animated logo, refined color palette (no lilac),
+# clean file (no stray text), plus Lieferschein & Fatura (PDF) generation and optional email sending via EmailJS.
 from pathlib import Path
 
 html = r"""<!doctype html>
@@ -15,17 +15,23 @@ html = r"""<!doctype html>
 <!-- Leaflet -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="anonymous">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="anonymous"></script>
-<!-- QR Code (EPC QR) -->
+
+<!-- QR Code for EPC -->
 <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+<!-- jsPDF + autotable for Invoice/Lieferschein PDFs -->
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.3/dist/jspdf.plugin.autotable.min.js"></script>
+<!-- OPTIONAL: EmailJS (client-side email). Fill CONFIG.emailjs_* to use. -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 
 <style>
 :root{
-  --bg:#0b0f16; --panel:#0f1522; --panel2:#0c121e; --border:#1e2740; --line:#2a3655;
-  --text:#eaf1ff; --muted:#b7c3da; --accent:#2aa8ff; --accent2:#6fd0ff; --gold:#d4af37;
-  --radius:18px; --shadow:0 10px 26px rgba(0,0,0,.35);
+  --bg:#0a0f16; --panel:#0e1421; --panel2:#0b111c; --border:#1f2842; --line:#2b395a;
+  --text:#e9f1ff; --muted:#c7d2e9; --accent:#22b0ff; --accent2:#86dcff; --gold:#d9b646;
+  --radius:20px; --shadow:0 12px 28px rgba(0,0,0,.35);
 }
 *{box-sizing:border-box} html,body{height:100%}
-body{margin:0;background:linear-gradient(180deg,#0b0f16 0%,#0b111a 55%,#0a0f18 100%);color:var(--text);font:15.5px/1.6 Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif}
+body{margin:0;background:linear-gradient(180deg,#0a0f16 0%,#0a1119 55%,#090f18 100%);color:var(--text);font:16px/1.62 Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif}
 
 /* Layout */
 .container{max-width:1180px;margin:0 auto;padding:24px}
@@ -38,11 +44,13 @@ body{margin:0;background:linear-gradient(180deg,#0b0f16 0%,#0b111a 55%,#0a0f18 1
 @media(max-width:640px){.grid-4,.grid-3{grid-template-columns:1fr}}
 
 /* Header */
-header{position:sticky;top:0;z-index:30;background:linear-gradient(180deg,rgba(6,10,18,.92),rgba(6,10,18,.65));backdrop-filter:blur(8px);border-bottom:1px solid var(--border)}
+header{position:sticky;top:0;z-index:40;background:linear-gradient(180deg,rgba(6,10,18,.92),rgba(6,10,18,.65));backdrop-filter:blur(8px);border-bottom:1px solid var(--border)}
 .nav{display:flex;align-items:center;gap:16px;padding:10px 16px}
-.brand{display:flex;align-items:center;gap:10px}
-.brand img{height:64px;width:auto}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{height:88px;width:auto;filter:drop-shadow(0 10px 22px rgba(0,0,0,.5))}
 .brand strong{font-weight:800;letter-spacing:.2px}
+.brand .glow{position:relative}
+.brand .glow::after{content:"";position:absolute;inset:50% auto auto 50%;transform:translate(-50%,-50%);width:140px;height:140px;border-radius:50%;background:radial-gradient(closest-side,rgba(34,176,255,.18),transparent 70%);pointer-events:none}
 .spacer{flex:1}
 .btn{display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:999px;border:1px solid var(--line);background:linear-gradient(180deg,#131a2a,#0e1423);cursor:pointer}
 .btn:hover{transform:translateY(-1px)}
@@ -68,13 +76,13 @@ h2 .bar{display:block;width:88px;height:3px;margin-top:8px;background:linear-gra
 
 /* Vehicles */
 .veh img{aspect-ratio:4/3;object-fit:cover;max-height:180px}
-.veh .overlay{position:absolute;inset:auto 10px 10px auto;width:76px;opacity:.95}
-.pill{display:inline-block;border:1px solid #2b3143;border-radius:999px;padding:2px 8px;margin-left:8px;color:#b9c3d6;font-size:12px}
+.veh .overlay{position:absolute;inset:auto 10px 10px auto;width:90px;opacity:.95}
+.pill{display:inline-block;border:1px solid #2b3143;border-radius:999px;padding:2px 8px;margin-left:8px;color:#c4d0e6;font-size:12px}
 
 /* Map area */
 .aiRoute{display:grid;grid-template-columns:1.15fr 1fr;gap:18px;align-items:stretch}
 .mapWrap{border-radius:var(--radius);border:1px solid var(--border);padding:14px;background:linear-gradient(180deg,#0e1422,#0b101a)}
-#map{height:340px;border-radius:14px;border:1px solid #253251;overflow:hidden}
+#map{height:360px;border-radius:14px;border:1px solid #253251;overflow:hidden}
 .controls{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
 .input{width:100%;padding:10px;border:1px solid var(--border);border-radius:10px;background:#0e1422;color:var(--text)}
 .infoRow{display:flex;gap:10px;margin-top:8px;align-items:center;flex-wrap:wrap}
@@ -89,17 +97,17 @@ footer a{color:#cfe1ff}
 /* Modal */
 .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.55);backdrop-filter:blur(2px);z-index:60}
 .modal.open{display:flex}
-.modal-card{width:min(720px,92vw);background:linear-gradient(180deg,#121a2a,#0d1320);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow);padding:18px}
+.modal-card{width:min(740px,92vw);background:linear-gradient(180deg,#121a2a,#0d1320);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow);padding:18px}
 .modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
 .close{background:transparent;border:0;color:#c9d3e8;font-size:20px;cursor:pointer}
 .form{display:grid;gap:10px}
 .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 label.small{font-size:12px;color:#b9c6e2}
-select, input[type="text"], input[type="datetime-local"], input[type="tel"], textarea{width:100%;padding:10px;border:1px solid var(--border);border-radius:10px;background:#0e1422;color:var(--text)}
+select, input[type="text"], input[type="email"], input[type="datetime-local"], input[type="tel"], textarea{width:100%;padding:10px;border:1px solid var(--border);border-radius:10px;background:#0e1422;color:var(--text)}
 textarea{min-height:70px;resize:vertical}
 .pay-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .pay-opt{display:flex;gap:8px;align-items:center;border:1px solid #28324a;border-radius:12px;padding:10px;background:#0f1626;cursor:pointer}
-.pay-opt input{accent-color:#2aa8ff}
+.pay-opt input{accent-color:#22b0ff}
 .pay-panel{margin-top:8px;border:1px dashed #30405f;border-radius:12px;padding:10px;display:none}
 .pay-panel.show{display:block}
 .kv{display:grid;grid-template-columns:auto 1fr;gap:6px 10px}
@@ -113,7 +121,7 @@ textarea{min-height:70px;resize:vertical}
 <body>
 <header>
   <div class="nav container">
-    <a class="brand" href="#top"><img src="assets/logo.png" alt="Zenty Express AI"><strong>Zenty Express AI · Mobility & Transport</strong></a>
+    <a class="brand" href="#top"><span class="glow"><img src="assets/logo.png" alt="Zenty Express AI"></span><strong>Zenty Express AI · Mobility & Transport</strong></a>
     <div class="spacer"></div>
     <a class="btn" href="#fahrzeuge">Fahrzeuge</a>
     <a class="btn" href="#preise">Preise</a>
@@ -247,21 +255,24 @@ textarea{min-height:70px;resize:vertical}
     </div>
     <form class="form" id="payForm" onsubmit="return false;">
       <div class="row">
-        <label class="small">Name
-          <input type="text" id="custName" placeholder="Ad Soyad / Name" required>
+        <label class="small">Kunde E-Mail
+          <input type="email" id="custEmail" placeholder="muster@kunde.de">
         </label>
         <label class="small">Telefon
           <input type="tel" id="custPhone" placeholder="+49 ..." required>
         </label>
       </div>
       <div class="row">
+        <label class="small">Name
+          <input type="text" id="custName" placeholder="Ad Soyad / Name" required>
+        </label>
         <label class="small">Abholung / Pickup
           <input type="datetime-local" id="pickupTime" required>
         </label>
-        <label class="small">Notiz (optional)
-          <input type="text" id="note" placeholder="Gepäck, Personenanzahl, Flugnummer …">
-        </label>
       </div>
+      <label class="small">Notiz (optional)</label>
+      <textarea id="note" placeholder="Gepäck, Personenanzahl, Flugnummer …"></textarea>
+
       <label class="small">Zahlungsart</label>
       <div class="pay-grid" id="payOptions">
         <label class="pay-opt"><input type="radio" name="pay" value="PayPal" required> PayPal</label>
@@ -308,50 +319,51 @@ textarea{min-height:70px;resize:vertical}
         <button class="btn" id="sendInquiry">Anfrage senden (WhatsApp)</button>
         <button class="btn gold" id="confirmBook">Buchung bestätigen</button>
       </div>
-      <small class="notice">Zahlungslink oder Kartenterminal-Optionen werden nach Bestätigung bereitgestellt.</small>
+      <small class="notice">Nach Bestätigung werden Lieferschein & Rechnung erzeugt. Optional per E-Mail versenden (EmailJS Konfiguration erforderlich).</small>
     </form>
   </div>
 </div>
 
 <script>
-/* ===== CONFIG (füllen) ===== */
+/* ===== CONFIG ===== */
 const CONFIG = {
-  paypalMe: "",           // z.B. "https://paypal.me/zentyexpress"
-  paypalClientId: "",     // für PayPal Smart Buttons (optional)
-  stripeCardLink: "",     // Stripe Payment Link (Karte + Apple Pay)
-  stripeApplePayLink: "", // optional separater Link, sonst stripeCardLink
-  merchant: {             // SEPA / Überweisung
+  // PayPal
+  paypalMe: "",
+  paypalClientId: "",
+  // Stripe (Payment Links)
+  stripeCardLink: "",
+  stripeApplePayLink: "",
+  // SEPA
+  merchant: {
     name: "Zenty Express AI",
     iban: "DE00 0000 0000 0000 0000 00",
     bic:  "ABCDEFGHXXX",
     city: "Lonsee",
-    currency: "EUR"
+    currency: "EUR",
+    email: "info@zentyexpress.de"
+  },
+  // EmailJS (optional auto email for PDFs)
+  emailjs: {
+    public_key: "",      // EmailJS public key
+    service_id: "",      // EmailJS service ID
+    template_id: ""      // EmailJS template ID expecting vars: to_email, subject, message, files(optional)
   }
 };
-/* =========================== */
+/* =================== */
 
-/* Map + Pricing + Booking */
+// Initialize EmailJS if configured
+if (CONFIG.emailjs.public_key) { emailjs.init(CONFIG.emailjs.public_key); }
+
+/* Map + Pricing + Booking + PDFs */
 (function(){
   const cities = {"Lonsee":[48.5259,9.9274],"Ulm":[48.4011,9.9876],"Neu-Ulm":[48.3927,10.0111],"Blaustein":[48.4177,9.9410],"Dornstadt":[48.4633,9.9553],"Günzburg":[48.4553,10.2728],"Senden":[48.3286,10.0442],"Ehingen":[48.2829,9.7276],"Laupheim":[48.2289,9.8776],"Geislingen":[48.6255,9.8344],"Biberach":[48.1033,9.7900],"Langenau":[48.4975,10.1192],"Weißenhorn":[48.3014,10.1582]};
-  const dl = document.getElementById('citylist');
-  Object.keys(cities).forEach(n=>{const o=document.createElement('option');o.value=n;dl.appendChild(o);});
-
+  const dl = document.getElementById('citylist'); Object.keys(cities).forEach(n=>{const o=document.createElement('option');o.value=n;dl.appendChild(o);});
   const start=cities["Lonsee"];
   const map=L.map('map',{zoomControl:false,attributionControl:false}).setView(start,10);
   const osm=L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19});
   const sat=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:19});
-  osm.addTo(map);
-  L.control.zoom({position:'bottomright'}).addTo(map);
-  L.control.layers({"Harita":osm,"Sat":sat},null,{position:'topright'}).addTo(map);
-
-  const markers={};
-  Object.entries(cities).forEach(([name,latlng])=>{
-    const m=L.circleMarker(latlng,{radius:6,color:'#7fc1ff',fillColor:'#2aa8ff',fillOpacity:.9,weight:2})
-      .addTo(map).bindTooltip(name,{direction:'top',offset:[0,-6],opacity:.9});
-    m.on('click',()=>{document.getElementById('destInput').value=name; compute();});
-    markers[name]=m;
-  });
-
+  osm.addTo(map); L.control.zoom({position:'bottomright'}).addTo(map); L.control.layers({"Harita":osm,"Sat":sat},null,{position:'topright'}).addTo(map);
+  const markers={}; Object.entries(cities).forEach(([name,latlng])=>{const m=L.circleMarker(latlng,{radius:6,color:'#7fc1ff',fillColor:'#22b0ff',fillOpacity:.9,weight:2}).addTo(map).bindTooltip(name,{direction:'top',offset:[0,-6],opacity:.9}); m.on('click',()=>{document.getElementById('destInput').value=name; compute();}); markers[name]=m;});
   let route=L.polyline([], {color:'#9ad0ff',weight:3,opacity:1,dashArray:'6 6'}).addTo(map);
   function haversine(a,b){const R=6371,toRad=d=>d*Math.PI/180,dLat=toRad(b[0]-a[0]),dLon=toRad(b[1]-a[1]),lat1=toRad(a[0]),lat2=toRad(b[0]),h=Math.sin(dLat/2)**2+Math.cos(lat1)*Math.cos(lat2)*Math.sin(dLon/2)**2;return 2*R*Math.asin(Math.sqrt(h));}
   const priceTiers=[{max:20,rate:1.00},{max:100,rate:0.90},{max:9999,rate:0.80}];
@@ -376,6 +388,7 @@ const CONFIG = {
   const accName=document.getElementById('accName'); const accIban=document.getElementById('accIban'); const accBic=document.getElementById('accBic'); const accAmt=document.getElementById('accAmt'); const accRef=document.getElementById('accRef');
   const copyIbanBtn=document.getElementById('copyIban'); const epcQR=document.getElementById('epcQR');
   const ppAmount=document.getElementById('ppAmount'); const stAmount=document.getElementById('stAmount');
+  const custEmailEl=document.getElementById('custEmail'); const custPhoneEl=document.getElementById('custPhone'); const custNameEl=document.getElementById('custName'); const pickupTimeEl=document.getElementById('pickupTime'); const noteEl=document.getElementById('note');
 
   let currentTrip={sName:null,dName:null,km:null,price:null,rate:null,amountNum:0};
 
@@ -417,6 +430,7 @@ const CONFIG = {
     if(method==="Echtzeitüberweisung"||method==="Überweisung"){panelSEPA.classList.add('show'); fillSEPA();}
   });
 
+  /* PayPal */
   function initPayPal(){
     paypalButtonsDiv.style.display="none";
     if(CONFIG.paypalClientId){
@@ -436,16 +450,18 @@ const CONFIG = {
       onError:(err)=>{console.error(err); alert("PayPal Fehler: "+err);}
     }).render('#paypalButtons');
   }
-  document.getElementById('ppGo').addEventListener('click',()=>{
+  ppGo.addEventListener('click',()=>{
     if(CONFIG.paypalMe){const amt=currentTrip.amountNum.toFixed(2); const url=CONFIG.paypalMe.replace(/\/$/,'')+"/"+encodeURIComponent(amt); window.open(url,"_blank");}
     else{alert("Bitte PayPal.me im CONFIG setzen oder Smart Buttons (client-id) nutzen.");}
   });
 
-  document.getElementById('stGo').addEventListener('click',()=>{
+  /* Stripe Payment Link */
+  stGo.addEventListener('click',()=>{
     const method=selectedPay(); const link=(method==="Apple Pay"&&CONFIG.stripeApplePayLink)?CONFIG.stripeApplePayLink:CONFIG.stripeCardLink;
     if(link){window.open(link,"_blank");}else{alert("Stripe Payment Link im CONFIG hinzufügen.");}
   });
 
+  /* SEPA (EPC QR) */
   function fillSEPA(){
     accName.textContent=CONFIG.merchant.name; accIban.textContent=CONFIG.merchant.iban; accBic.textContent=CONFIG.merchant.bic; accAmt.textContent=currentTrip.price+" €";
     const ref=makeRef(); accRef.textContent=ref;
@@ -454,10 +470,11 @@ const CONFIG = {
   }
   function makeRef(){const dt=new Date(),y=dt.getFullYear(),m=String(dt.getMonth()+1).padStart(2,'0'),d=String(dt.getDate()).padStart(2,'0'); return `ZENTY-${y}${m}${d}-${currentTrip.sName}-${currentTrip.dName}-${currentTrip.km}km`.replace(/[^A-Z0-9\-]/gi,'-').slice(0,70);}
   function buildEPC({name,iban,bic,amount,remittance}){return ["BCD","001","1","SCT",bic||"",name,iban,"EUR"+amount,"",remittance||"",].join("\n");}
-  document.getElementById('copyIban').addEventListener('click',()=>{navigator.clipboard.writeText(CONFIG.merchant.iban).then(()=>{copyIbanBtn.textContent="Kopiert ✓"; setTimeout(()=>copyIbanBtn.textContent="Kopieren",1500);});});
+  copyIbanBtn.addEventListener('click',()=>{navigator.clipboard.writeText(CONFIG.merchant.iban).then(()=>{copyIbanBtn.textContent="Kopiert ✓"; setTimeout(()=>copyIbanBtn.textContent="Kopieren",1500);});});
 
+  /* WhatsApp + Booking + PDFs */
   function buildMsg(prefix){
-    const pay=selectedPay()||'—', name=document.getElementById('custName').value.trim()||'—', phone=document.getElementById('custPhone').value.trim()||'—', when=document.getElementById('pickupTime').value||'—', note=document.getElementById('note').value.trim()||'—';
+    const pay=selectedPay()||'—', name=custNameEl.value.trim()||'—', phone=custPhoneEl.value.trim()||'—', when=pickupTimeEl.value||'—', note=noteEl.value.trim()||'—';
     return `${prefix}
 ${currentTrip.sName} → ${currentTrip.dName}
 Entfernung: ${currentTrip.km} km
@@ -468,18 +485,109 @@ Abholung: ${when}
 Notiz: ${note}`.trim();
   }
   sendInquiry.addEventListener('click',()=>{if(!currentTrip.sName) return; const msg=buildMsg('Anfrage / Request:'); window.open(`https://api.whatsapp.com/send?phone=49162575957&text=${encodeURIComponent(msg)}`,'_blank');});
-  confirmBook.addEventListener('click',()=>{
+
+  confirmBook.addEventListener('click', async ()=>{
     if(!payForm.reportValidity()) return;
+    // Generate PDFs
+    const docs = await generateDocs();
+    // Try sending via EmailJS (customer + business)
+    if(CONFIG.emailjs.public_key && CONFIG.emailjs.service_id && CONFIG.emailjs.template_id){
+      try{
+        const vars = {
+          to_email: (custEmailEl.value || CONFIG.merchant.email),
+          subject: `Buchung ${currentTrip.sName} → ${currentTrip.dName}`,
+          message: 'Ihre Buchungsunterlagen sind im Anhang. Vielen Dank!',
+        };
+        await emailjs.send(CONFIG.emailjs.service_id, CONFIG.emailjs.template_id, vars, {
+          publicKey: CONFIG.emailjs.public_key,
+          attachments: [
+            { name: docs.invoiceName, data: docs.invoiceBase64 },
+            { name: docs.dnoteName, data: docs.dnoteBase64 }
+          ]
+        });
+        // Send to business as well
+        if (CONFIG.merchant.email && custEmailEl.value) {
+          const vars2 = { to_email: CONFIG.merchant.email, subject: `Neue Buchung: ${custNameEl.value}`, message: 'Kopie der Unterlagen.' };
+          await emailjs.send(CONFIG.emailjs.service_id, CONFIG.emailjs.template_id, vars2, {
+            publicKey: CONFIG.emailjs.public_key,
+            attachments: [
+              { name: docs.invoiceName, data: docs.invoiceBase64 },
+              { name: docs.dnoteName, data: docs.dnoteBase64 }
+            ]
+          });
+        }
+        alert("E-Mails wurden gesendet (Kunde & Büro).");
+      }catch(e){ console.error(e); alert("E-Mail-Übermittlung fehlgeschlagen. Dateien lokal heruntergeladen."); }
+    } else {
+      alert("EmailJS konfigüre edilmedi: PDF'ler indiriliyor, WhatsApp onayı açılıyor.");
+    }
+
+    // Offer downloads
+    downloadBlob(docs.invoiceBlob, docs.invoiceName);
+    downloadBlob(docs.dnoteBlob, docs.dnoteName);
+
     const method=selectedPay();
-    if(method==="PayPal"){ if(CONFIG.paypalMe) document.getElementById('ppGo').click(); else if(CONFIG.paypalClientId) alert("PayPal Buttons aktiv — bitte unten nutzen."); }
-    if(method==="Kreditkarte"||method==="Apple Pay"){ if(CONFIG.stripeCardLink||CONFIG.stripeApplePayLink) document.getElementById('stGo').click(); }
+    if(method==="PayPal"){ if(CONFIG.paypalMe) ppGo.click(); else if(CONFIG.paypalClientId) alert("PayPal Buttons aktiv — unten nutzen."); }
+    if(method==="Kreditkarte"||method==="Apple Pay"){ if(CONFIG.stripeCardLink||CONFIG.stripeApplePayLink) stGo.click(); }
     if(method==="Echtzeitüberweisung"||method==="Überweisung"){ alert("SEPA (Echtzeit) möglich. IBAN & EPC-QR angezeigt."); }
+
     const msg=buildMsg('Buchung · Bestätigung gewünscht:'); window.open(`https://api.whatsapp.com/send?phone=49162575957&text=${encodeURIComponent(msg)}`,'_blank'); close();
   });
+
+  function downloadBlob(blob, filename){
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a'); a.href=url; a.download=filename; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+  }
+
+  async function generateDocs(){
+    const { jsPDF } = window.jspdf;
+    const seller = CONFIG.merchant;
+    const when = new Date(pickupTimeEl.value || Date.now());
+    const invNo = makeRef();
+    const rows = [[`${currentTrip.sName} → ${currentTrip.dName}`, `${currentTrip.km} km`, `${currentTrip.rate} €/km`, `${currentTrip.price} €`]];
+
+    // Invoice (Rechnung / Fatura)
+    const invoice = new jsPDF();
+    invoice.setFontSize(16); invoice.text("Rechnung / Fatura", 14, 16);
+    invoice.setFontSize(10);
+    invoice.text(`Rechnungs-Nr: ${invNo}`, 14, 24);
+    invoice.text(`Datum: ${when.toLocaleString()}`, 14, 29);
+    invoice.text(`Kunde: ${custNameEl.value || "-"}`, 14, 34);
+    invoice.text(`E-Mail: ${custEmailEl.value || "-"}`, 14, 39);
+    invoice.text(`Telefon: ${custPhoneEl.value || "-"}`, 14, 44);
+    invoice.text(`Firma: ${seller.name}`, 140, 24);
+    invoice.text(`IBAN: ${seller.iban}`, 140, 29);
+    invoice.text(`BIC: ${seller.bic}`, 140, 34);
+    invoice.text(`Sitz: ${seller.city}`, 140, 39);
+    invoice.autoTable({ startY: 52, head: [["Leistung", "Distanz", "Tarif", "Betrag"]], body: rows });
+    invoice.text(`Gesamt (ab): ${currentTrip.price} €`, 14, invoice.lastAutoTable.finalY + 10);
+    invoice.text(`Zahlungsart: ${selectedPay() || "-"}`, 14, invoice.lastAutoTable.finalY + 16);
+    invoice.text(`Hinweis: Richtpreis – Endpreis nach bestätigter Durchführung.`, 14, invoice.lastAutoTable.finalY + 22);
+    const invoiceBlob = invoice.output("blob");
+    const invoiceBase64 = invoice.output("datauristring").split(",")[1];
+    const invoiceName = `Rechnung_${invNo}.pdf`;
+
+    // Lieferschein
+    const dnote = new jsPDF();
+    dnote.setFontSize(16); dnote.text("Lieferschein", 14, 16);
+    dnote.setFontSize(10);
+    dnote.text(`LS-Nr: ${invNo}`, 14, 24);
+    dnote.text(`Datum: ${when.toLocaleString()}`, 14, 29);
+    dnote.text(`Kunde: ${custNameEl.value || "-"}`, 14, 34);
+    dnote.text(`Abholung: ${currentTrip.sName}`, 14, 39);
+    dnote.text(`Ziel: ${currentTrip.dName}`, 14, 44);
+    dnote.text(`Notiz: ${noteEl.value || "-"}`, 14, 49);
+    dnote.autoTable({ startY: 56, head: [["Position", "Details"]], body: [["Route", `${currentTrip.sName} → ${currentTrip.dName}`], ["Entfernung", `${currentTrip.km} km`], ["Geplanter Zeitpunkt", when.toLocaleString()]] });
+    const dnoteBlob = dnote.output("blob");
+    const dnoteBase64 = dnote.output("datauristring").split(",")[1];
+    const dnoteName = `Lieferschein_${invNo}.pdf`;
+
+    return { invoiceBlob, invoiceBase64, invoiceName, dnoteBlob, dnoteBase64, dnoteName };
+  }
 })();</script>
 </body>
 </html>
 """
-out = Path("/mnt/data/index_corporate.html")
+out = Path("/mnt/data/index_pro_corporate.html")
 out.write_text(html, encoding="utf-8")
 print(str(out))
