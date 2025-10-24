@@ -1,7 +1,4 @@
-from pathlib import Path
-
-html_path = "/mnt/data/index_final.html"
-html_content = """<!doctype html>
+<!doctype html>
 <html lang="de">
 <head>
 <meta charset="utf-8">
@@ -255,6 +252,4 @@ textarea{min-height:70px;resize:vertical}
   calcBtn.addEventListener('click',compute);
 })();</script>
 </body>
-</html>"""
-Path(html_path).write_text(html_content, encoding="utf-8")
-print(html_path)
+</html>
