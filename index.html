@@ -717,19 +717,19 @@ body{
     <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:24px">
       <div style="text-align:center;padding:32px;background:linear-gradient(135deg,var(--panel),var(--panel2));border:1px solid var(--border);border-radius:20px">
         <div style="font-size:3rem;font-weight:900;background:linear-gradient(135deg,#00e0ff,#7f00ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent" data-count="2500">0</div>
-        <div style="color:var(--muted);margin-top:8px;font-weight:600">Zufriedene Kunden</div>
+        <div style="color:var(--muted);margin-top:8px;font-weight:600" data-i18n="stats-customers">Zufriedene Kunden</div>
       </div>
       <div style="text-align:center;padding:32px;background:linear-gradient(135deg,var(--panel),var(--panel2));border:1px solid var(--border);border-radius:20px">
         <div style="font-size:3rem;font-weight:900;background:linear-gradient(135deg,#ffd700,#ff006e);-webkit-background-clip:text;-webkit-text-fill-color:transparent" data-count="50">0</div>
-        <div style="color:var(--muted);margin-top:8px;font-weight:600">Fahrzeuge</div>
+        <div style="color:var(--muted);margin-top:8px;font-weight:600" data-i18n="stats-vehicles">Fahrzeuge</div>
       </div>
       <div style="text-align:center;padding:32px;background:linear-gradient(135deg,var(--panel),var(--panel2));border:1px solid var(--border);border-radius:20px">
         <div style="font-size:3rem;font-weight:900;background:linear-gradient(135deg,#00ff88,#00e0ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent" data-count="15000">0</div>
-        <div style="color:var(--muted);margin-top:8px;font-weight:600">Gefahrene km (täglich)</div>
+        <div style="color:var(--muted);margin-top:8px;font-weight:600" data-i18n="stats-km">Gefahrene km (täglich)</div>
       </div>
       <div style="text-align:center;padding:32px;background:linear-gradient(135deg,var(--panel),var(--panel2));border:1px solid var(--border);border-radius:20px">
         <div style="font-size:3rem;font-weight:900;background:linear-gradient(135deg,#ff006e,#7f00ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent" data-count="98">0</div>
-        <div style="color:var(--muted);margin-top:8px;font-weight:600">Zufriedenheit (%)</div>
+        <div style="color:var(--muted);margin-top:8px;font-weight:600" data-i18n="stats-satisfaction">Zufriedenheit (%)</div>
       </div>
     </div>
   </div>
@@ -739,8 +739,8 @@ body{
 <section class="section" id="leistungen">
   <div class="container">
     <div class="section-header">
-      <h2 class="section-title">Unsere Leistungen</h2>
-      <p class="section-desc">Maßgeschneiderte Mobilitätslösungen für jede Anforderung — 8 Kategorien, 50+ Services</p>
+      <h2 class="section-title" data-i18n="services-title">Unsere Leistungen</h2>
+      <p class="section-desc" data-i18n="services-desc">Maßgeschneiderte Mobilitätslösungen für jede Anforderung — 8 Kategorien, 50+ Services</p>
     </div>
     
     <div class="grid grid-4">
@@ -916,8 +916,8 @@ body{
 <section class="section" id="fahrzeuge" style="background:radial-gradient(1400px 500px at 50% -10%, rgba(20,183,255,.08) 0%, transparent 60%)">
   <div class="container">
     <div class="section-header">
-      <h2 class="section-title">Unsere Fahrzeugflotte</h2>
-      <p class="section-desc">Premium Fahrzeuge mit ZENTY Express AI Branding — TÜV geprüft, vollversichert & einsatzbereit</p>
+      <h2 class="section-title" data-i18n="vehicles-title">Unsere Fahrzeugflotte</h2>
+      <p class="section-desc" data-i18n="vehicles-desc">Premium Fahrzeuge mit ZENTY Express AI Branding — TÜV geprüft, vollversichert & einsatzbereit</p>
     </div>
     
     <div class="grid grid-3" style="margin-bottom:28px">
@@ -2659,7 +2659,21 @@ const i18n = {
     'hero-btn-services': '🗺️ Unsere Services',
     'hero-btn-contact': '📞 Jetzt anfragen',
     'badge-certified': 'Zertifiziert',
-    'badge-eu': 'EU-weit'
+    'badge-eu': 'EU-weit',
+    'stats-customers': 'Zufriedene Kunden',
+    'stats-vehicles': 'Fahrzeuge',
+    'stats-km': 'Gefahrene km (täglich)',
+    'stats-satisfaction': 'Zufriedenheit (%)',
+    'services-title': 'Unsere Leistungen',
+    'services-desc': 'Maßgeschneiderte Mobilitätslösungen für jede Anforderung — 8 Kategorien, 50+ Services',
+    'vehicles-title': 'Unsere Fahrzeugflotte',
+    'vehicles-desc': 'Premium Fahrzeuge mit ZENTY Express AI Branding — TÜV geprüft, vollversichert & einsatzbereit',
+    'ai-title': 'AI-Powered Features',
+    'ai-desc': 'Modernste KI-Technologie für optimale Mobilität',
+    'prices-title': 'Preise & Pakete',
+    'prices-desc': 'Transparente Preisgestaltung — Keine versteckten Kosten',
+    'booking-title': 'Jetzt Buchen',
+    'contact-title': 'Kontakt'
   },
   en: {
     'nav-services': 'Services',
@@ -2672,7 +2686,21 @@ const i18n = {
     'hero-btn-services': '🗺️ Our Services',
     'hero-btn-contact': '📞 Get Quote',
     'badge-certified': 'Certified',
-    'badge-eu': 'EU-wide'
+    'badge-eu': 'EU-wide',
+    'stats-customers': 'Happy Customers',
+    'stats-vehicles': 'Vehicles',
+    'stats-km': 'Daily km Driven',
+    'stats-satisfaction': 'Satisfaction (%)',
+    'services-title': 'Our Services',
+    'services-desc': 'Tailored mobility solutions for every requirement — 8 categories, 50+ services',
+    'vehicles-title': 'Our Fleet',
+    'vehicles-desc': 'Premium vehicles with ZENTY Express AI branding — TÜV certified, fully insured & ready',
+    'ai-title': 'AI-Powered Features',
+    'ai-desc': 'State-of-the-art AI technology for optimal mobility',
+    'prices-title': 'Prices & Packages',
+    'prices-desc': 'Transparent pricing — No hidden costs',
+    'booking-title': 'Book Now',
+    'contact-title': 'Contact'
   },
   tr: {
     'nav-services': 'Hizmetler',
@@ -2685,7 +2713,21 @@ const i18n = {
     'hero-btn-services': '🗺️ Hizmetlerimiz',
     'hero-btn-contact': '📞 Teklif Al',
     'badge-certified': 'Sertifikalı',
-    'badge-eu': 'AB Çapında'
+    'badge-eu': 'AB Çapında',
+    'stats-customers': 'Mutlu Müşteri',
+    'stats-vehicles': 'Araç',
+    'stats-km': 'Günlük km',
+    'stats-satisfaction': 'Memnuniyet (%)',
+    'services-title': 'Hizmetlerimiz',
+    'services-desc': 'Her ihtiyaç için özel mobilite çözümleri — 8 kategori, 50+ hizmet',
+    'vehicles-title': 'Araç Filomuz',
+    'vehicles-desc': 'ZENTY Express AI markalı premium araçlar — TÜV onaylı, tam sigortalı & hazır',
+    'ai-title': 'AI-Destekli Özellikler',
+    'ai-desc': 'Optimal mobilite için son teknoloji AI',
+    'prices-title': 'Fiyatlar & Paketler',
+    'prices-desc': 'Şeffaf fiyatlandırma — Gizli maliyet yok',
+    'booking-title': 'Hemen Rezervasyon',
+    'contact-title': 'İletişim'
   },
   ru: {
     'nav-services': 'Услуги',
@@ -2698,7 +2740,21 @@ const i18n = {
     'hero-btn-services': '🗺️ Наши услуги',
     'hero-btn-contact': '📞 Связаться',
     'badge-certified': 'Сертифицирован',
-    'badge-eu': 'По всему ЕС'
+    'badge-eu': 'По всему ЕС',
+    'stats-customers': 'Довольных клиентов',
+    'stats-vehicles': 'Автомобилей',
+    'stats-km': 'Ежедневно км',
+    'stats-satisfaction': 'Удовлетворенность (%)',
+    'services-title': 'Наши услуги',
+    'services-desc': 'Индивидуальные решения для любых потребностей — 8 категорий, 50+ услуг',
+    'vehicles-title': 'Наш автопарк',
+    'vehicles-desc': 'Премиум-автомобили с брендингом ZENTY Express AI — сертифицированы TÜV, застрахованы',
+    'ai-title': 'Функции с ИИ',
+    'ai-desc': 'Передовые технологии ИИ для оптимальной мобильности',
+    'prices-title': 'Цены и пакеты',
+    'prices-desc': 'Прозрачные цены — Никаких скрытых расходов',
+    'booking-title': 'Забронировать',
+    'contact-title': 'Контакт'
   },
   ar: {
     'nav-services': 'الخدمات',
@@ -2711,7 +2767,21 @@ const i18n = {
     'hero-btn-services': '🗺️ خدماتنا',
     'hero-btn-contact': '📞 احصل على عرض',
     'badge-certified': 'معتمد',
-    'badge-eu': 'في جميع أنحاء الاتحاد الأوروبي'
+    'badge-eu': 'في جميع أنحاء الاتحاد الأوروبي',
+    'stats-customers': 'عملاء سعداء',
+    'stats-vehicles': 'مركبات',
+    'stats-km': 'كيلومترات يومية',
+    'stats-satisfaction': 'الرضا (%)',
+    'services-title': 'خدماتنا',
+    'services-desc': 'حلول تنقل مخصصة لكل متطلب — 8 فئات، أكثر من 50 خدمة',
+    'vehicles-title': 'أسطولنا',
+    'vehicles-desc': 'مركبات فاخرة بعلامة ZENTY Express AI — معتمدة من TÜV، مؤمنة بالكامل',
+    'ai-title': 'ميزات مدعومة بالذكاء الاصطناعي',
+    'ai-desc': 'أحدث تقنيات الذكاء الاصطناعي للتنقل الأمثل',
+    'prices-title': 'الأسعار والباقات',
+    'prices-desc': 'تسعير شفاف — لا توجد تكاليف خفية',
+    'booking-title': 'احجز الآن',
+    'contact-title': 'اتصل بنا'
   },
   fr: {
     'nav-services': 'Services',
@@ -2724,7 +2794,21 @@ const i18n = {
     'hero-btn-services': '🗺️ Nos Services',
     'hero-btn-contact': '📞 Demander un devis',
     'badge-certified': 'Certifié',
-    'badge-eu': 'Dans toute l\'UE'
+    'badge-eu': 'Dans toute l\'UE',
+    'stats-customers': 'Clients satisfaits',
+    'stats-vehicles': 'Véhicules',
+    'stats-km': 'Km quotidiens',
+    'stats-satisfaction': 'Satisfaction (%)',
+    'services-title': 'Nos Services',
+    'services-desc': 'Solutions de mobilité sur mesure pour chaque besoin — 8 catégories, plus de 50 services',
+    'vehicles-title': 'Notre Flotte',
+    'vehicles-desc': 'Véhicules premium avec marque ZENTY Express AI — certifiés TÜV, entièrement assurés',
+    'ai-title': 'Fonctionnalités IA',
+    'ai-desc': 'Technologie IA de pointe pour une mobilité optimale',
+    'prices-title': 'Prix et Forfaits',
+    'prices-desc': 'Tarification transparente — Aucun coût caché',
+    'booking-title': 'Réserver',
+    'contact-title': 'Contact'
   }
 };
 
