@@ -1,255 +1,3588 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Zenty Express AI — Mobility & Transport</title>
-<meta name="description" content="Zenty Express AI · Mobility & Transport · VIP Shuttle · Kurier · Intelligente Routen · Made in Germany">
-<link rel="preconnect" href="https://unpkg.com" crossorigin>
-<link rel="preconnect" href="https://server.arcgisonline.com" crossorigin>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="anonymous">
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zenty Express AI — KI-gestützte Mobilität & Transport</title>
+<meta name="description" content="Zenty Express AI · Intelligente Mobilität · VIP Shuttle · Kurierdienst · Seniorenservice · AI Route Optimizer · Made in Germany">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="anonymous">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+<link href='https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.css' rel='stylesheet' />
+<script src='https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.js'></script>
 <style>
 :root{
-  --bg:#0b0f16; --panel:#0f1420; --panel2:#0b111a; --border:#1a2438; --line:#26334d;
-  --text:#eef3fb; --muted:#b7c4d6; --accent:#12b0a7; --accent2:#6fe0d6; --gold:#d4af37;
-  --radius:18px; --shadow:0 10px 26px rgba(0,0,0,.35);
+  --bg:#050810; --bg2:#0a0e18; --panel:#0b1220; --panel2:#0d1625;
+  --muted:#9ba5b8; --text:#e6ecf5; --line:#1a2842; --border:#253250;
+  --blue:#14b7ff; --blue2:#0090ff; --accent:#00e0ff; --gold:#d4af37; --gold2:#ffd700;
+  --red:#ff3e5e; --green:#00d67f;
+  --shadow:0 10px 40px rgba(0,0,0,.4);
 }
-*{box-sizing:border-box} html,body{height:100%}
-body{margin:0;background:linear-gradient(180deg,#0b0f16,#0a1119 60%,#091018);color:var(--text);font:16px/1.6 Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif}
-a, a:visited{color:#ffffff;text-decoration:none;font-weight:700}
-a:hover{text-decoration:underline}
-.link-muted{color:var(--muted);font-weight:600}
-.container{max-width:1180px;margin:0 auto;padding:24px}
-.section{padding:28px 0}
-.card{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
-.card.pad{padding:22px}
-.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-@media(max-width:1024px){.grid-4{grid-template-columns:repeat(2,1fr)}.grid-3{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:640px){.grid-4,.grid-3{grid-template-columns:1fr}}
-header{position:sticky;top:0;z-index:40;background:linear-gradient(180deg,rgba(6,10,18,.92),rgba(6,10,18,.65));backdrop-filter:blur(8px);border-bottom:1px solid var(--border)}
-.nav{display:flex;align-items:center;gap:16px;padding:8px 16px}
-.brand{display:flex;align-items:center;gap:12px}
-.brand img{height:108px;width:auto;filter:drop-shadow(0 8px 18px rgba(0,0,0,.55)) drop-shadow(0 0 20px rgba(18,176,167,.25))}
-.brand strong{font-weight:900;letter-spacing:.2px;color:#fff}
-.spacer{flex:1}
-.btn{display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:999px;border:1px solid var(--line);background:linear-gradient(180deg,#141b24,#0e1420);cursor:pointer}
-.btn:hover{transform:translateY(-1px)}
-.btn.gold{background:linear-gradient(180deg,#2a2311,#171108);border-color:#3a2c09;color:#fbf6e5}
-.badges{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-h1{margin:6px 0 10px;font-weight:900;letter-spacing:.2px;font-size:clamp(30px,3.2vw,44px);color:#fff}
-h2{font-size:clamp(22px,2.3vw,30px);margin:0 0 14px;font-weight:900;color:#fff}
-h2 .bar{display:block;width:110px;height:3px;margin-top:8px;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:999px;opacity:.9}
-.hero{display:grid;grid-template-columns:1.15fr 1fr;gap:22px;align-items:center}
-.hero .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
-.hero .media{overflow:hidden}
-.hero img{display:block;width:100%;height:auto;border-radius:var(--radius)}
-.tile{overflow:hidden}
-.tile img{width:100%;height:auto;display:block;object-fit:cover;aspect-ratio:4/3;transform:none}
-.tile .body{padding:14px 16px}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  color:var(--text);
+  background:linear-gradient(180deg,var(--bg),var(--bg2));
+  line-height:1.6;
+  overflow-x:hidden;
+}
+
+/* Logo SVG Inline */
+.logo-svg{display:inline-flex;align-items:center;gap:12px}
+.logo-svg svg{height:80px;width:auto;filter:drop-shadow(0 8px 20px rgba(0,180,255,.3))}
+
+/* Utility */
+.container{max-width:1200px;margin:0 auto;padding:0 24px}
+.flex{display:flex}
+.between{justify-content:space-between}
+.center{align-items:center}
+.wrap{flex-wrap:wrap}
+.gap{gap:12px}
 .muted{color:var(--muted)}
-.veh .overlay{position:absolute;inset:auto 10px 10px auto;width:90px;opacity:.95}
-.aiRoute{display:grid;grid-template-columns:1.15fr 1fr;gap:18px;align-items:stretch}
-.mapWrap{border-radius:var(--radius);border:1px solid var(--border);padding:14px;background:linear-gradient(180deg,#0e1422,#0b101a)}
-#map{height:360px;border-radius:14px;border:1px solid #253251;overflow:hidden}
-.controls{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
-.input{width:100%;padding:10px;border:1px solid var(--border);border-radius:10px;background:#0e1422;color:#fff}
-.infoRow{display:flex;gap:10px;margin-top:8px;align-items:center;flex-wrap:wrap}
-.stat{background:#0e1422;border:1px solid #28324a;border-radius:12px;padding:8px 10px}
-footer{padding:22px 0;border-top:1px solid var(--border);color:#aeb8cc}
-.footergrid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:14px}
-@media(max-width:860px){.hero{grid-template-columns:1fr}.aiRoute{grid-template-columns:1fr}.footergrid{grid-template-columns:1fr}}
-.modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.55);backdrop-filter:blur(2px);z-index:60}
-.modal.open{display:flex}
-.modal-card{width:min(740px,92vw);background:linear-gradient(180deg,#121a2a,#0d1320);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow);padding:18px}
-.modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
-.close{background:transparent;border:0;color:#c9d3e8;font-size:20px;cursor:pointer}
-.form{display:grid;gap:10px}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-label.small{font-size:12px;color:#b9c6e2}
-select, input[type="text"], input[type="email"], input[type="datetime-local"], input[type="tel"], textarea{width:100%;padding:10px;border:1px solid var(--border);border-radius:10px;background:#0e1422;color:#fff}
-textarea{min-height:70px;resize:vertical}
-.notice{font-size:12px;color:#9fb0cf}
+.gold{color:var(--gold2)}
+
+/* Topbar */
+.topbar{
+  background:rgba(5,8,16,.95);
+  border-bottom:1px solid var(--line);
+  padding:10px 0;
+  font-size:.9rem;
+}
+.topbar-content{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.topbar a{color:var(--accent);text-decoration:none;transition:.2s}
+.topbar a:hover{color:var(--gold2)}
+.sep{opacity:.5;margin:0 8px}
+
+/* Header */
+.header{
+  position:sticky;
+  top:0;
+  z-index:100;
+  background:rgba(8,12,20,.92);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);
+  padding:16px 0;
+}
+.header .container{display:flex;justify-content:space-between;align-items:center}
+.brand{display:flex;align-items:center;gap:14px;text-decoration:none}
+.brand-text{display:flex;flex-direction:column;gap:2px}
+.brand-name{font-weight:900;font-size:1.4rem;color:#fff;letter-spacing:.5px}
+.brand-tagline{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+.nav{display:flex;gap:6px;align-items:center}
+.nav a{
+  padding:.7rem 1.1rem;
+  border-radius:10px;
+  color:var(--text);
+  text-decoration:none;
+  font-weight:600;
+  transition:all .2s;
+  font-size:.95rem;
+}
+.nav a:hover{background:var(--panel);color:#fff}
+.nav a.cta{
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  color:#000;
+  box-shadow:0 6px 20px rgba(212,175,55,.3);
+}
+.nav a.cta:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(212,175,55,.5)}
+.hamburger{display:none;background:transparent;border:0;cursor:pointer;padding:8px}
+.hamburger span{display:block;width:24px;height:2px;background:#fff;margin:5px 0;transition:.3s}
+
+/* Hero */
+.hero{
+  position:relative;
+  min-height:85vh;
+  display:flex;
+  align-items:center;
+  overflow:hidden;
+  background:url('https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=1920&q=85') center/cover;
+}
+.hero::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(135deg,rgba(0,10,30,.92),rgba(5,15,40,.85));
+  z-index:1;
+}
+.hero::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(circle at 20% 50%, rgba(20,183,255,.15), transparent 50%),
+    radial-gradient(circle at 80% 50%, rgba(212,175,55,.12), transparent 50%);
+  z-index:1;
+}
+.hero-content{position:relative;z-index:2;max-width:800px}
+.hero h1{
+  font-size:clamp(2.2rem,5vw,3.8rem);
+  font-weight:900;
+  line-height:1.15;
+  margin:0 0 20px;
+  background:linear-gradient(135deg,#fff,var(--accent));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.hero .lead{font-size:1.25rem;color:#c9dff5;margin-bottom:28px;line-height:1.7}
+.badges{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:28px}
+.badge{
+  background:rgba(20,183,255,.15);
+  border:1px solid rgba(20,183,255,.3);
+  padding:.6rem 1.1rem;
+  border-radius:999px;
+  color:var(--accent);
+  font-weight:600;
+  font-size:.9rem;
+  backdrop-filter:blur(8px);
+}
+.hero-actions{display:flex;gap:14px;flex-wrap:wrap}
+
+/* Buttons */
+.btn{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:.85rem 1.5rem;
+  border-radius:12px;
+  text-decoration:none;
+  font-weight:700;
+  transition:all .3s;
+  border:1px solid transparent;
+  cursor:pointer;
+  font-size:.95rem;
+}
+.btn-primary{
+  background:linear-gradient(135deg,var(--blue2),var(--accent));
+  color:#fff;
+  box-shadow:0 8px 24px rgba(0,144,255,.35);
+}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,144,255,.5)}
+.btn-secondary{
+  background:var(--panel);
+  border-color:var(--border);
+  color:var(--text);
+}
+.btn-secondary:hover{border-color:var(--blue);background:var(--panel2)}
+.btn-gold{
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  color:#000;
+  box-shadow:0 8px 24px rgba(212,175,55,.35);
+}
+.btn-gold:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(212,175,55,.5)}
+
+/* Section */
+.section{padding:80px 0}
+.section-header{text-align:center;margin-bottom:60px}
+.section-title{
+  font-size:clamp(1.8rem,3.5vw,2.8rem);
+  font-weight:900;
+  margin:0 0 16px;
+  color:#fff;
+  position:relative;
+  display:inline-block;
+}
+.section-title::after{
+  content:'';
+  position:absolute;
+  bottom:-8px;
+  left:50%;
+  transform:translateX(-50%);
+  width:80px;
+  height:4px;
+  background:linear-gradient(90deg,var(--gold),var(--accent));
+  border-radius:999px;
+}
+.section-desc{font-size:1.1rem;color:var(--muted);max-width:720px;margin:0 auto}
+
+/* Grid */
+.grid{display:grid;gap:24px}
+.grid-2{grid-template-columns:repeat(2,1fr)}
+.grid-3{grid-template-columns:repeat(3,1fr)}
+.grid-4{grid-template-columns:repeat(4,1fr)}
+
+/* Service Cards */
+.service-category{
+  background:linear-gradient(135deg,var(--panel),var(--panel2));
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:36px;
+  transition:all .3s;
+  position:relative;
+  overflow:hidden;
+}
+.service-category::before{
+  content:'';
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  height:4px;
+  background:linear-gradient(90deg,var(--gold),var(--accent));
+  opacity:0;
+  transition:.3s;
+}
+.service-category:hover{
+  transform:translateY(-8px);
+  box-shadow:var(--shadow);
+  border-color:var(--blue);
+}
+.service-category:hover::before{opacity:1}
+.service-icon{
+  width:72px;
+  height:72px;
+  background:linear-gradient(135deg,rgba(20,183,255,.2),rgba(212,175,55,.2));
+  border-radius:16px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:2.2rem;
+  margin-bottom:20px;
+}
+.service-category h3{font-size:1.5rem;margin:0 0 12px;color:#fff}
+.service-category .services-list{
+  list-style:none;
+  margin:16px 0 0;
+  padding:0;
+}
+.service-category .services-list li{
+  padding:10px 0;
+  color:var(--muted);
+  border-bottom:1px solid rgba(255,255,255,.05);
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.service-category .services-list li::before{
+  content:'✓';
+  color:var(--accent);
+  font-weight:900;
+  font-size:1.1rem;
+}
+.service-category .services-list li:last-child{border:0}
+
+/* Vehicle Cards */
+.vehicle-card{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:18px;
+  overflow:hidden;
+  transition:all .3s;
+  position:relative;
+}
+.vehicle-card:hover{
+  transform:translateY(-6px);
+  box-shadow:var(--shadow);
+  border-color:var(--blue);
+}
+.vehicle-image{
+  position:relative;
+  aspect-ratio:16/10;
+  overflow:hidden;
+  background:#000;
+}
+.vehicle-image img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  transition:.4s;
+}
+.vehicle-card:hover .vehicle-image img{transform:scale(1.08)}
+.vehicle-badge{
+  position:absolute;
+  top:14px;
+  right:14px;
+  background:rgba(0,0,0,.8);
+  backdrop-filter:blur(8px);
+  padding:6px 14px;
+  border-radius:8px;
+  font-size:.8rem;
+  font-weight:700;
+  color:var(--gold2);
+  border:1px solid var(--gold);
+}
+.vehicle-body{padding:24px}
+.vehicle-body h3{font-size:1.3rem;margin:0 0 8px;color:#fff}
+.vehicle-body p{color:var(--muted);margin:0}
+
+/* Features */
+.feature-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.feature-item{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:24px;
+  text-align:center;
+  transition:.3s;
+}
+.feature-item:hover{border-color:var(--accent);transform:translateY(-4px)}
+.feature-icon{font-size:2.5rem;margin-bottom:12px}
+.feature-item h4{font-size:1.1rem;margin:0 0 8px;color:#fff}
+.feature-item p{font-size:.9rem;color:var(--muted);margin:0}
+
+/* Pricing */
+.pricing-card{
+  background:linear-gradient(135deg,var(--panel),var(--panel2));
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:40px;
+  text-align:center;
+  transition:all .3s;
+  position:relative;
+}
+.pricing-card.featured{
+  border-color:var(--gold);
+  box-shadow:0 0 40px rgba(212,175,55,.2);
+}
+.pricing-card.featured::before{
+  content:'BELIEBT';
+  position:absolute;
+  top:-12px;
+  right:24px;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  color:#000;
+  padding:4px 16px;
+  border-radius:20px;
+  font-size:.75rem;
+  font-weight:900;
+  letter-spacing:1px;
+}
+.pricing-card:hover{transform:translateY(-6px);box-shadow:var(--shadow)}
+.pricing-header h3{font-size:1.6rem;margin:0 0 20px;color:#fff}
+.pricing-price{font-size:3rem;font-weight:900;color:var(--gold2);margin:0}
+.pricing-price small{font-size:1.2rem;color:var(--muted)}
+.pricing-features{
+  list-style:none;
+  margin:28px 0;
+  padding:0;
+}
+.pricing-features li{
+  padding:12px 0;
+  color:var(--muted);
+  border-bottom:1px solid rgba(255,255,255,.05);
+}
+.pricing-features li:last-child{border:0}
+
+/* CTA Section */
+.cta-section{
+  background:linear-gradient(135deg,rgba(20,183,255,.1),rgba(212,175,55,.1));
+  border-radius:24px;
+  padding:60px 40px;
+  text-align:center;
+  border:1px solid var(--border);
+}
+.cta-section h2{font-size:2.5rem;margin:0 0 20px;color:#fff}
+.cta-section p{font-size:1.2rem;color:var(--muted);margin:0 0 32px}
+
+/* Contact */
+.contact-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:32px}
+.contact-info{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:36px;
+}
+.contact-info h3{font-size:1.5rem;margin:0 0 24px;color:#fff}
+.contact-item{
+  display:flex;
+  align-items:flex-start;
+  gap:16px;
+  margin-bottom:24px;
+}
+.contact-icon{
+  width:48px;
+  height:48px;
+  background:linear-gradient(135deg,rgba(20,183,255,.2),rgba(212,175,55,.2));
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:1.5rem;
+  flex-shrink:0;
+}
+.contact-text h4{margin:0 0 6px;color:#fff;font-size:1rem}
+.contact-text p{margin:0;color:var(--muted)}
+.contact-text a{color:var(--accent);text-decoration:none}
+.contact-text a:hover{text-decoration:underline}
+.map-embed{
+  border-radius:18px;
+  overflow:hidden;
+  border:1px solid var(--border);
+  height:100%;
+  min-height:400px;
+}
+.map-embed iframe{width:100%;height:100%;border:0}
+
+/* Footer */
+.footer{
+  background:rgba(5,8,16,.95);
+  border-top:1px solid var(--line);
+  padding:60px 0 24px;
+  margin-top:80px;
+}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px}
+.footer-col h4{color:#fff;margin:0 0 20px;font-size:1.1rem}
+.footer-col p{color:var(--muted);line-height:1.8;margin:0 0 16px}
+.footer-col ul{list-style:none;padding:0;margin:0}
+.footer-col ul li{margin:10px 0}
+.footer-col a{color:var(--muted);text-decoration:none;transition:.2s}
+.footer-col a:hover{color:var(--accent)}
+.footer-bottom{
+  padding-top:32px;
+  border-top:1px solid var(--line);
+  text-align:center;
+  color:var(--muted);
+  font-size:.9rem;
+}
+.footer-logo{font-size:1.3rem;font-weight:900;color:#fff;margin-bottom:16px}
+
+/* FAB */
+.fab{position:fixed;right:24px;bottom:24px;z-index:90}
+.fab-btn{
+  width:60px;
+  height:60px;
+  background:linear-gradient(135deg,var(--blue2),var(--accent));
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#fff;
+  font-size:1.6rem;
+  box-shadow:0 8px 24px rgba(0,144,255,.4);
+  cursor:pointer;
+  transition:all .3s;
+  text-decoration:none;
+}
+.fab-btn:hover{transform:scale(1.15) rotate(15deg);box-shadow:0 12px 32px rgba(0,144,255,.6)}
+
+/* Responsive */
+@media(max-width:1024px){
+  .grid-4{grid-template-columns:repeat(2,1fr)}
+  .grid-3{grid-template-columns:repeat(2,1fr)}
+  .feature-grid{grid-template-columns:repeat(2,1fr)}
+  .footer-grid{grid-template-columns:repeat(2,1fr)}
+  .contact-grid{grid-template-columns:1fr}
+}
+
+@keyframes slideOut{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-10px)}}
+
+@media(max-width:768px){
+  .topbar{display:none}
+  .logo-svg svg{height:60px}
+  .brand-name{font-size:1.1rem}
+  .brand-tagline{font-size:.7rem}
+  
+  .nav{
+    position:fixed;
+    top:88px;
+    left:0;
+    right:0;
+    background:rgba(8,12,20,.98);
+    backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--line);
+    padding:20px;
+    flex-direction:column;
+    transform:translateY(-200%);
+    transition:.3s;
+    box-shadow:var(--shadow);
+  }
+  .nav.open{transform:translateY(0)}
+  .nav a{width:100%;text-align:center;padding:1rem}
+  
+  .hamburger{display:block}
+  .hamburger.active span:nth-child(1){transform:rotate(45deg) translate(7px,7px)}
+  .hamburger.active span:nth-child(2){opacity:0}
+  .hamburger.active span:nth-child(3){transform:rotate(-45deg) translate(7px,-7px)}
+  
+  .hero{min-height:70vh}
+  .hero h1{font-size:2rem}
+  .hero .lead{font-size:1.1rem}
+  
+  .section{padding:60px 0}
+  .section-header{margin-bottom:40px}
+  
+  .grid-4,.grid-3,.grid-2{grid-template-columns:1fr}
+  .feature-grid{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
-<header>
-  <div class="nav container">
-    <a class="brand" href="#top"><img src="assets/logo.png" alt="Zenty Express AI"><strong>Zenty Express AI · Mobility & Transport</strong></a>
-    <div class="spacer"></div>
-    <a class="btn" href="#fahrzeuge">Fahrzeuge</a>
-    <a class="btn" href="#preise">Preise</a>
-    <a class="btn" href="#leistungen">Leistungen</a>
-    <a class="btn gold" href="#kontakt">Kontakt</a>
+
+<!-- Loading Screen -->
+<div id="preloader" style="position:fixed;inset:0;z-index:9999;background:linear-gradient(135deg,#050810,#0a0e18);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:24px">
+  <svg viewBox="0 0 400 120" xmlns="http://www.w3.org/2000/svg" style="width:300px;height:auto;animation:logoFloat 2s ease-in-out infinite">
+    <defs>
+      <linearGradient id="loader-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" style="stop-color:#00e0ff;stop-opacity:1" />
+        <stop offset="50%" style="stop-color:#7f00ff;stop-opacity:1" />
+        <stop offset="100%" style="stop-color:#ff006e;stop-opacity:1" />
+      </linearGradient>
+      <linearGradient id="loader-text" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+        <stop offset="100%" style="stop-color:#00e0ff;stop-opacity:1" />
+      </linearGradient>
+    </defs>
+    <rect x="20" y="30" width="32" height="7" fill="url(#loader-grad)" rx="3.5"/>
+    <rect x="20" y="45" width="32" height="7" fill="url(#loader-grad)" rx="3.5" transform="rotate(45 36 48.5)"/>
+    <rect x="20" y="65" width="32" height="7" fill="url(#loader-grad)" rx="3.5"/>
+    <text x="65" y="75" font-family="Arial Black" font-size="56" font-weight="900" fill="url(#loader-text)" letter-spacing="-1">ZENTY</text>
+    <circle cx="330" cy="45" r="6" fill="#00ff88"/>
+    <path d="M65,82 Q110,77 155,82 T245,82" stroke="url(#loader-grad)" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.7"/>
+    <rect x="280" y="50" width="42" height="22" fill="url(#loader-grad)" rx="4"/>
+    <text x="289" y="66" font-family="Arial Black" font-size="13" font-weight="900" fill="#000">AI</text>
+    <text x="65" y="105" font-family="Arial" font-size="16" font-weight="600" fill="#9fb0c8" letter-spacing="6">EXPRESS</text>
+  </svg>
+  <div style="width:200px;height:4px;background:rgba(255,255,255,.1);border-radius:999px;overflow:hidden">
+    <div id="loadingBar" style="width:0%;height:100%;background:linear-gradient(90deg,#00e0ff,#7f00ff,#ff006e);border-radius:999px;transition:width .3s"></div>
   </div>
-</header>
+  <p style="color:#9ba5b8;font-size:.95rem;margin-top:8px">Wird geladen...</p>
+</div>
 
-<main class="container">
-  <section class="section hero">
-    <div class="card pad">
-      <h1>AI Powered Mobility — Premium Shuttle · Kurier · Fleet</h1>
-      <p class="muted">Intelligente Routen, Echtzeit-Analyse, verlässliche Transporte. <b>Zenty Express AI</b> setzt neue Maßstäbe in Mobilität & Transport.</p>
-      <div class="badges" style="margin-top:10px">
-        <span class="stat">24/7 Dispatch</span>
-        <span class="stat">Versichert & Registriert</span>
-        <span class="stat">EU-Fahrten</span>
-      </div>
-      <div class="actions">
-        <a class="btn" href="#preise">📄 Preise ansehen</a>
-        <a class="btn" href="#ki">🗺️ Route & Buchung</a>
-      </div>
+<style>
+@keyframes logoFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+</style>
+
+<!-- Scroll Progress Bar -->
+<div id="scrollProgress" style="position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,#00e0ff,#7f00ff,#ff006e);width:0%;z-index:999;transition:width .1s"></div>
+
+<!-- Dark/Light Mode Toggle -->
+<button id="themeToggle" style="position:fixed;left:24px;bottom:24px;z-index:90;width:56px;height:56px;background:linear-gradient(135deg,#ffd700,#ff006e);border:0;border-radius:50%;color:#000;font-size:1.6rem;cursor:pointer;box-shadow:0 8px 24px rgba(255,215,0,.4);transition:all .3s">
+  🌓
+</button>
+
+<!-- Floating Contact Bar -->
+<div id="floatingBar" style="position:fixed;bottom:0;left:0;right:0;z-index:85;background:linear-gradient(135deg,rgba(0,224,255,.95),rgba(127,0,255,.95));backdrop-filter:blur(12px);padding:16px;transform:translateY(100%);transition:transform .3s;box-shadow:0 -10px 40px rgba(0,0,0,.3)">
+  <div class="container" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
+    <div style="color:#fff;font-weight:700;font-size:1.05rem">
+      🚀 Bereit für Ihre Fahrt? Kontaktieren Sie uns jetzt!
     </div>
-    <div class="card media"><img src="assets/prospekt-cover-fleet.jpg" alt="Fleet Cover"></div>
-  </section>
-
-  <section class="section" id="leistungen">
-    <h2>Unsere Leistungen<span class="bar"></span></h2>
-    <div class="card pad">
-      <h3>VIP & Business Transfer</h3>
-      <p class="muted">Diskreter, terminfester Fahrservice für Geschäfts- und Privatkunden. Ablauf: Anfrage → Bestätigung & Fixpreis → Fahrer- und Fahrzeugzuweisung → Live-Tracking & Abrechnung. Was wir übernehmen: Wartezeiten am Terminal, Gepäckhilfe, Meet&Assist, stille Fahrt auf Wunsch.</p>
-      <h3>Shuttle & Gruppentransfer</h3>
-      <p class="muted">Regelmäßige Mitarbeiter-Shuttles, Event-Transfers, Messe- und Hotelshuttles. Ablauf: Routenplanung (KI) → Sammelpunkte → Zeitslots → Sicherheitseinweisung. Extras: Teilnehmerlisten, Sammelrechnung, deutsch/englisch Fahrer.</p>
-      <h3>Flughafentransfer</h3>
-      <p class="muted">Abholung Haus/Hotel → Terminal/Ankunft → Rückfahrt optional. Prozess: Flugnummer prüfen (ETA), Parkticket, Abholschild am Ankunftsbereich, 24/7 Support.</p>
-      <h3>Kurier & Express</h3>
-      <p class="muted">Zeitkritische Dokumente, Prototypen, Ersatzteile – europaweit Direktfahrt. SLA: Übernahme ≤ 60–120 min (Region), GPS-Nachweis, Fotobeleg, Übergabe mit Namen/Unterschrift, optionale Kühlbox.</p>
-      <h3>Eil- & Sonderfahrten</h3>
-      <p class="muted">Medizinische Proben, sensible Sendungen, After-Hours-Logistik. Sicherheit: Fahrtjournal, temperaturstabile Lagerung (nach Absprache), Chain-of-Custody.</p>
-      <h3>Fest- & Tagestouren</h3>
-      <p class="muted">Halb-/Ganztagesdisposition für Produktion, Serviceteams oder City-Hopping. Planung: Zeitfenster, definierte Stops, transparente Pauschale, Fahrer in Bereitschaft.</p>
-    </div>
-  </section>
-
-  <section class="section" id="fahrzeuge">
-    <h2>Unsere Fahrzeugflotte<span class="bar"></span></h2>
-    <p class="muted">Schwarzer Vito & Caddy · Weiße Trafic, Sprinter & <b>Fiat Ducato</b> — gepflegt, einsatzbereit.</p>
-    <div class="grid-4">
-      <article class="card tile veh"><img src="assets/vito.jpg" alt="Mercedes Vito"><img class="overlay" src="assets/logo.png" alt=""><div class="body"><h3>Mercedes Vito</h3><p class="muted">Shuttle, bis 8 Personen.</p></div></article>
-      <article class="card tile veh"><img src="assets/caddy.jpg" alt="VW Caddy"><img class="overlay" src="assets/logo.png" alt=""><div class="body"><h3>VW Caddy</h3><p class="muted">Kompakt & wendig.</p></div></article>
-      <article class="card tile veh"><img src="assets/trafic.jpg" alt="Renault Trafic"><img class="overlay" src="assets/logo.png" alt=""><div class="body"><h3>Renault Trafic</h3><p class="muted">Viel Platz für Team & Gepäck.</p></div></article>
-      <article class="card tile veh"><img src="assets/sprinter.jpg" alt="Mercedes Sprinter"><img class="overlay" src="assets/logo.png" alt=""><div class="body"><h3>Mercedes Sprinter</h3><p class="muted">Gruppen- & Sondertransporte.</p></div></article>
-      <article class="card tile veh"><img src="assets/ducato.jpg" alt="Fiat Ducato"><img class="overlay" src="assets/logo.png" alt=""><div class="body"><h3>Fiat Ducato</h3><p class="muted">Volumenstark – Paletten & Langgut.</p></div></article>
-    </div>
-  </section>
-
-  <section class="section" id="preise">
-    <h2>Preise<span class="bar"></span></h2>
-    <div class="grid-3">
-      <article class="card pad"><h3>Basic</h3><p><b>€ 1,00/km</b></p><p class="muted">Kurzstrecken · Transparente Tarife</p></article>
-      <article class="card pad"><h3>Standard</h3><p><b>€ 0,90/km</b></p><p class="muted">20–100 km · schnelle Verfügbarkeit</p></article>
-      <article class="card pad"><h3>Premium</h3><p><b>€ 0,80/km</b></p><p class="muted">Langstrecke · VIP</p></article>
-    </div>
-    <p class="notice" style="margin-top:8px">Hinweis: Richtpreise. Endpreise je nach Route, Zeit und Verfügbarkeit.</p>
-  </section>
-
-  <section class="section" id="ki">
-    <h2>Zenty AI Route Intelligence<span class="bar"></span></h2>
-    <div class="aiRoute">
-      <div class="card pad">
-        <h3 style="margin-top:0">Schnellanfrage</h3>
-        <p class="muted">Start und Ziel wählen — Entfernung & Preis werden automatisch berechnet. Danach direkt buchen.</p>
-      </div>
-      <div class="mapWrap card">
-        <h3>Ulm-Region · Start: <b>Lonsee</b></h3>
-        <div id="map"></div>
-        <div class="controls">
-          <label>Start <input id="startInput" class="input" list="citylist" value="Lonsee"></label>
-          <label>Ziel <input id="destInput" class="input" list="citylist" placeholder="Ziel wählen…"></label>
-          <datalist id="citylist"></datalist>
-        </div>
-        <div class="infoRow">
-          <button class="btn" id="calcBtn">Preis berechnen</button>
-          <button class="btn gold" id="bookBtn" disabled>Jetzt buchen</button>
-          <div id="priceBox" class="stat">Entfernung: — km · Preis: —</div>
-        </div>
-        <small class="notice">Marker anklicken oder Liste nutzen · „Harita/Sat“ für Ansicht wechseln.</small>
-      </div>
-    </div>
-  </section>
-
-  <section class="section" id="kontakt">
-    <h2>Kontakt & Standort<span class="bar"></span></h2>
-    <div class="card pad">
-      <div class="footergrid">
-        <div>
-          <p class="muted">E-Mail: <a class="link-muted" href="mailto:info@zentyexpress.de">info@zentyexpress.de</a><br>Web: <a class="link-muted" href="https://zentyexpress.de" target="_blank" rel="noopener">zentyexpress.de</a></p>
-          <p class="muted">Sitz: <b>Sinabronner Str. 25, 89173 Lonsee</b> · Deutschland</p>
-          <div class="infoRow" style="margin-top:8px">
-            <a class="btn" id="waBtn" href="https://api.whatsapp.com/send?phone=49162575957" target="_blank" rel="noopener">WhatsApp</a>
-            <a class="btn" href="https://t.me/ZentyExpressBot" target="_blank" rel="noopener">Telegram</a>
-            <a class="btn gold" href="mailto:info@zentyexpress.de">E-Mail</a>
-          </div>
-        </div>
-        <div>
-          <h4>Rechtliches</h4>
-          <p class="muted"><a class="link-muted" href="#" aria-disabled="true">Impressum</a><br><a class="link-muted" href="#" aria-disabled="true">Datenschutz</a><br><a class="link-muted" href="#" aria-disabled="true">AGB</a></p>
-        </div>
-        <div>
-          <h4>Support</h4>
-          <p class="muted"><a class="link-muted" href="#leistungen">Leistungen</a><br><a class="link-muted" href="#fahrzeuge">Fahrzeuge</a><br><a class="link-muted" href="#ki">Buchung & Preise</a></p>
-        </div>
-      </div>
-    </div>
-  </section>
-</main>
-
-<footer>
-  <div class="container">© Zenty Express AI — Mobility & Transport · Final Signature Edition v12 · Made in Germany</div>
-</footer>
-
-<div class="modal" id="payModal" aria-hidden="true" role="dialog" aria-labelledby="payTitle">
-  <div class="modal-card">
-    <div class="modal-head">
-      <h3 id="payTitle">Buchung & Zahlung</h3>
-      <button class="close" id="closeModal" aria-label="Close">×</button>
-    </div>
-    <div class="form">
-      <p class="muted">Ödeme panelleri önceki dosyada mevcut. Bu sürüm tasarım ve metin iyileştirmelerine odaklıdır.</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <a href="https://api.whatsapp.com/send?phone=491625757957" target="_blank" style="padding:10px 20px;background:#25d366;border:0;border-radius:10px;color:#fff;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:.2s">
+        💬 WhatsApp
+      </a>
+      <a href="tel:+491625757957" style="padding:10px 20px;background:#000;border:0;border-radius:10px;color:#fff;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:.2s">
+        📞 Anrufen
+      </a>
+      <a href="#booking" style="padding:10px 20px;background:linear-gradient(135deg,#ffd700,#ffed4e);border:0;border-radius:10px;color:#000;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:.2s">
+        📝 Buchen
+      </a>
+      <button id="closeFloatingBar" style="padding:10px 16px;background:rgba(0,0,0,.3);border:0;border-radius:10px;color:#fff;cursor:pointer;font-size:1.2rem;transition:.2s">×</button>
     </div>
   </div>
 </div>
 
+<!-- Live Notifications -->
+<div id="liveNotifications" style="position:fixed;left:24px;bottom:100px;z-index:85;max-width:320px"></div>
+
+<!-- Particle Canvas -->
+<canvas id="particles" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:0.3"></canvas>
+
+<!-- Topbar -->
+<div class="topbar">
+  <div class="container">
+    <div class="topbar-content">
+      <div>
+        <span>📧 info@zentyexpress.de</span>
+        <span class="sep">|</span>
+        <span>📞 +49 162 5757957</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+        <a href="https://api.whatsapp.com/send?phone=491625757957" target="_blank">WhatsApp</a>
+        <span class="sep">|</span>
+        <a href="https://t.me/ZentyExpressBot" target="_blank">Telegram</a>
+        <span class="sep">|</span>
+        <span class="gold">🇩🇪 Made in Germany</span>
+        <span class="sep">|</span>
+        <select id="languageSelector" style="padding:6px 10px;background:rgba(20,183,255,.15);border:1px solid rgba(20,183,255,.3);border-radius:6px;color:var(--accent);font-weight:600;cursor:pointer;font-size:.85rem">
+          <option value="de">🇩🇪 Deutsch</option>
+          <option value="en">🇬🇧 English</option>
+          <option value="tr">🇹🇷 Türkçe</option>
+          <option value="ru">🇷🇺 Русский</option>
+          <option value="ar">🇸🇦 العربية</option>
+          <option value="fr">🇫🇷 Français</option>
+        </select>
+        <span class="sep">|</span>
+        
+        <!-- User Login Section -->
+        <button id="loginBtn" style="padding:6px 16px;background:linear-gradient(135deg,var(--accent),#7f00ff);border:0;border-radius:8px;color:#fff;font-weight:700;cursor:pointer;font-size:.85rem;display:inline-flex;align-items:center;gap:6px;transition:.2s">
+          <span>👤</span>
+          <span>Login</span>
+        </button>
+        
+        <div id="userProfile" style="display:none;position:relative">
+          <button id="profileBtn" style="padding:6px 12px;background:rgba(0,224,255,.15);border:1px solid rgba(0,224,255,.4);border-radius:8px;color:#fff;font-weight:700;cursor:pointer;font-size:.85rem;display:inline-flex;align-items:center;gap:8px;transition:.2s">
+            <span style="width:24px;height:24px;background:linear-gradient(135deg,var(--accent),#7f00ff);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.85rem">👤</span>
+            <span id="userName">Kunde</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Header -->
+<header class="header">
+  <div class="container">
+    <a href="#" class="brand">
+      <div class="logo-svg">
+        <svg viewBox="0 0 340 90" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="wave-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style="stop-color:#00e0ff;stop-opacity:1" />
+              <stop offset="50%" style="stop-color:#7f00ff;stop-opacity:1" />
+              <stop offset="100%" style="stop-color:#ff006e;stop-opacity:1" />
+            </linearGradient>
+          </defs>
+          
+          <!-- Flat Bold Z Icon with Gradient -->
+          <rect x="15" y="25" width="28" height="6" fill="url(#wave-gradient)" rx="3"/>
+          <rect x="15" y="38" width="28" height="6" fill="url(#wave-gradient)" rx="3" transform="rotate(45 29 41)"/>
+          <rect x="15" y="54" width="28" height="6" fill="url(#wave-gradient)" rx="3"/>
+          
+          <!-- ZENTY - Flat Bold with Gradient -->
+          <defs>
+            <linearGradient id="text-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+              <stop offset="100%" style="stop-color:#00e0ff;stop-opacity:1" />
+            </linearGradient>
+          </defs>
+          <text x="50" y="60" font-family="Inter, sans-serif" font-size="46" font-weight="900" fill="url(#text-gradient)" letter-spacing="-1">ZENTY</text>
+          
+          <!-- Accent Dot with Gradient -->
+          <circle cx="240" cy="38" r="5" fill="#00ff88"/>
+          
+          <!-- Wave underline -->
+          <path d="M50,65 Q90,60 130,65 T210,65" stroke="url(#wave-gradient)" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.7"/>
+          
+          <!-- AI Badge - Flat Style -->
+          <rect x="250" y="40" width="35" height="18" fill="url(#wave-gradient)" rx="3"/>
+          <text x="257" y="53" font-family="Inter, sans-serif" font-size="11" font-weight="900" fill="#000" letter-spacing="1">AI</text>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <div class="brand-name">EXPRESS</div>
+        <div class="brand-tagline">Mobility & Transport</div>
+      </div>
+    </a>
+    <nav class="nav" id="nav">
+      <a href="#leistungen" data-i18n="nav-services">Leistungen</a>
+      <a href="#fahrzeuge" data-i18n="nav-vehicles">Fahrzeuge</a>
+      <a href="#ai-features" data-i18n="nav-ai">AI Features</a>
+      <a href="#preise" data-i18n="nav-prices">Preise</a>
+      <a href="#kontakt" class="cta" data-i18n="nav-contact">Kontakt</a>
+    </nav>
+    <button class="hamburger" id="menuBtn" aria-label="Menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+</header>
+
+<!-- Hero -->
+<section class="hero" style="position:relative;overflow:hidden">
+  <!-- Video Background -->
+  <video autoplay muted loop playsinline style="position:absolute;top:50%;left:50%;min-width:100%;min-height:100%;width:auto;height:auto;transform:translate(-50%,-50%);z-index:0;opacity:.3">
+    <source src="https://cdn.coverr.co/videos/coverr-driving-on-highway-at-night-4436/1080p.mp4" type="video/mp4">
+  </video>
+  <div class="container">
+    <div class="hero-content">
+      <h1 data-i18n="hero-title">KI-gestützte Mobilität & Transport</h1>
+      <p class="lead" data-i18n="hero-lead">Intelligente Routenoptimierung, Echtzeit-Tracking und verlässliche Transportlösungen. <strong>Zenty Express AI</strong> revolutioniert Mobilität in Deutschland.</p>
+      <div class="badges">
+        <span class="badge">🤖 AI-Powered</span>
+        <span class="badge">🚀 24/7 Service</span>
+        <span class="badge">✅ TÜV <span data-i18n="badge-certified">Zertifiziert</span></span>
+        <span class="badge">🇪🇺 <span data-i18n="badge-eu">EU-weit</span></span>
+        <span class="badge">📱 QR Check-in</span>
+      </div>
+      <div class="hero-actions">
+        <a href="#leistungen" class="btn btn-primary" data-i18n="hero-btn-services">🗺️ Unsere Services</a>
+        <a href="#kontakt" class="btn btn-gold" data-i18n="hero-btn-contact">📞 Jetzt anfragen</a>
+        <a href="#ai-features" class="btn btn-secondary">🤖 AI Features</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Stats Section -->
+<section class="section" style="padding:60px 0;background:linear-gradient(135deg,rgba(0,224,255,.05),rgba(127,0,255,.05))">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:24px">
+      <div style="text-align:center;padding:32px;background:linear-gradient(135deg,var(--panel),var(--panel2));border:1px solid var(--border);border-radius:20px">
+        <div style="font-size:3rem;font-weight:900;background:linear-gradient(135deg,#00e0ff,#7f00ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent" data-count="2500">0</div>
+        <div style="color:var(--muted);margin-top:8px;font-weight:600">Zufriedene Kunden</div>
+      </div>
+      <div style="text-align:center;padding:32px;background:linear-gradient(135deg,var(--panel),var(--panel2));border:1px solid var(--border);border-radius:20px">
+        <div style="font-size:3rem;font-weight:900;background:linear-gradient(135deg,#ffd700,#ff006e);-webkit-background-clip:text;-webkit-text-fill-color:transparent" data-count="50">0</div>
+        <div style="color:var(--muted);margin-top:8px;font-weight:600">Fahrzeuge</div>
+      </div>
+      <div style="text-align:center;padding:32px;background:linear-gradient(135deg,var(--panel),var(--panel2));border:1px solid var(--border);border-radius:20px">
+        <div style="font-size:3rem;font-weight:900;background:linear-gradient(135deg,#00ff88,#00e0ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent" data-count="15000">0</div>
+        <div style="color:var(--muted);margin-top:8px;font-weight:600">Gefahrene km (täglich)</div>
+      </div>
+      <div style="text-align:center;padding:32px;background:linear-gradient(135deg,var(--panel),var(--panel2));border:1px solid var(--border);border-radius:20px">
+        <div style="font-size:3rem;font-weight:900;background:linear-gradient(135deg,#ff006e,#7f00ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent" data-count="98">0</div>
+        <div style="color:var(--muted);margin-top:8px;font-weight:600">Zufriedenheit (%)</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Leistungen -->
+<section class="section" id="leistungen">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Unsere Leistungen</h2>
+      <p class="section-desc">Maßgeschneiderte Mobilitätslösungen für jede Anforderung — 8 Kategorien, 50+ Services</p>
+    </div>
+    
+    <div class="grid grid-4">
+      <!-- Category 1 -->
+      <a href="services-ki-transport.html" style="text-decoration:none">
+      <div class="service-category" style="cursor:pointer;position:relative;overflow:hidden">
+        <div style="position:absolute;top:0;right:0;background:linear-gradient(135deg,rgba(0,224,255,.2),rgba(127,0,255,.2));padding:6px 12px;border-radius:0 0 0 12px;font-size:.75rem;font-weight:700;color:var(--accent)">HAUPTKATEGORIE</div>
+        <div class="service-icon">🚀</div>
+        <h3>KI Transport & Mobilität</h3>
+        <p class="muted">Intelligente Transportlösungen mit AI-Routenoptimierung und Echtzeit-Tracking</p>
+        <ul class="services-list">
+          <li>VIP Shuttle (QR Check-in/out)</li>
+          <li>Business & Schüler-Shuttle</li>
+          <li>Flughafentransfer</li>
+          <li>Kurierdienst Express</li>
+          <li>Fest- & Tagestouren</li>
+          <li>Sonderfahrten</li>
+          <li>Eiltransport</li>
+        </ul>
+        <div style="margin-top:20px;padding:12px;background:linear-gradient(135deg,rgba(0,224,255,.1),rgba(127,0,255,.05));border-radius:10px;text-align:center">
+          <span style="color:var(--accent);font-weight:700;font-size:.9rem">→ Details ansehen</span>
+        </div>
+      </div>
+      </a>
+      
+      <!-- Category 2 -->
+      <a href="services-sozial.html" style="text-decoration:none">
+      <div class="service-category" style="cursor:pointer">
+        <div class="service-icon">👴</div>
+        <h3>Sozial Service</h3>
+        <p class="muted">Spezialisierte Dienstleistungen für Senioren mit persönlicher Betreuung</p>
+        <ul class="services-list">
+          <li>Senioren Einkaufsservice</li>
+          <li>Begleitfahrten</li>
+          <li>Arzttermine & Apothekenfahrten</li>
+          <li>Behördengänge</li>
+          <li>Kulturelle Ausflüge</li>
+          <li>Familienbesuche</li>
+        </ul>
+        <div style="margin-top:20px;padding:12px;background:linear-gradient(135deg,rgba(0,224,255,.1),rgba(127,0,255,.05));border-radius:10px;text-align:center">
+          <span style="color:var(--accent);font-weight:700;font-size:.9rem">→ Details ansehen</span>
+        </div>
+      </div>
+      </a>
+      
+      <!-- Category 3 -->
+      <a href="services-reise.html" style="text-decoration:none">
+      <div class="service-category" style="cursor:pointer">
+        <div class="service-icon">✈️</div>
+        <h3>Reise & Transfer</h3>
+        <p class="muted">Komplette Reiseplanung und professionelle Transferkoordination</p>
+        <ul class="services-list">
+          <li>Reiseplanung & Beratung</li>
+          <li>Transfer Koordination</li>
+          <li>Event & Messe Transport</li>
+          <li>Hochzeits- & Festfahrten</li>
+          <li>Gruppenreisen</li>
+          <li>Airport Shuttle</li>
+        </ul>
+        <div style="margin-top:20px;padding:12px;background:linear-gradient(135deg,rgba(0,224,255,.1),rgba(127,0,255,.05));border-radius:10px;text-align:center">
+          <span style="color:var(--accent);font-weight:700;font-size:.9rem">→ Details ansehen</span>
+        </div>
+      </div>
+      </a>
+      
+      <!-- Category 4 -->
+      <a href="services-ai-tech.html" style="text-decoration:none">
+      <div class="service-category" style="cursor:pointer;position:relative">
+        <div style="position:absolute;top:0;right:0;background:linear-gradient(135deg,rgba(127,0,255,.2),rgba(255,0,110,.2));padding:6px 12px;border-radius:0 0 0 12px;font-size:.75rem;font-weight:700;color:#7f00ff">AI-POWERED</div>
+        <div class="service-icon">🤖</div>
+        <h3>AI & Technology</h3>
+        <p class="muted">Modernste Technologie für optimale Effizienz</p>
+        <ul class="services-list">
+          <li>AI Route Optimizer</li>
+          <li>AI Koordinator System</li>
+          <li>AI Reiseplanung</li>
+          <li>Smart Hotel & Flight Finder</li>
+          <li>Predictive Scheduling</li>
+          <li>Real-time GPS Tracking</li>
+          <li>QR-Code Boarding System</li>
+        </ul>
+        <div style="margin-top:20px;padding:12px;background:linear-gradient(135deg,rgba(0,224,255,.1),rgba(127,0,255,.05));border-radius:10px;text-align:center">
+          <span style="color:var(--accent);font-weight:700;font-size:.9rem">→ Details ansehen</span>
+        </div>
+      </div>
+      </a>
+      
+      <!-- Category 5 -->
+      <a href="services-business.html" style="text-decoration:none">
+      <div class="service-category" style="cursor:pointer">
+        <div class="service-icon">💼</div>
+        <h3>Business & Media</h3>
+        <p class="muted">Professionelle B2B-Lösungen und Marketingservices</p>
+        <ul class="services-list">
+          <li>B2B Transportlösungen</li>
+          <li>Corporate Fleet Management</li>
+          <li>Marketing & Branding</li>
+          <li>Medienproduktion</li>
+          <li>Fahrzeugbeschriftung</li>
+          <li>Content Creation</li>
+        </ul>
+        <div style="margin-top:20px;padding:12px;background:linear-gradient(135deg,rgba(0,224,255,.1),rgba(127,0,255,.05));border-radius:10px;text-align:center">
+          <span style="color:var(--accent);font-weight:700;font-size:.9rem">→ Details ansehen</span>
+        </div>
+      </div>
+      </a>
+      
+      <!-- Category 6 -->
+      <a href="services-event.html" style="text-decoration:none">
+      <div class="service-category" style="cursor:pointer">
+        <div class="service-icon">🎉</div>
+        <h3>Event & Entertainment</h3>
+        <p class="muted">Spezialtransporte für Veranstaltungen und Events</p>
+        <ul class="services-list">
+          <li>Konzert & Festival Shuttle</li>
+          <li>VIP Event-Service</li>
+          <li>Hochzeitskonvoi</li>
+          <li>After-Party Transport</li>
+          <li>Stadion-Transfer</li>
+          <li>Party-Bus Service</li>
+        </ul>
+        <div style="margin-top:20px;padding:12px;background:linear-gradient(135deg,rgba(0,224,255,.1),rgba(127,0,255,.05));border-radius:10px;text-align:center">
+          <span style="color:var(--accent);font-weight:700;font-size:.9rem">→ Details ansehen</span>
+        </div>
+      </div>
+      </a>
+      
+      <!-- Category 7 -->
+      <a href="services-medical.html" style="text-decoration:none">
+      <div class="service-category" style="cursor:pointer;position:relative">
+        <div style="position:absolute;top:0;right:0;background:linear-gradient(135deg,rgba(255,107,107,.2),rgba(255,0,110,.2));padding:6px 12px;border-radius:0 0 0 12px;font-size:.75rem;font-weight:700;color:#ff6b6b">24/7 NOTFALL</div>
+        <div class="service-icon">🏥</div>
+        <h3>Medical & Emergency</h3>
+        <p class="muted">Medizinische Transporte und Eilfahrten</p>
+        <ul class="services-list">
+          <li>Patiententransfer</li>
+          <li>Medikamenten-Express</li>
+          <li>Blutproben-Transport</li>
+          <li>Doktor-Hausbesuch Shuttle</li>
+          <li>Dialyse-Fahrten</li>
+          <li>24/7 Notfall-Service</li>
+        </ul>
+        <div style="margin-top:20px;padding:12px;background:linear-gradient(135deg,rgba(0,224,255,.1),rgba(127,0,255,.05));border-radius:10px;text-align:center">
+          <span style="color:var(--accent);font-weight:700;font-size:.9rem">→ Details ansehen</span>
+        </div>
+      </div>
+      </a>
+      
+      <!-- Category 8 -->
+      <a href="services-tourism.html" style="text-decoration:none">
+      <div class="service-category" style="cursor:pointer">
+        <div class="service-icon">🌍</div>
+        <h3>Tourism & Travel</h3>
+        <p class="muted">Touristische Touren mit AI-Planung</p>
+        <ul class="services-list">
+          <li>Stadttouren (AI-geplant)</li>
+          <li>Hotel-Airport-Pakete</li>
+          <li>Regionale Tur Koordination</li>
+          <li>Fototour-Transfer</li>
+          <li>Wine & Dine Tours</li>
+          <li>Multi-City Packages</li>
+        </ul>
+        <div style="margin-top:20px;padding:12px;background:linear-gradient(135deg,rgba(0,224,255,.1),rgba(127,0,255,.05));border-radius:10px;text-align:center">
+          <span style="color:var(--accent);font-weight:700;font-size:.9rem">→ Details ansehen</span>
+        </div>
+      </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Fahrzeuge -->
+<section class="section" id="fahrzeuge" style="background:radial-gradient(1400px 500px at 50% -10%, rgba(20,183,255,.08) 0%, transparent 60%)">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Unsere Fahrzeugflotte</h2>
+      <p class="section-desc">Premium Fahrzeuge mit ZENTY Express AI Branding — TÜV geprüft, vollversichert & einsatzbereit</p>
+    </div>
+    
+    <div class="grid grid-3" style="margin-bottom:28px">
+      <!-- 1. Audi Q7 - Business SUV -->
+      <div class="vehicle-card">
+        <div class="vehicle-image" style="position:relative">
+          <img src="assets/audi-q7.jpg" alt="Audi Q7 Business" onerror="this.src='https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=600&q=80'">
+          <div class="vehicle-badge" style="background:linear-gradient(135deg,#d4af37,#ffd700);color:#000;font-weight:900">BUSINESS 💼</div>
+        </div>
+        <div class="vehicle-body">
+          <h3>Audi Q7 SUV</h3>
+          <p><strong style="color:#fff;background:linear-gradient(135deg,#000,#333);padding:4px 12px;border-radius:6px;display:inline-block">Schwarz · Premium</strong></p>
+          <p style="font-size:.95rem;margin-top:12px;line-height:1.7">5 Personen · Business Class · Executive Transfer · Panoramadach</p>
+        </div>
+      </div>
+      
+      <!-- 2. Mercedes Vito - Schwarz Verglast -->
+      <div class="vehicle-card">
+        <div class="vehicle-image" style="position:relative">
+          <img src="assets/vito-schwarz.jpg" alt="Mercedes Vito Schwarz" onerror="this.src='https://images.unsplash.com/photo-1527786356703-4b100091cd2c?w=600&q=90';this.style.filter='brightness(0.7)'">
+          <div class="vehicle-badge" style="background:linear-gradient(135deg,#000,#333);color:#fff">VIP ⭐</div>
+        </div>
+        <div class="vehicle-body">
+          <h3>Mercedes Vito</h3>
+          <p><strong style="color:#000;background:linear-gradient(135deg,#00e0ff,#7f00ff);padding:4px 12px;border-radius:6px;display:inline-block">Schwarz · Verglast</strong></p>
+          <p style="font-size:.95rem;margin-top:12px;line-height:1.7">8 Personen · Komfort · Premium VIP Transfer · Business Fahrten</p>
+        </div>
+      </div>
+      
+      <!-- 2. Renault Trafic - Weiß Verglast -->
+      <div class="vehicle-card">
+        <div class="vehicle-image" style="position:relative">
+          <img src="assets/trafic-weiss.jpg" alt="Renault Trafic Weiß" onerror="this.src='https://images.unsplash.com/photo-1519003722824-194d4455a60c?w=600&q=80'">
+          <div class="vehicle-badge" style="background:linear-gradient(135deg,#fff,#e0e0e0);color:#000">Shuttle 🚐</div>
+        </div>
+        <div class="vehicle-body">
+          <h3>Renault Trafic</h3>
+          <p><strong style="color:#000;background:linear-gradient(135deg,#fff,#00e0ff);padding:4px 12px;border-radius:6px;display:inline-block">Weiß · Verglast</strong></p>
+          <p style="font-size:.95rem;margin-top:12px;line-height:1.7">9 Personen · Shuttle-Service · Gruppenfahrten · Gepäckraum</p>
+        </div>
+      </div>
+      
+      <!-- 3. VW Caddy - Schwarz Verglast -->
+      <div class="vehicle-card">
+        <div class="vehicle-image" style="position:relative">
+          <img src="assets/caddy-schwarz.jpg" alt="VW Caddy Schwarz" onerror="this.src='https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=600&q=80'">
+          <div class="vehicle-badge" style="background:linear-gradient(135deg,#000,#333);color:#fff">City 🏙️</div>
+        </div>
+        <div class="vehicle-body">
+          <h3>VW Caddy</h3>
+          <p><strong style="color:#000;background:linear-gradient(135deg,#00e0ff,#7f00ff);padding:4px 12px;border-radius:6px;display:inline-block">Schwarz · Verglast</strong></p>
+          <p style="font-size:.95rem;margin-top:12px;line-height:1.7">4 Personen · Kompakt · City-Fahrten · Kurierdienst</p>
+        </div>
+      </div>
+      
+      <!-- 4. Mercedes Sprinter - Weiß Geschlossen -->
+      <div class="vehicle-card">
+        <div class="vehicle-image" style="position:relative">
+          <img src="assets/sprinter-weiss.jpg" alt="Mercedes Sprinter Weiß" onerror="this.src='https://images.unsplash.com/photo-1527786356703-4b100091cd2c?w=600&q=80'">
+          <div class="vehicle-badge" style="background:linear-gradient(135deg,#fff,#e0e0e0);color:#000">Express 🚚</div>
+        </div>
+        <div class="vehicle-body">
+          <h3>Mercedes Sprinter</h3>
+          <p><strong style="color:#000;background:linear-gradient(135deg,#fff,#00e0ff);padding:4px 12px;border-radius:6px;display:inline-block">Weiß · Geschlossen</strong></p>
+          <p style="font-size:.95rem;margin-top:12px;line-height:1.7">Express Lieferung · Logistik · EU-Langstrecke</p>
+        </div>
+      </div>
+      
+      <!-- 5. Fiat Ducato - Weiß Geschlossen -->
+      <div class="vehicle-card">
+        <div class="vehicle-image" style="position:relative">
+          <img src="assets/ducato-weiss.jpg" alt="Fiat Ducato Weiß" onerror="this.src='https://images.unsplash.com/photo-1601362840469-51e4d8d58785?w=600&q=80'">
+          <div class="vehicle-badge" style="background:linear-gradient(135deg,#fff,#e0e0e0);color:#000">Cargo 📦</div>
+        </div>
+        <div class="vehicle-body">
+          <h3>Fiat Ducato</h3>
+          <p><strong style="color:#000;background:linear-gradient(135deg,#fff,#00e0ff);padding:4px 12px;border-radius:6px;display:inline-block">Weiß · Geschlossen</strong></p>
+          <p style="font-size:.95rem;margin-top:12px;line-height:1.7">Paletten · Langgut · Volumenstark · Kurier</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AI Features -->
+<section class="section" id="ai-features">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">AI Technology Features</h2>
+      <p class="section-desc">Modernste künstliche Intelligenz für optimale Effizienz und Kundenerfahrung</p>
+    </div>
+    
+    <div class="feature-grid">
+      <div class="feature-item">
+        <div class="feature-icon">🗺️</div>
+        <h4>AI Route Optimizer</h4>
+        <p>Echtzeit-Routenoptimierung basierend auf Verkehr & Wetter</p>
+      </div>
+      
+      <div class="feature-item">
+        <div class="feature-icon">📱</div>
+        <h4>QR Check-in System</h4>
+        <p>Kontaktloses Ein-/Auschecken mit automatischer Abrechnung</p>
+      </div>
+      
+      <div class="feature-item">
+        <div class="feature-icon">📍</div>
+        <h4>Live GPS Tracking</h4>
+        <p>Standortverfolgung in Echtzeit für Kunden & Disponenten</p>
+      </div>
+      
+      <div class="feature-item">
+        <div class="feature-icon">🧠</div>
+        <h4>Predictive Scheduling</h4>
+        <p>KI-basierte Vorhersage für optimale Fahrzeugauslastung</p>
+      </div>
+      
+      <div class="feature-item">
+        <div class="feature-icon">🏨</div>
+        <h4>Smart Travel Finder</h4>
+        <p>AI findet beste Hotels, Flüge & Routen für Ihre Reise</p>
+      </div>
+      
+      <div class="feature-item">
+        <div class="feature-icon">💚</div>
+        <h4>CO₂ Tracking</h4>
+        <p>Umwelt-Monitoring mit Optimierung für Nachhaltigkeit</p>
+      </div>
+      
+      <div class="feature-item">
+        <div class="feature-icon">💬</div>
+        <h4>Chatbot Assistant</h4>
+        <p>24/7 KI-Support via WhatsApp & Telegram</p>
+      </div>
+      
+      <div class="feature-item">
+        <div class="feature-icon">📊</div>
+        <h4>Smart Analytics</h4>
+        <p>Detaillierte Fahrtberichte & Kostenanalyse</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QR Boarding System -->
+<section class="section" style="background:radial-gradient(1400px 500px at 50% -10%, rgba(0,224,255,.08) 0%, transparent 60%)">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">QR Code Boarding System</h2>
+      <p class="section-desc">Kontaktlos ein- und aussteigen mit automatischer Zeiterfassung</p>
+    </div>
+    
+    <div class="grid grid-2">
+      <div class="card">
+        <h3 style="margin-top:0;display:flex;align-items:center;gap:10px">
+          <span style="font-size:2rem">📱</span>
+          Wie funktioniert es?
+        </h3>
+        <ul style="list-style:none;padding:0;margin:20px 0">
+          <li style="padding:12px 0;border-bottom:1px solid rgba(255,255,255,.05);display:flex;align-items:start;gap:12px">
+            <span style="color:var(--accent);font-weight:900;font-size:1.2rem">1</span>
+            <div>
+              <strong style="color:#fff">Buchung erhalten</strong>
+              <p style="margin:4px 0 0;color:var(--muted);font-size:.9rem">Sie bekommen einen personalisierten QR-Code per E-Mail oder WhatsApp</p>
+            </div>
+          </li>
+          <li style="padding:12px 0;border-bottom:1px solid rgba(255,255,255,.05);display:flex;align-items:start;gap:12px">
+            <span style="color:var(--accent);font-weight:900;font-size:1.2rem">2</span>
+            <div>
+              <strong style="color:#fff">Check-In</strong>
+              <p style="margin:4px 0 0;color:var(--muted);font-size:.9rem">QR-Code beim Einsteigen am Fahrzeug scannen - automatische Zeiterfassung</p>
+            </div>
+          </li>
+          <li style="padding:12px 0;border-bottom:1px solid rgba(255,255,255,.05);display:flex;align-items:start;gap:12px">
+            <span style="color:var(--accent);font-weight:900;font-size:1.2rem">3</span>
+            <div>
+              <strong style="color:#fff">Fahrt genießen</strong>
+              <p style="margin:4px 0 0;color:var(--muted);font-size:.9rem">Live-Tracking auf Ihrem Smartphone - jederzeit sehen wo Sie sind</p>
+            </div>
+          </li>
+          <li style="padding:12px 0;display:flex;align-items:start;gap:12px">
+            <span style="color:var(--accent);font-weight:900;font-size:1.2rem">4</span>
+            <div>
+              <strong style="color:#fff">Check-Out</strong>
+              <p style="margin:4px 0 0;color:var(--muted);font-size:.9rem">Beim Aussteigen erneut scannen - automatische Abrechnung & Rechnung</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+      
+      <div class="card" style="text-align:center;padding:40px">
+        <h3 style="margin:0 0 20px">Demo QR-Code</h3>
+        <div id="qr-demo" style="background:#fff;padding:20px;border-radius:16px;display:inline-block;margin-bottom:20px"></div>
+        <p style="color:var(--muted);margin:16px 0">Scannen Sie diesen Code mit Ihrer Kamera-App</p>
+        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:24px">
+          <span class="chip">✓ Kontaktlos</span>
+          <span class="chip">✓ Schnell</span>
+          <span class="chip">✓ Sicher</span>
+        </div>
+        <button class="btn btn-primary" style="margin-top:24px" onclick="alert('QR-System wird bei Buchung automatisch aktiviert!')">QR-Code anfordern</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Preise -->
+<section class="section" id="preise" style="background:radial-gradient(1400px 500px at 50% -10%, rgba(212,175,55,.08) 0%, transparent 60%)">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Transparente Preisstruktur</h2>
+      <p class="section-desc">Faire Kilometerpreise ohne versteckte Kosten — AI-optimiert für beste Effizienz</p>
+    </div>
+    
+    <div class="grid grid-3">
+      <div class="pricing-card">
+        <div class="pricing-header">
+          <h3>Basic</h3>
+        </div>
+        <div class="pricing-price">€1,00<small>/km</small></div>
+        <ul class="pricing-features">
+          <li>Kurzstrecken bis 20 km</li>
+          <li>City-Fahrten</li>
+          <li>Standardfahrzeuge</li>
+          <li>GPS Tracking</li>
+          <li>Online Buchung</li>
+        </ul>
+        <a href="#kontakt" class="btn btn-secondary" style="width:100%">Anfragen</a>
+      </div>
+      
+      <div class="pricing-card featured">
+        <div class="pricing-header">
+          <h3>Standard</h3>
+        </div>
+        <div class="pricing-price">€0,90<small>/km</small></div>
+        <ul class="pricing-features">
+          <li>20–100 km Strecken</li>
+          <li>Flughafentransfer</li>
+          <li>Komfortfahrzeuge</li>
+          <li>AI Route Optimizer</li>
+          <li>QR Check-in</li>
+          <li>Prioritäts-Support</li>
+        </ul>
+        <a href="#kontakt" class="btn btn-primary" style="width:100%">Buchen</a>
+      </div>
+      
+      <div class="pricing-card">
+        <div class="pricing-header">
+          <h3>Premium</h3>
+        </div>
+        <div class="pricing-price">€0,80<small>/km</small></div>
+        <ul class="pricing-features">
+          <li>Langstrecke über 100 km</li>
+          <li>VIP Service</li>
+          <li>Premium Fahrzeuge</li>
+          <li>Persönlicher Fahrer</li>
+          <li>Meet & Greet</li>
+          <li>Concierge Service</li>
+        </ul>
+        <a href="#kontakt" class="btn btn-gold" style="width:100%">VIP Anfragen</a>
+      </div>
+    </div>
+    
+    <p style="text-align:center;margin-top:32px;color:var(--muted)">
+      <strong>Hinweis:</strong> Preise sind Richtpreise. Endpreise variieren je nach Fahrzeug, Tageszeit und Verfügbarkeit. Pauschalpreise auf Anfrage.
+    </p>
+  </div>
+</section>
+
+<!-- Interactive Route Optimizer -->
+<section class="section" id="route-optimizer" style="background:linear-gradient(180deg,rgba(0,10,30,.3),transparent)">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">🗺️ AI Route Optimizer & Live Booking</h2>
+      <p class="section-desc">Intelligente Routenplanung mit Echtzeit-Verkehrsanalyse & sofortiger Buchung</p>
+    </div>
+    
+    <div style="display:grid;grid-template-columns:1fr 1.2fr;gap:28px;align-items:start">
+      <!-- Route Calculator -->
+      <div class="card" style="position:sticky;top:120px">
+        <h3 style="margin-top:0;display:flex;align-items:center;gap:10px">
+          <span style="font-size:1.8rem">🎯</span>
+          Route berechnen
+        </h3>
+        <div style="margin:24px 0">
+          <label style="display:block;margin-bottom:24px;position:relative">
+            <span style="display:block;margin-bottom:10px;color:#fff;font-size:1.1rem;font-weight:700">📍 Abholadresse (Start)</span>
+            <input type="text" id="startAddress" placeholder="Straße Nr, PLZ Stadt oder nur PLZ..." style="width:100%;padding:16px 20px;background:linear-gradient(135deg,var(--panel2),var(--panel));border:2px solid var(--border);border-radius:14px;color:#fff;font-size:1.05rem;font-weight:600;transition:.2s">
+            <div id="startSuggestions" style="position:absolute;top:100%;left:0;right:0;background:var(--panel);border:2px solid var(--accent);border-radius:12px;margin-top:8px;max-height:280px;overflow-y:auto;display:none;box-shadow:0 12px 40px rgba(0,0,0,.5);z-index:10"></div>
+            <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+              <span style="font-size:.85rem;color:#fff;font-weight:600">💡 Schnellwahl:</span>
+              <button type="button" class="quick-city" data-target="start" data-city="Lonsee" style="padding:6px 12px;background:rgba(0,224,255,.1);border:1px solid rgba(0,224,255,.3);border-radius:8px;color:var(--accent);font-size:.85rem;cursor:pointer;font-weight:600;transition:.2s">Lonsee</button>
+              <button type="button" class="quick-city" data-target="start" data-city="Ulm" style="padding:6px 12px;background:rgba(0,224,255,.1);border:1px solid rgba(0,224,255,.3);border-radius:8px;color:var(--accent);font-size:.85rem;cursor:pointer;font-weight:600;transition:.2s">Ulm</button>
+              <button type="button" class="quick-city" data-target="start" data-city="Stuttgart" style="padding:6px 12px;background:rgba(0,224,255,.1);border:1px solid rgba(0,224,255,.3);border-radius:8px;color:var(--accent);font-size:.85rem;cursor:pointer;font-weight:600;transition:.2s">Stuttgart</button>
+            </div>
+          </label>
+          
+          <label style="display:block;margin-bottom:28px;position:relative">
+            <span style="display:block;margin-bottom:10px;color:#fff;font-size:1.1rem;font-weight:700">🎯 Zieladresse</span>
+            <input type="text" id="destAddress" placeholder="Straße Nr, PLZ Stadt oder nur PLZ..." style="width:100%;padding:16px 20px;background:linear-gradient(135deg,var(--panel2),var(--panel));border:2px solid var(--border);border-radius:14px;color:#fff;font-size:1.05rem;font-weight:600;transition:.2s">
+            <div id="destSuggestions" style="position:absolute;top:100%;left:0;right:0;background:var(--panel);border:2px solid var(--accent);border-radius:12px;margin-top:8px;max-height:280px;overflow-y:auto;display:none;box-shadow:0 12px 40px rgba(0,0,0,.5);z-index:10"></div>
+            <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+              <span style="font-size:.85rem;color:#fff;font-weight:600">💡 Schnellwahl:</span>
+              <button type="button" class="quick-city" data-target="dest" data-city="München" style="padding:6px 12px;background:rgba(0,224,255,.1);border:1px solid rgba(0,224,255,.3);border-radius:8px;color:var(--accent);font-size:.85rem;cursor:pointer;font-weight:600;transition:.2s">München</button>
+              <button type="button" class="quick-city" data-target="dest" data-city="Stuttgart Flughafen" style="padding:6px 12px;background:rgba(0,224,255,.1);border:1px solid rgba(0,224,255,.3);border-radius:8px;color:var(--accent);font-size:.85rem;cursor:pointer;font-weight:600;transition:.2s">Flughafen</button>
+              <button type="button" class="quick-city" data-target="dest" data-city="Frankfurt" style="padding:6px 12px;background:rgba(0,224,255,.1);border:1px solid rgba(0,224,255,.3);border-radius:8px;color:var(--accent);font-size:.85rem;cursor:pointer;font-weight:600;transition:.2s">Frankfurt</button>
+            </div>
+          </label>
+          
+          <button class="btn btn-primary" id="calculateRoute" style="width:100%;justify-content:center;padding:16px;font-size:1.05rem">
+            🚀 AI Route berechnen
+          </button>
+          
+          <!-- Route Result -->
+          <div id="routeResult" style="margin-top:24px;padding:24px;background:linear-gradient(135deg,rgba(0,224,255,.15),rgba(127,0,255,.12));border:2px solid var(--accent);border-radius:16px;display:none;box-shadow:0 8px 32px rgba(0,224,255,.2)">
+            <h4 style="margin:0 0 16px;color:#fff;font-size:1.3rem;display:flex;align-items:center;gap:8px;font-weight:900">
+              <span>📊</span> Routendetails
+            </h4>
+            <div style="display:grid;gap:12px">
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.2)">
+                <span style="color:#fff;font-size:1.05rem;font-weight:600">📏 Entfernung:</span>
+                <strong id="routeDistance" style="color:#00ff88;font-size:1.2rem">— km</strong>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.2)">
+                <span style="color:#fff;font-size:1.05rem;font-weight:600">⏱ Fahrzeit:</span>
+                <strong id="routeTime" style="color:#00ff88;font-size:1.2rem">— min</strong>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.2)">
+                <span style="color:#fff;font-size:1.05rem;font-weight:600">💰 Tarif:</span>
+                <strong id="routeTariff" style="color:#ffd700;font-size:1.2rem">— €/km</strong>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:18px;background:linear-gradient(135deg,rgba(255,215,0,.25),rgba(255,237,78,.15));margin:4px -8px -8px;border-radius:12px;border:1px solid rgba(255,215,0,.3)">
+                <span style="color:#fff;font-size:1.25rem;font-weight:700">Gesamtpreis:</span>
+                <strong id="routePrice" style="color:#ffd700;font-size:1.8rem;font-weight:900">— €</strong>
+              </div>
+            </div>
+            <button class="btn btn-gold" id="bookNowWithPayment" style="width:100%;margin-top:20px;justify-content:center;padding:16px;font-size:1.05rem">
+              💳 Jetzt buchen & bezahlen
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Modern Map -->
+      <div class="card" style="padding:20px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+          <h3 style="margin:0;display:flex;align-items:center;gap:10px">
+            <span style="font-size:1.8rem">🌍</span>
+            Live Karte - Ulm Region
+          </h3>
+          <div style="display:flex;gap:8px">
+            <button id="mapStyleStreet" style="padding:8px 14px;background:var(--panel2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-weight:600;cursor:pointer;font-size:.85rem;transition:.2s">🗺️ Straße</button>
+            <button id="mapStyleSat" style="padding:8px 14px;background:var(--accent);border:0;border-radius:8px;color:#000;font-weight:600;cursor:pointer;font-size:.85rem;transition:.2s">🛰️ Satellit HD</button>
+          </div>
+        </div>
+        
+        <div id="map" style="height:520px;border-radius:16px;overflow:hidden;border:2px solid var(--border);box-shadow:0 10px 40px rgba(0,0,0,.3);position:relative"></div>
+        
+        <!-- Map Controls -->
+        <div style="display:flex;gap:10px;margin-top:16px;justify-content:center;flex-wrap:wrap">
+          <button id="zoom3D" style="padding:10px 16px;background:linear-gradient(135deg,rgba(0,224,255,.15),rgba(127,0,255,.1));border:1px solid var(--accent);border-radius:8px;color:var(--text);font-weight:600;cursor:pointer;font-size:.9rem;transition:.2s">
+            🏢 3D Ansicht
+          </button>
+          <button id="trafficLayer" style="padding:10px 16px;background:var(--panel2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-weight:600;cursor:pointer;font-size:.9rem;transition:.2s">
+            🚗 Verkehr anzeigen
+          </button>
+          <button id="fullscreenMap" style="padding:10px 16px;background:var(--panel2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-weight:600;cursor:pointer;font-size:.9rem;transition:.2s">
+            ⛶ Vollbild
+          </button>
+        </div>
+        
+        <div style="margin-top:16px;padding:16px;background:var(--panel2);border-radius:12px;border:1px solid var(--border)">
+          <h4 style="margin:0 0 12px;color:#fff;font-size:1rem">🤖 AI Features aktiv:</h4>
+          <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px">
+            <div style="display:flex;align-items:center;gap:8px;font-size:.9rem;color:var(--muted)">
+              <span style="color:#00ff88">✓</span> Verkehrsanalyse
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:.9rem;color:var(--muted)">
+              <span style="color:#00ff88">✓</span> Wetterprognose
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:.9rem;color:var(--muted)">
+              <span style="color:#00ff88">✓</span> Route-Optimierung
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:.9rem;color:var(--muted)">
+              <span style="color:#00ff88">✓</span> Preis-Kalkulation
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Payment Modal -->
+<div id="paymentModal" style="position:fixed;inset:0;z-index:999;background:rgba(0,0,0,.85);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:20px">
+  <div style="width:min(600px,95vw);max-height:90vh;overflow-y:auto;background:linear-gradient(135deg,var(--panel),var(--panel2));border:2px solid var(--border);border-radius:24px;box-shadow:0 20px 80px rgba(0,0,0,.6)">
+    <!-- Header -->
+    <div style="padding:28px;background:linear-gradient(135deg,var(--blue2),var(--accent));border-radius:22px 22px 0 0;position:relative">
+      <button id="closePayment" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,.2);border:0;color:#fff;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1.3rem;transition:.2s">×</button>
+      <h3 style="margin:0 0 8px;color:#fff;font-size:1.6rem">💳 Zahlung auswählen</h3>
+      <p style="margin:0;color:rgba(255,255,255,.9);font-size:.95rem">Sichere Bezahlung - SSL verschlüsselt</p>
+      <div id="paymentAmount" style="margin-top:16px;padding:16px;background:rgba(0,0,0,.3);border-radius:12px">
+        <span style="color:rgba(255,255,255,.8);font-size:.9rem">Gesamtbetrag:</span>
+        <div style="font-size:2rem;font-weight:900;color:#fff;margin-top:4px">€ <span id="totalAmount">0.00</span></div>
+      </div>
+    </div>
+    
+    <!-- Payment Methods -->
+    <div style="padding:28px">
+      <h4 style="margin:0 0 20px;color:#fff;font-size:1.1rem">Zahlungsmethode wählen:</h4>
+      
+      <div style="display:grid;gap:12px">
+        <!-- PayPal -->
+        <button class="payment-method" data-method="paypal" style="display:flex;align-items:center;gap:14px;padding:16px;background:var(--panel2);border:2px solid var(--border);border-radius:14px;cursor:pointer;transition:.2s;text-align:left">
+          <div style="width:50px;height:50px;background:linear-gradient(135deg,#0070ba,#003087);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;color:#fff">💙</div>
+          <div style="flex:1">
+            <div style="color:#fff;font-weight:700;font-size:1.05rem">PayPal</div>
+            <div style="color:var(--accent);font-size:.85rem;font-weight:600">paypal.me/zentyexpress</div>
+          </div>
+          <span style="color:var(--accent);font-size:1.2rem">→</span>
+        </button>
+        
+        <!-- Klarna -->
+        <button class="payment-method" data-method="klarna" style="display:flex;align-items:center;gap:14px;padding:16px;background:var(--panel2);border:2px solid var(--border);border-radius:14px;cursor:pointer;transition:.2s;text-align:left">
+          <div style="width:50px;height:50px;background:linear-gradient(135deg,#ffb3c7,#ff6b9d);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;color:#fff">💖</div>
+          <div style="flex:1">
+            <div style="color:#fff;font-weight:700;font-size:1.05rem">Klarna</div>
+            <div style="color:var(--muted);font-size:.85rem">Später bezahlen - flexibel</div>
+          </div>
+          <span style="color:var(--accent);font-size:1.2rem">→</span>
+        </button>
+        
+        <!-- Kreditkarte -->
+        <button class="payment-method" data-method="card" style="display:flex;align-items:center;gap:14px;padding:16px;background:var(--panel2);border:2px solid var(--border);border-radius:14px;cursor:pointer;transition:.2s;text-align:left">
+          <div style="width:50px;height:50px;background:linear-gradient(135deg,#667eea,#764ba2);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;color:#fff">💳</div>
+          <div style="flex:1">
+            <div style="color:#fff;font-weight:700;font-size:1.05rem">Kreditkarte</div>
+            <div style="color:var(--muted);font-size:.85rem">Visa, Mastercard, Amex</div>
+          </div>
+          <span style="color:var(--accent);font-size:1.2rem">→</span>
+        </button>
+        
+        <!-- Apple Pay -->
+        <button class="payment-method" data-method="applepay" style="display:flex;align-items:center;gap:14px;padding:16px;background:var(--panel2);border:2px solid var(--border);border-radius:14px;cursor:pointer;transition:.2s;text-align:left">
+          <div style="width:50px;height:50px;background:linear-gradient(135deg,#000,#333);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;color:#fff">🍎</div>
+          <div style="flex:1">
+            <div style="color:#fff;font-weight:700;font-size:1.05rem">Apple Pay</div>
+            <div style="color:var(--muted);font-size:.85rem">Schnell & sicher - Touch ID</div>
+          </div>
+          <span style="color:var(--accent);font-size:1.2rem">→</span>
+        </button>
+        
+        <!-- Google Pay -->
+        <button class="payment-method" data-method="googlepay" style="display:flex;align-items:center;gap:14px;padding:16px;background:var(--panel2);border:2px solid var(--border);border-radius:14px;cursor:pointer;transition:.2s;text-align:left">
+          <div style="width:50px;height:50px;background:linear-gradient(135deg,#4285f4,#34a853);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;color:#fff">🔵</div>
+          <div style="flex:1">
+            <div style="color:#fff;font-weight:700;font-size:1.05rem">Google Pay</div>
+            <div style="color:var(--muted);font-size:.85rem">Mit einem Klick bezahlen</div>
+          </div>
+          <span style="color:var(--accent);font-size:1.2rem">→</span>
+        </button>
+        
+        <!-- Echtzeit-Überweisung -->
+        <button class="payment-method" data-method="sofort" style="display:flex;align-items:center;gap:14px;padding:16px;background:var(--panel2);border:2px solid var(--border);border-radius:14px;cursor:pointer;transition:.2s;text-align:left">
+          <div style="width:50px;height:50px;background:linear-gradient(135deg,#ff6b6b,#ee5a6f);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;color:#fff">⚡</div>
+          <div style="flex:1">
+            <div style="color:#fff;font-weight:700;font-size:1.05rem">Sofort-Überweisung</div>
+            <div style="color:var(--muted);font-size:.85rem">Direkt vom Bankkonto</div>
+          </div>
+          <span style="color:var(--accent);font-size:1.2rem">→</span>
+        </button>
+        
+        <!-- Rechnung -->
+        <button class="payment-method" data-method="invoice" style="display:flex;align-items:center;gap:14px;padding:16px;background:var(--panel2);border:2px solid var(--border);border-radius:14px;cursor:pointer;transition:.2s;text-align:left">
+          <div style="width:50px;height:50px;background:linear-gradient(135deg,var(--gold),var(--gold2));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;color:#000">📄</div>
+          <div style="flex:1">
+            <div style="color:#fff;font-weight:700;font-size:1.05rem">Rechnung</div>
+            <div style="color:var(--muted);font-size:.85rem">Nach Fahrt bezahlen (14 Tage)</div>
+          </div>
+          <span style="color:var(--accent);font-size:1.2rem">→</span>
+        </button>
+      </div>
+      
+      <p style="margin-top:20px;font-size:.85rem;color:var(--muted);text-align:center">
+        🔒 Alle Zahlungen sind SSL-verschlüsselt und sicher
+      </p>
+    </div>
+  </div>
+</div>
+
+<style>
+.payment-method:hover{
+  border-color:var(--accent)!important;
+  transform:translateX(6px);
+  box-shadow:0 6px 20px rgba(0,224,255,.2);
+}
+#startAddress:focus,#destAddress:focus{
+  border-color:var(--accent)!important;
+  box-shadow:0 0 0 4px rgba(0,224,255,.2)!important;
+  background:var(--panel2)!important;
+}
+.quick-city:hover{
+  background:rgba(0,224,255,.25)!important;
+  border-color:var(--accent)!important;
+  transform:scale(1.05);
+}
+#startSuggestions::-webkit-scrollbar,#destSuggestions::-webkit-scrollbar{width:8px}
+#startSuggestions::-webkit-scrollbar-track,#destSuggestions::-webkit-scrollbar-track{background:var(--panel2);border-radius:4px}
+#startSuggestions::-webkit-scrollbar-thumb,#destSuggestions::-webkit-scrollbar-thumb{background:var(--accent);border-radius:4px}
+#loginBtn:hover{background:linear-gradient(135deg,#7f00ff,var(--accent));transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,224,255,.4)}
+#profileBtn:hover{border-color:var(--accent);background:rgba(0,224,255,.2);transform:translateY(-1px)}
+#closeLogin:hover{background:rgba(255,0,110,.2);transform:rotate(90deg)}
+.social-login:hover{background:rgba(0,224,255,.1)!important;border-color:var(--accent)!important;transform:translateY(-2px)}
+.profile-menu-item:hover{background:rgba(0,224,255,.15)!important}
+#loginEmail:focus,#loginPassword:focus,#registerName:focus,#registerEmail:focus,#registerPhone:focus,#registerPassword:focus{
+  border-color:var(--accent)!important;
+  box-shadow:0 0 0 3px rgba(0,224,255,.2)!important
+}
+</style>
+
+<!-- CTA -->
+<section class="section">
+  <div class="container">
+    <div class="cta-section">
+      <h2>Bereit für intelligente Mobilität?</h2>
+      <p>Kontaktieren Sie uns jetzt und erleben Sie den Unterschied von AI-gestützter Transportlogistik</p>
+      <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap">
+        <a href="#booking" class="btn btn-primary">📞 Online Buchen</a>
+        <a href="https://api.whatsapp.com/send?phone=491625757957" target="_blank" class="btn btn-secondary">💬 WhatsApp</a>
+        <a href="https://t.me/ZentyExpressBot" target="_blank" class="btn btn-secondary">✈️ Telegram</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Online Booking Form -->
+<section class="section" id="booking" style="background:radial-gradient(1400px 500px at 50% -10%, rgba(0,224,255,.08) 0%, transparent 60%)">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Online Buchung</h2>
+      <p class="section-desc">Schnell und einfach - Ihre Fahrt in 3 Minuten gebucht</p>
+    </div>
+    
+    <div class="grid grid-2" style="gap:24px">
+      <div class="card">
+        <h3 style="margin-top:0">📝 Buchungsformular</h3>
+        <form id="bookingForm" style="margin-top:24px">
+          <div style="display:grid;gap:16px">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <label>
+                <span style="display:block;margin-bottom:6px;color:var(--muted);font-size:.9rem">Vorname *</span>
+                <input type="text" name="firstName" required style="width:100%;padding:12px;background:var(--panel2);border:1px solid var(--border);border-radius:8px;color:#fff">
+              </label>
+              <label>
+                <span style="display:block;margin-bottom:6px;color:var(--muted);font-size:.9rem">Nachname *</span>
+                <input type="text" name="lastName" required style="width:100%;padding:12px;background:var(--panel2);border:1px solid var(--border);border-radius:8px;color:#fff">
+              </label>
+            </div>
+            
+            <label>
+              <span style="display:block;margin-bottom:6px;color:var(--muted);font-size:.9rem">E-Mail *</span>
+              <input type="email" name="email" required style="width:100%;padding:12px;background:var(--panel2);border:1px solid var(--border);border-radius:8px;color:#fff">
+            </label>
+            
+            <label>
+              <span style="display:block;margin-bottom:6px;color:var(--muted);font-size:.9rem">Telefon *</span>
+              <input type="tel" name="phone" required style="width:100%;padding:12px;background:var(--panel2);border:1px solid var(--border);border-radius:8px;color:#fff">
+            </label>
+            
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <label>
+                <span style="display:block;margin-bottom:6px;color:var(--muted);font-size:.9rem">Datum *</span>
+                <input type="date" name="date" required style="width:100%;padding:12px;background:var(--panel2);border:1px solid var(--border);border-radius:8px;color:#fff">
+              </label>
+              <label>
+                <span style="display:block;margin-bottom:6px;color:var(--muted);font-size:.9rem">Uhrzeit *</span>
+                <input type="time" name="time" required style="width:100%;padding:12px;background:var(--panel2);border:1px solid var(--border);border-radius:8px;color:#fff">
+              </label>
+            </div>
+            
+            <label>
+              <span style="display:block;margin-bottom:6px;color:var(--muted);font-size:.9rem">Service auswählen *</span>
+              <select name="service" required style="width:100%;padding:12px;background:var(--panel2);border:1px solid var(--border);border-radius:8px;color:#fff">
+                <option value="">Bitte wählen...</option>
+                <option>VIP Shuttle</option>
+                <option>Business Transfer</option>
+                <option>Flughafentransfer</option>
+                <option>Kurierdienst</option>
+                <option>Seniorenservice</option>
+                <option>Gruppentransfer</option>
+                <option>Tagestouren</option>
+              </select>
+            </label>
+            
+            <label>
+              <span style="display:block;margin-bottom:6px;color:var(--muted);font-size:.9rem">Abholort *</span>
+              <input type="text" name="pickup" required placeholder="Straße, PLZ, Stadt" style="width:100%;padding:12px;background:var(--panel2);border:1px solid var(--border);border-radius:8px;color:#fff">
+            </label>
+            
+            <label>
+              <span style="display:block;margin-bottom:6px;color:var(--muted);font-size:.9rem">Zielort *</span>
+              <input type="text" name="destination" required placeholder="Straße, PLZ, Stadt" style="width:100%;padding:12px;background:var(--panel2);border:1px solid var(--border);border-radius:8px;color:#fff">
+            </label>
+            
+            <label>
+              <span style="display:block;margin-bottom:6px;color:var(--muted);font-size:.9rem">Anzahl Passagiere</span>
+              <input type="number" name="passengers" min="1" max="12" value="1" style="width:100%;padding:12px;background:var(--panel2);border:1px solid var(--border);border-radius:8px;color:#fff">
+            </label>
+            
+            <label>
+              <span style="display:block;margin-bottom:6px;color:var(--muted);font-size:.9rem">Besondere Wünsche</span>
+              <textarea name="notes" rows="3" placeholder="Gepäck, Kindersitze, etc..." style="width:100%;padding:12px;background:var(--panel2);border:1px solid var(--border);border-radius:8px;color:#fff;resize:vertical"></textarea>
+            </label>
+            
+            <label style="display:flex;align-items:start;gap:10px;cursor:pointer">
+              <input type="checkbox" name="terms" required style="margin-top:4px">
+              <span style="color:var(--muted);font-size:.9rem">Ich akzeptiere die <a href="#" style="color:var(--accent)">AGB</a> und <a href="#" style="color:var(--accent)">Datenschutzerklärung</a> *</span>
+            </label>
+            
+            <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;padding:14px">
+              ✓ Buchung absenden
+            </button>
+          </div>
+        </form>
+      </div>
+      
+      <div class="card">
+        <h3 style="margin-top:0">ℹ️ Buchungsinformationen</h3>
+        <div style="margin-top:24px">
+          <div style="padding:16px;background:var(--panel2);border-radius:10px;border:1px solid var(--border);margin-bottom:16px">
+            <h4 style="margin:0 0 12px;color:#fff;display:flex;align-items:center;gap:8px">
+              <span style="font-size:1.5rem">🎯</span>
+              Sofortige Bestätigung
+            </h4>
+            <p style="color:var(--muted);margin:0;font-size:.95rem">Sie erhalten innerhalb von 5 Minuten eine Buchungsbestätigung per E-Mail mit QR-Code.</p>
+          </div>
+          
+          <div style="padding:16px;background:var(--panel2);border-radius:10px;border:1px solid var(--border);margin-bottom:16px">
+            <h4 style="margin:0 0 12px;color:#fff;display:flex;align-items:center;gap:8px">
+              <span style="font-size:1.5rem">💳</span>
+              Flexible Zahlung
+            </h4>
+            <p style="color:var(--muted);margin:0;font-size:.95rem">Zahlung nach der Fahrt per Rechnung, Karte oder PayPal. Keine Vorauszahlung nötig.</p>
+          </div>
+          
+          <div style="padding:16px;background:var(--panel2);border-radius:10px;border:1px solid var(--border);margin-bottom:16px">
+            <h4 style="margin:0 0 12px;color:#fff;display:flex;align-items:center;gap:8px">
+              <span style="font-size:1.5rem">🔄</span>
+              Kostenlose Stornierung
+            </h4>
+            <p style="color:var(--muted);margin:0;font-size:.95rem">Bis 24 Stunden vor Fahrtantritt kostenlos stornierbar. Danach 50% Stornogebühr.</p>
+          </div>
+          
+          <div style="padding:16px;background:var(--panel2);border-radius:10px;border:1px solid var(--border)">
+            <h4 style="margin:0 0 12px;color:#fff;display:flex;align-items:center;gap:8px">
+              <span style="font-size:1.5rem">📱</span>
+              Live Tracking
+            </h4>
+            <p style="color:var(--muted);margin:0;font-size:.95rem">Verfolgen Sie Ihr Fahrzeug in Echtzeit auf Ihrem Smartphone. Link kommt per SMS.</p>
+          </div>
+          
+          <div style="margin-top:24px;padding:20px;background:linear-gradient(135deg,rgba(0,224,255,.1),rgba(255,215,0,.1));border-radius:12px;border:1px solid var(--border)">
+            <h4 style="margin:0 0 8px;color:#fff">🎁 Neukunden-Bonus</h4>
+            <p style="margin:0;color:var(--gold2);font-weight:700;font-size:1.1rem">10% Rabatt auf Ihre erste Fahrt!</p>
+            <p style="margin:8px 0 0;color:var(--muted);font-size:.85rem">Code wird automatisch angewendet</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section class="section" style="background:radial-gradient(1400px 500px at 50% -10%, rgba(0,224,255,.08) 0%, transparent 60%)">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">⭐ Was unsere Kunden sagen</h2>
+      <p class="section-desc">Über 2.500+ zufriedene Kunden vertrauen auf Zenty Express AI</p>
+    </div>
+    
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px">
+      <div class="card" style="padding:28px">
+        <div style="display:flex;gap:12px;margin-bottom:16px">
+          <img src="https://i.pravatar.cc/80?img=12" alt="" style="width:60px;height:60px;border-radius:50%;border:2px solid var(--accent)">
+          <div>
+            <h4 style="margin:0;color:#fff;font-size:1.1rem">Michael Weber</h4>
+            <p style="margin:4px 0 0;color:var(--muted);font-size:.85rem">Geschäftsführer</p>
+            <div style="color:#ffd700;margin-top:4px">⭐⭐⭐⭐⭐</div>
+          </div>
+        </div>
+        <p style="color:var(--text);line-height:1.7;font-size:.95rem">"Professioneller Service! Die AI-Routenoptimierung spart uns täglich Zeit und Geld. Absolute Empfehlung!"</p>
+      </div>
+      
+      <div class="card" style="padding:28px">
+        <div style="display:flex;gap:12px;margin-bottom:16px">
+          <img src="https://i.pravatar.cc/80?img=45" alt="" style="width:60px;height:60px;border-radius:50%;border:2px solid var(--accent)">
+          <div>
+            <h4 style="margin:0;color:#fff;font-size:1.1rem">Sarah Müller</h4>
+            <p style="margin:4px 0 0;color:var(--muted);font-size:.85rem">Event Managerin</p>
+            <div style="color:#ffd700;margin-top:4px">⭐⭐⭐⭐⭐</div>
+          </div>
+        </div>
+        <p style="color:var(--text);line-height:1.7;font-size:.95rem">"QR Check-in ist genial! Unsere Gäste lieben die unkomplizierte Abwicklung. Top moderne Lösung!"</p>
+      </div>
+      
+      <div class="card" style="padding:28px">
+        <div style="display:flex;gap:12px;margin-bottom:16px">
+          <img src="https://i.pravatar.cc/80?img=33" alt="" style="width:60px;height:60px;border-radius:50%;border:2px solid var(--accent)">
+          <div>
+            <h4 style="margin:0;color:#fff;font-size:1.1rem">Thomas Schmidt</h4>
+            <p style="margin:4px 0 0;color:var(--muted);font-size:.85rem">Privatperson</p>
+            <div style="color:#ffd700;margin-top:4px">⭐⭐⭐⭐⭐</div>
+          </div>
+        </div>
+        <p style="color:var(--text);line-height:1.7;font-size:.95rem">"Flughafentransfer war pünktlich und komfortabel. Fahrer sehr freundlich. Gerne wieder!"</p>
+      </div>
+    </div>
+    
+    <div style="text-align:center;margin-top:32px">
+      <p style="color:var(--gold2);font-size:1.2rem;font-weight:700">⭐⭐⭐⭐⭐ 4.9/5.0 Durchschnittsbewertung</p>
+      <p style="color:var(--muted);margin-top:8px">Basierend auf 2.500+ Google & Trustpilot Reviews</p>
+    </div>
+  </div>
+</section>
+
+<!-- Kontakt -->
+<section class="section" id="kontakt">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Kontakt & Standort</h2>
+      <p class="section-desc">Wir sind 24/7 für Sie erreichbar — per Telefon, WhatsApp, Telegram oder E-Mail</p>
+    </div>
+    
+    <div class="contact-grid">
+      <div class="contact-info">
+        <h3>Kontaktinformationen</h3>
+        
+        <div class="contact-item">
+          <div class="contact-icon">📍</div>
+          <div class="contact-text">
+            <h4>Adresse</h4>
+            <p>
+              Zenty Express AI Mobility & Transport<br>
+              Sinabronner Str. 25<br>
+              89173 Lonsee<br>
+              Deutschland
+            </p>
+          </div>
+        </div>
+        
+        <div class="contact-item">
+          <div class="contact-icon">📞</div>
+          <div class="contact-text">
+            <h4>Telefon</h4>
+            <p><a href="tel:+4916257579570">+49 162 5757957</a></p>
+            <p style="font-size:.85rem">24/7 Hotline verfügbar</p>
+          </div>
+        </div>
+        
+        <div class="contact-item">
+          <div class="contact-icon">📧</div>
+          <div class="contact-text">
+            <h4>E-Mail</h4>
+            <p><a href="mailto:info@zentyexpress.de">info@zentyexpress.de</a></p>
+            <p style="font-size:.85rem">Antwort binnen 24 Stunden</p>
+          </div>
+        </div>
+        
+        <div class="contact-item">
+          <div class="contact-icon">💬</div>
+          <div class="contact-text">
+            <h4>Messenger</h4>
+            <p>
+              <a href="https://api.whatsapp.com/send?phone=491625757957" target="_blank">WhatsApp</a> · 
+              <a href="https://t.me/ZentyExpressBot" target="_blank">Telegram</a>
+            </p>
+            <p style="font-size:.85rem">Instant Booking via Chat</p>
+          </div>
+        </div>
+        
+        <div style="margin-top:28px;display:flex;gap:12px;flex-wrap:wrap">
+          <a href="https://api.whatsapp.com/send?phone=491625757957" target="_blank" class="btn btn-primary">💬 WhatsApp Chat</a>
+          <a href="tel:+4916257579570" class="btn btn-gold">📞 Anrufen</a>
+        </div>
+      </div>
+      
+      <div class="map-embed">
+        <iframe 
+          src="https://www.openstreetmap.org/export/embed.html?bbox=9.9074%2C48.5059%2C9.9474%2C48.5459&layer=mapnik&marker=48.5259%2C9.9274" 
+          loading="lazy">
+        </iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="section" id="faq">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">❓ Häufig gestellte Fragen (FAQ)</h2>
+      <p class="section-desc">Schnelle Antworten auf die wichtigsten Fragen</p>
+    </div>
+    
+    <div style="max-width:900px;margin:0 auto">
+      <div class="faq-item" style="background:var(--panel);border:1px solid var(--border);border-radius:16px;margin-bottom:16px;overflow:hidden">
+        <button class="faq-question" style="width:100%;padding:20px 24px;background:transparent;border:0;color:#fff;font-size:1.1rem;font-weight:700;text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center">
+          <span>Wie funktioniert die Online-Buchung?</span>
+          <span style="font-size:1.5rem;transition:.3s">+</span>
+        </button>
+        <div class="faq-answer" style="max-height:0;overflow:hidden;transition:max-height .3s ease-out">
+          <div style="padding:0 24px 24px;color:#fff;line-height:1.8">
+            Einfach Start & Ziel eingeben, Route berechnen lassen und Zahlungsmethode wählen. Sie erhalten sofort eine Bestätigung mit QR-Code per E-Mail!
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item" style="background:var(--panel);border:1px solid var(--border);border-radius:16px;margin-bottom:16px;overflow:hidden">
+        <button class="faq-question" style="width:100%;padding:20px 24px;background:transparent;border:0;color:#fff;font-size:1.1rem;font-weight:700;text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center">
+          <span>Welche Zahlungsmethoden akzeptieren Sie?</span>
+          <span style="font-size:1.5rem;transition:.3s">+</span>
+        </button>
+        <div class="faq-answer" style="max-height:0;overflow:hidden;transition:max-height .3s ease-out">
+          <div style="padding:0 24px 24px;color:#fff;line-height:1.8">
+            PayPal, Klarna, Kreditkarte, Apple Pay, Google Pay, Sofort-Überweisung, Rechnung (14 Tage) und Barzahlung. SSL-verschlüsselt & sicher!
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item" style="background:var(--panel);border:1px solid var(--border);border-radius:16px;margin-bottom:16px;overflow:hidden">
+        <button class="faq-question" style="width:100%;padding:20px 24px;background:transparent;border:0;color:#fff;font-size:1.1rem;font-weight:700;text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center">
+          <span>Kann ich meine Buchung stornieren?</span>
+          <span style="font-size:1.5rem;transition:.3s">+</span>
+        </button>
+        <div class="faq-answer" style="max-height:0;overflow:hidden;transition:max-height .3s ease-out">
+          <div style="padding:0 24px 24px;color:#fff;line-height:1.8">
+            Ja! Bis 24 Stunden vor Fahrtantritt kostenlos stornierbar. Danach fällt eine Stornogebühr von 50% an.
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item" style="background:var(--panel);border:1px solid var(--border);border-radius:16px;margin-bottom:16px;overflow:hidden">
+        <button class="faq-question" style="width:100%;padding:20px 24px;background:transparent;border:0;color:#fff;font-size:1.1rem;font-weight:700;text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center">
+          <span>Wie funktioniert das QR Check-in System?</span>
+          <span style="font-size:1.5rem;transition:.3s">+</span>
+        </button>
+        <div class="faq-answer" style="max-height:0;overflow:hidden;transition:max-height .3s ease-out">
+          <div style="padding:0 24px 24px;color:#fff;line-height:1.8">
+            Nach der Buchung erhalten Sie einen QR-Code. Beim Einsteigen scannen → automatische Zeiterfassung. Beim Aussteigen erneut scannen → automatische Abrechnung!
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item" style="background:var(--panel);border:1px solid var(--border);border-radius:16px;margin-bottom:16px;overflow:hidden">
+        <button class="faq-question" style="width:100%;padding:20px 24px;background:transparent;border:0;color:#fff;font-size:1.1rem;font-weight:700;text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center">
+          <span>Fahren Sie auch EU-weit?</span>
+          <span style="font-size:1.5rem;transition:.3s">+</span>
+        </button>
+        <div class="faq-answer" style="max-height:0;overflow:hidden;transition:max-height .3s ease-out">
+          <div style="padding:0 24px 24px;color:#fff;line-height:1.8">
+            Ja! Wir bieten Langstrecken-Fahrten in ganz Deutschland und EU-weit an. Pauschalpreise auf Anfrage!
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Newsletter -->
+<section class="section" style="background:linear-gradient(135deg,rgba(0,224,255,.05),rgba(127,0,255,.05))">
+  <div class="container">
+    <div style="max-width:700px;margin:0 auto;text-align:center;padding:48px 32px;background:linear-gradient(135deg,var(--panel),var(--panel2));border:2px solid var(--accent);border-radius:24px">
+      <h2 style="color:#fff;margin:0 0 16px;font-size:2rem">📧 Newsletter abonnieren</h2>
+      <p style="color:#fff;margin-bottom:28px;font-size:1.1rem">
+        Erhalten Sie exklusive Angebote & <strong style="color:var(--gold2)">10% Rabatt</strong> auf Ihre erste Fahrt!
+      </p>
+      <form id="newsletterForm" style="display:flex;gap:12px;max-width:500px;margin:0 auto">
+        <input type="email" placeholder="Ihre E-Mail Adresse..." required style="flex:1;padding:14px 20px;background:var(--panel2);border:1px solid var(--border);border-radius:12px;color:#fff;font-size:1rem">
+        <button type="submit" style="padding:14px 32px;background:linear-gradient(135deg,var(--gold),var(--gold2));border:0;border-radius:12px;color:#000;font-weight:700;cursor:pointer;transition:.3s;white-space:nowrap">
+          Anmelden →
+        </button>
+      </form>
+      <p style="font-size:.85rem;color:#fff;margin-top:16px">🔒 Keine Spam-Mails. Jederzeit abmeldbar.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Login Modal -->
+<div id="loginModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(8px);z-index:9999;display:none;align-items:center;justify-content:center;padding:20px">
+  <div style="background:linear-gradient(135deg,var(--panel),var(--panel2));border:2px solid var(--accent);border-radius:24px;max-width:480px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.7);position:relative">
+    <button id="closeLogin" style="position:absolute;top:20px;right:20px;background:transparent;border:0;color:#fff;font-size:2rem;cursor:pointer;width:40px;height:40px;display:flex;align-items:center;justify-content:center;transition:.2s;border-radius:50%">×</button>
+    
+    <div style="padding:40px">
+      <div style="text-align:center;margin-bottom:32px">
+        <div style="width:80px;height:80px;background:linear-gradient(135deg,var(--accent),#7f00ff);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2.5rem;margin:0 auto 20px;box-shadow:0 10px 30px rgba(0,224,255,.3)">👤</div>
+        <h2 style="margin:0 0 8px;color:#fff;font-size:1.8rem">Willkommen zurück!</h2>
+        <p style="color:var(--muted);margin:0;font-size:.95rem">Melden Sie sich an, um Ihre Buchungen zu verwalten</p>
+      </div>
+      
+      <!-- Login Form -->
+      <form id="loginForm" style="display:block">
+        <div style="margin-bottom:20px">
+          <label style="display:block;color:#fff;font-weight:600;margin-bottom:8px;font-size:.95rem">📧 E-Mail</label>
+          <input type="email" id="loginEmail" placeholder="ihre@email.de" required style="width:100%;padding:14px 18px;background:var(--panel2);border:2px solid var(--border);border-radius:12px;color:#fff;font-size:1rem;transition:.2s">
+        </div>
+        
+        <div style="margin-bottom:12px">
+          <label style="display:block;color:#fff;font-weight:600;margin-bottom:8px;font-size:.95rem">🔒 Passwort</label>
+          <input type="password" id="loginPassword" placeholder="••••••••" required style="width:100%;padding:14px 18px;background:var(--panel2);border:2px solid var(--border);border-radius:12px;color:#fff;font-size:1rem;transition:.2s">
+        </div>
+        
+        <div style="text-align:right;margin-bottom:24px">
+          <a href="#" id="forgotPassword" style="color:var(--accent);font-size:.9rem;text-decoration:none;font-weight:600">Passwort vergessen?</a>
+        </div>
+        
+        <button type="submit" style="width:100%;padding:16px;background:linear-gradient(135deg,var(--accent),#7f00ff);border:0;border-radius:12px;color:#fff;font-weight:700;font-size:1.05rem;cursor:pointer;transition:.2s;margin-bottom:16px">
+          🚀 Anmelden
+        </button>
+        
+        <div style="text-align:center;color:var(--muted);margin:20px 0">
+          <span>oder schnell anmelden mit:</span>
+        </div>
+        
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px">
+          <button type="button" class="social-login" data-provider="google" style="padding:12px;background:var(--panel2);border:1px solid var(--border);border-radius:10px;color:#fff;font-weight:600;cursor:pointer;transition:.2s;display:flex;align-items:center;justify-content:center;gap:8px">
+            <span style="font-size:1.2rem">🔴</span>
+            <span>Google</span>
+          </button>
+          <button type="button" class="social-login" data-provider="apple" style="padding:12px;background:var(--panel2);border:1px solid var(--border);border-radius:10px;color:#fff;font-weight:600;cursor:pointer;transition:.2s;display:flex;align-items:center;justify-content:center;gap:8px">
+            <span style="font-size:1.2rem">🍎</span>
+            <span>Apple</span>
+          </button>
+        </div>
+        
+        <div style="text-align:center;padding-top:20px;border-top:1px solid var(--border)">
+          <span style="color:var(--muted)">Noch kein Konto?</span>
+          <a href="#" id="showRegister" style="color:var(--accent);font-weight:700;margin-left:8px;text-decoration:none">Jetzt registrieren →</a>
+        </div>
+      </form>
+      
+      <!-- Register Form -->
+      <form id="registerForm" style="display:none">
+        <div style="margin-bottom:20px">
+          <label style="display:block;color:#fff;font-weight:600;margin-bottom:8px;font-size:.95rem">👤 Name</label>
+          <input type="text" id="registerName" placeholder="Max Mustermann" required style="width:100%;padding:14px 18px;background:var(--panel2);border:2px solid var(--border);border-radius:12px;color:#fff;font-size:1rem">
+        </div>
+        
+        <div style="margin-bottom:20px">
+          <label style="display:block;color:#fff;font-weight:600;margin-bottom:8px;font-size:.95rem">📧 E-Mail</label>
+          <input type="email" id="registerEmail" placeholder="ihre@email.de" required style="width:100%;padding:14px 18px;background:var(--panel2);border:2px solid var(--border);border-radius:12px;color:#fff;font-size:1rem">
+        </div>
+        
+        <div style="margin-bottom:20px">
+          <label style="display:block;color:#fff;font-weight:600;margin-bottom:8px;font-size:.95rem">📱 Telefon</label>
+          <input type="tel" id="registerPhone" placeholder="+49 162 5757957" required style="width:100%;padding:14px 18px;background:var(--panel2);border:2px solid var(--border);border-radius:12px;color:#fff;font-size:1rem">
+        </div>
+        
+        <div style="margin-bottom:24px">
+          <label style="display:block;color:#fff;font-weight:600;margin-bottom:8px;font-size:.95rem">🔒 Passwort</label>
+          <input type="password" id="registerPassword" placeholder="••••••••" required style="width:100%;padding:14px 18px;background:var(--panel2);border:2px solid var(--border);border-radius:12px;color:#fff;font-size:1rem">
+        </div>
+        
+        <button type="submit" style="width:100%;padding:16px;background:linear-gradient(135deg,var(--gold),var(--gold2));border:0;border-radius:12px;color:#000;font-weight:700;font-size:1.05rem;cursor:pointer;transition:.2s;margin-bottom:16px">
+          ✨ Konto erstellen
+        </button>
+        
+        <div style="text-align:center;padding-top:20px;border-top:1px solid var(--border)">
+          <span style="color:var(--muted)">Bereits registriert?</span>
+          <a href="#" id="showLogin" style="color:var(--accent);font-weight:700;margin-left:8px;text-decoration:none">← Zurück zum Login</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Profile Dropdown Menu -->
+<div id="profileMenu" style="display:none;position:fixed;top:60px;right:20px;background:var(--panel);border:2px solid var(--accent);border-radius:16px;min-width:280px;box-shadow:0 12px 40px rgba(0,0,0,.6);z-index:9998;overflow:hidden">
+  <div style="padding:20px;border-bottom:2px solid var(--border);background:linear-gradient(135deg,rgba(0,224,255,.15),rgba(127,0,255,.1))">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+      <div style="width:50px;height:50px;background:linear-gradient(135deg,var(--accent),#7f00ff);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.5rem;box-shadow:0 4px 12px rgba(0,224,255,.3)">👤</div>
+      <div style="flex:1">
+        <div style="color:#fff;font-weight:700;font-size:1.1rem" id="profileName">Max Mustermann</div>
+        <div style="color:var(--muted);font-size:.85rem" id="profileEmail">max@example.com</div>
+      </div>
+    </div>
+    <div style="background:var(--panel2);padding:8px 12px;border-radius:8px;display:flex;justify-content:space-between;align-items:center">
+      <span style="color:var(--muted);font-size:.85rem">Kundennummer:</span>
+      <span style="color:var(--gold2);font-weight:700;font-size:.9rem" id="customerNumber">ZE-123456</span>
+    </div>
+  </div>
+  
+  <a href="#dashboard" class="profile-menu-item" style="display:flex;align-items:center;gap:14px;padding:16px 20px;color:#fff;text-decoration:none;transition:.2s;border-bottom:1px solid var(--border)">
+    <span style="font-size:1.3rem">📊</span>
+    <div style="flex:1">
+      <div style="font-weight:700">Dashboard</div>
+      <div style="color:var(--muted);font-size:.85rem">Übersicht & Statistiken</div>
+    </div>
+  </a>
+  
+  <a href="#bookings" class="profile-menu-item" style="display:flex;align-items:center;gap:14px;padding:16px 20px;color:#fff;text-decoration:none;transition:.2s;border-bottom:1px solid var(--border)">
+    <span style="font-size:1.3rem">🎫</span>
+    <div style="flex:1">
+      <div style="font-weight:700">Meine Buchungen</div>
+      <div style="color:var(--muted);font-size:.85rem">Aktive & vergangene Fahrten</div>
+    </div>
+    <span style="background:var(--accent);color:#000;padding:4px 10px;border-radius:12px;font-size:.8rem;font-weight:700">3</span>
+  </a>
+  
+  <a href="#invoices" class="profile-menu-item" style="display:flex;align-items:center;gap:14px;padding:16px 20px;color:#fff;text-decoration:none;transition:.2s;border-bottom:1px solid var(--border)">
+    <span style="font-size:1.3rem">📄</span>
+    <div style="flex:1">
+      <div style="font-weight:700">Rechnungen & Belege</div>
+      <div style="color:var(--muted);font-size:.85rem">Download als PDF</div>
+    </div>
+  </a>
+  
+  <a href="#settings" class="profile-menu-item" style="display:flex;align-items:center;gap:14px;padding:16px 20px;color:#fff;text-decoration:none;transition:.2s;border-bottom:1px solid var(--border)">
+    <span style="font-size:1.3rem">⚙️</span>
+    <div style="flex:1">
+      <div style="font-weight:700">Einstellungen</div>
+      <div style="color:var(--muted);font-size:.85rem">Profile & Benachrichtigungen</div>
+    </div>
+  </a>
+  
+  <button id="logoutBtn" style="width:100%;display:flex;align-items:center;gap:14px;padding:16px 20px;background:transparent;border:0;color:#ff006e;cursor:pointer;transition:.2s;font-weight:700;font-size:1rem">
+    <span style="font-size:1.3rem">🚪</span>
+    <span>Abmelden</span>
+  </button>
+</div>
+
+<!-- Cookie Consent -->
+<div id="cookieConsent" style="position:fixed;bottom:0;left:0;right:0;z-index:999;background:linear-gradient(135deg,var(--panel),var(--panel2));backdrop-filter:blur(12px);border-top:2px solid var(--border);padding:24px;box-shadow:0 -10px 40px rgba(0,0,0,.5);display:none">
+  <div class="container" style="display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap">
+    <div style="flex:1">
+      <h4 style="margin:0 0 8px;color:#fff;font-size:1.1rem">🍪 Cookie-Hinweis</h4>
+      <p style="margin:0;color:#fff;font-size:.95rem;line-height:1.6">
+        Wir verwenden Cookies für bessere Nutzererfahrung & Analyse. Mit "Akzeptieren" stimmen Sie unserer <a href="#" style="color:var(--accent)">Datenschutzerklärung</a> zu.
+      </p>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button id="cookieReject" style="padding:12px 24px;background:var(--panel2);border:1px solid var(--border);border-radius:10px;color:#fff;font-weight:600;cursor:pointer;transition:.2s">
+        Ablehnen
+      </button>
+      <button id="cookieAccept" style="padding:12px 32px;background:linear-gradient(135deg,var(--accent),#7f00ff);border:0;border-radius:10px;color:#fff;font-weight:700;cursor:pointer;transition:.2s">
+        ✓ Akzeptieren
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div class="footer-logo">ZENTY EXPRESS AI</div>
+        <p>Revolutionieren Sie Ihre Mobilität mit KI-gestützter Transportlogistik. Schnell. Zuverlässig. Intelligent.</p>
+        <p style="color:var(--gold2);font-weight:700">🇩🇪 Made in Germany</p>
+      </div>
+      
+      <div class="footer-col">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="#leistungen">VIP Transfer</a></li>
+          <li><a href="#leistungen">Shuttle Service</a></li>
+          <li><a href="#leistungen">Kurierdienst</a></li>
+          <li><a href="#leistungen">Seniorenservice</a></li>
+          <li><a href="#leistungen">Reiseplanung</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-col">
+        <h4>Unternehmen</h4>
+        <ul>
+          <li><a href="#fahrzeuge">Fahrzeugflotte</a></li>
+          <li><a href="#ai-features">AI Features</a></li>
+          <li><a href="#preise">Preise</a></li>
+          <li><a href="#">Über uns</a></li>
+          <li><a href="#">Karriere</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-col">
+        <h4>Rechtliches</h4>
+        <ul>
+          <li><a href="#">Impressum</a></li>
+          <li><a href="#">Datenschutz</a></li>
+          <li><a href="#">AGB</a></li>
+          <li><a href="#">Cookie-Richtlinie</a></li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="footer-bottom">
+      © <span id="year">2025</span> Zenty Express AI Mobility & Transport — KI-gestützte Mobilität & Transport · Powered by Artificial Intelligence · All Rights Reserved
+    </div>
+  </div>
+</footer>
+
+<!-- FAB -->
+<div class="fab">
+  <a href="#kontakt" class="fab-btn" title="Kontakt">✉</a>
+</div>
+
+<!-- Advanced AI Chatbot Widget -->
+<div id="chatbot" style="position:fixed;right:24px;bottom:100px;z-index:80;display:none">
+  <div style="width:380px;max-height:580px;background:var(--panel);border:2px solid var(--border);border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,.5);overflow:hidden">
+    <!-- Header -->
+    <div style="padding:20px;background:linear-gradient(135deg,var(--blue2),var(--accent));display:flex;justify-content:space-between;align-items:center">
+      <div style="flex:1">
+        <h4 style="margin:0;color:#fff;font-size:1.15rem;display:flex;align-items:center;gap:8px">
+          <span style="animation:pulse 2s infinite">🤖</span> Zenty AI Assistant
+        </h4>
+        <p style="margin:4px 0 0;font-size:.85rem;color:rgba(255,255,255,.95);display:flex;align-items:center;gap:6px">
+          <span style="width:8px;height:8px;background:#00ff88;border-radius:50%;animation:blink 1.5s infinite"></span>
+          Online - antwortet sofort
+        </p>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <select id="chatLanguage" style="padding:6px;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);border-radius:6px;color:#fff;font-size:.8rem;cursor:pointer">
+          <option value="de">🇩🇪 DE</option>
+          <option value="en">🇬🇧 EN</option>
+          <option value="tr">🇹🇷 TR</option>
+          <option value="ru">🇷🇺 RU</option>
+          <option value="ar">🇸🇦 AR</option>
+          <option value="fr">🇫🇷 FR</option>
+        </select>
+        <button id="closeChatbot" style="background:transparent;border:0;color:#fff;font-size:1.5rem;cursor:pointer;padding:4px">×</button>
+      </div>
+    </div>
+    
+    <!-- Messages -->
+    <div id="chatMessages" style="height:340px;padding:16px;overflow-y:auto;background:var(--panel2)">
+      <div style="margin-bottom:16px">
+        <div style="display:inline-block;background:linear-gradient(135deg,rgba(0,224,255,.15),rgba(127,0,255,.15));backdrop-filter:blur(8px);padding:14px 18px;border-radius:14px 14px 14px 4px;max-width:85%;border:1px solid rgba(0,224,255,.3)">
+          <p style="margin:0;color:var(--text);font-size:.95rem;line-height:1.6">
+            <strong>Willkommen! 👋</strong><br>
+            Ich bin Ihr KI-Assistent. Ich kann Ihnen in 6 Sprachen helfen!
+          </p>
+        </div>
+      </div>
+      
+      <!-- Quick Actions -->
+      <div id="chatOptions" style="display:grid;gap:8px;margin-top:16px">
+        <button class="chat-option" data-action="instant-booking" style="background:linear-gradient(135deg,rgba(0,224,255,.15),rgba(127,0,255,.1));border:1px solid var(--accent);padding:14px;border-radius:10px;color:var(--text);text-align:left;cursor:pointer;transition:.2s;font-weight:600">
+          ⚡ Sofort buchen (Express)
+        </button>
+        <button class="chat-option" data-action="whatsapp" style="background:linear-gradient(135deg,rgba(37,211,102,.15),rgba(0,180,137,.1));border:1px solid #25d366;padding:14px;border-radius:10px;color:var(--text);text-align:left;cursor:pointer;transition:.2s;font-weight:600">
+          💬 WhatsApp Chat öffnen
+        </button>
+        <button class="chat-option" data-action="telegram" style="background:linear-gradient(135deg,rgba(0,136,204,.15),rgba(41,171,226,.1));border:1px solid #0088cc;padding:14px;border-radius:10px;color:var(--text);text-align:left;cursor:pointer;transition:.2s;font-weight:600">
+          ✈️ Telegram Chat öffnen
+        </button>
+        <button class="chat-option" data-action="call" style="background:linear-gradient(135deg,rgba(255,215,0,.15),rgba(212,175,55,.1));border:1px solid var(--gold);padding:14px;border-radius:10px;color:var(--text);text-align:left;cursor:pointer;transition:.2s;font-weight:600">
+          📞 Direkt anrufen
+        </button>
+        <button class="chat-option" data-action="email" style="background:linear-gradient(135deg,rgba(255,0,110,.15),rgba(127,0,255,.1));border:1px solid #ff006e;padding:14px;border-radius:10px;color:var(--text);text-align:left;cursor:pointer;transition:.2s;font-weight:600">
+          📧 E-Mail senden
+        </button>
+        <button class="chat-option" data-action="route" style="background:var(--panel);border:1px solid var(--border);padding:14px;border-radius:10px;color:var(--text);text-align:left;cursor:pointer;transition:.2s">
+          🗺️ Route berechnen
+        </button>
+        <button class="chat-option" data-action="prices" style="background:var(--panel);border:1px solid var(--border);padding:14px;border-radius:10px;color:var(--text);text-align:left;cursor:pointer;transition:.2s">
+          💰 Preise ansehen
+        </button>
+      </div>
+    </div>
+    
+    <!-- Input Area -->
+    <div style="padding:12px;background:var(--panel);border-top:1px solid var(--border)">
+      <div style="display:flex;gap:8px;align-items:center">
+        <input type="text" id="chatInput" placeholder="Ihre Nachricht..." style="flex:1;padding:11px 14px;background:var(--panel2);border:1px solid var(--border);border-radius:10px;color:#fff;font-size:.95rem">
+        <button id="voiceBtn" style="padding:11px 14px;background:var(--panel2);border:1px solid var(--border);border-radius:10px;color:var(--accent);cursor:pointer;font-size:1.2rem;transition:.2s" title="Sprachnachricht">
+          🎤
+        </button>
+        <button id="chatSend" style="padding:11px 18px;background:linear-gradient(135deg,var(--blue2),var(--accent));border:0;border-radius:10px;color:#fff;cursor:pointer;font-weight:700;font-size:1.1rem">
+          ➤
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+@keyframes slideIn{0%{opacity:0;transform:translateY(10px)}100%{opacity:1;transform:translateY(0)}}
+@keyframes markerPulse{
+  0%,100%{transform:scale(1);box-shadow:0 6px 20px rgba(0,224,255,.6)}
+  50%{transform:scale(1.15);box-shadow:0 8px 30px rgba(0,224,255,.9)}
+}
+@keyframes routeFlow{
+  0%{stroke-dashoffset:0}
+  100%{stroke-dashoffset:40}
+}
+.animated-route{animation:routeFlow 2s linear infinite}
+.chat-option:hover{transform:translateX(4px);border-color:var(--accent)!important}
+#voiceBtn:hover{background:var(--accent);color:#000}
+.leaflet-popup-content-wrapper{
+  background:linear-gradient(135deg,var(--panel),var(--panel2))!important;
+  color:#fff!important;
+  border:1px solid var(--border)!important;
+  border-radius:12px!important;
+  padding:12px!important;
+}
+.leaflet-popup-tip{
+  background:var(--panel)!important;
+  border:1px solid var(--border)!important;
+}
+</style>
+
+<!-- Chatbot Toggle Button -->
+<div style="position:fixed;right:90px;bottom:24px;z-index:90">
+  <button id="toggleChatbot" style="width:60px;height:60px;background:linear-gradient(135deg,#7f00ff,#ff006e);border:0;border-radius:50%;color:#fff;font-size:1.8rem;cursor:pointer;box-shadow:0 8px 24px rgba(127,0,255,.4);transition:all .3s">
+    💬
+  </button>
+</div>
+
 <script>
-(function(){
-  const cities = {"Lonsee":[48.5259,9.9274],"Ulm":[48.4011,9.9876],"Neu-Ulm":[48.3927,10.0111],"Blaustein":[48.4177,9.9410],"Dornstadt":[48.4633,9.9553],"Günzburg":[48.4553,10.2728],"Senden":[48.3286,10.0442],"Ehingen":[48.2829,9.7276],"Laupheim":[48.2289,9.8776],"Geislingen":[48.6255,9.8344],"Biberach":[48.1033,9.7900],"Langenau":[48.4975,10.1192],"Weißenhorn":[48.3014,10.1582]};
-  const dl = document.getElementById('citylist'); Object.keys(cities).forEach(n=>{const o=document.createElement('option');o.value=n;dl.appendChild(o);});
-  const start=cities["Lonsee"];
-  const map=L.map('map',{zoomControl:false,attributionControl:false}).setView(start,10);
-  const osm=L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19});
-  const sat=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:19});
-  osm.addTo(map); L.control.zoom({position:'bottomright'}).addTo(map); L.control.layers({"Harita":osm,"Sat":sat},null,{position:'topright'}).addTo(map);
+// ===== PRELOADER =====
+window.addEventListener('load', () => {
+  const loadingBar = document.getElementById('loadingBar');
+  let progress = 0;
+  
+  const interval = setInterval(() => {
+    progress += Math.random() * 30;
+    if(progress > 100) progress = 100;
+    loadingBar.style.width = progress + '%';
+    
+    if(progress >= 100) {
+      clearInterval(interval);
+      setTimeout(() => {
+        document.getElementById('preloader').style.opacity = '0';
+        document.getElementById('preloader').style.transition = 'opacity .5s';
+        setTimeout(() => {
+          document.getElementById('preloader').style.display = 'none';
+        }, 500);
+      }, 300);
+    }
+  }, 100);
+});
 
-  let route=L.polyline([], {color:'#9ad0ff',weight:3,opacity:1,dashArray:'6 6'}).addTo(map);
-  function haversine(a,b){const R=6371,toRad=d=>d*Math.PI/180,dLat=toRad(b[0]-a[0]),dLon=toRad(b[1]-a[1]),lat1=toRad(a[0]),lat2=toRad(b[0]),h=Math.sin(dLat/2)**2 + Math.cos(lat1)*Math.cos(lat2)*Math.sin(dLon/2)**2;return 2*R*Math.asin(Math.sqrt(h));}
-  const priceTiers=[{max:20,rate:1.00},{max:100,rate:0.90},{max:9999,rate:0.80}];
-  function priceFor(km){const t=priceTiers.find(x=>km<=x.max);return {rate:t.rate,total:km*t.rate};}
+// ===== SCROLL PROGRESS BAR =====
+window.addEventListener('scroll', () => {
+  const scrollTop = window.pageYOffset;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const scrollPercent = (scrollTop / docHeight) * 100;
+  document.getElementById('scrollProgress').style.width = scrollPercent + '%';
+});
 
-  const startInput=document.getElementById('startInput');
-  const destInput=document.getElementById('destInput');
-  const priceBox=document.getElementById('priceBox');
-  const calcBtn=document.getElementById('calcBtn');
-  const bookBtn=document.getElementById('bookBtn');
-  startInput.value='Lonsee';
+// ===== ANIMATED STATS COUNTER =====
+function animateCounter(element) {
+  const target = parseInt(element.getAttribute('data-count'));
+  const duration = 2000;
+  const step = target / (duration / 16);
+  let current = 0;
+  
+  const timer = setInterval(() => {
+    current += step;
+    if(current >= target) {
+      current = target;
+      clearInterval(timer);
+    }
+    element.textContent = Math.floor(current).toLocaleString('de-DE');
+  }, 16);
+}
 
-  function compute(){
-    const sName=startInput.value.trim(); const dName=destInput.value.trim();
-    if(!cities[sName]||!cities[dName]){priceBox.textContent='Entfernung: — km · Preis: —'; route.setLatLngs([]); bookBtn.disabled=true; return;}
-    const A=cities[sName],B=cities[dName];
-    const mid=[(A[0]+B[0])/2,(A[1]+B[1])/2]; const dx=B[1]-A[1], dy=B[0]-A[0];
-    const len=Math.sqrt(dx*dx+dy*dy); const nx=-dy/len, ny=dx/len; const amp=Math.min(0.12,Math.max(0.04,len*0.25));
-    const ctrl=[mid[0]+ny*amp, mid[1]+nx*amp];
-    function quad(p0,p1,p2,t){const u=1-t;return [u*u*p0[0]+2*u*t*p1[0]+t*t*p2[0],u*u*p0[1]+2*u*t*p1[1]+t*t*p2[1]];}
-    const pts=[]; for(let t=0;t<=1.001;t+=0.05) pts.push(quad(A,ctrl,B,t));
-    route.setLatLngs(pts); map.fitBounds(L.latLngBounds([A,B]).pad(0.25));
+const statsObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting) {
+      animateCounter(entry.target);
+      statsObserver.unobserve(entry.target);
+    }
+  });
+}, {threshold: 0.5});
 
-    const km=haversine(A,B); const {rate,total}=priceFor(km);
-    const dk=km.toFixed(1).replace('.',','); const ct=total.toFixed(2).replace('.',',');
-    priceBox.innerHTML=`Route: <b>${sName}</b> → <b>${dName}</b> · Entfernung: <b>${dk} km</b> · Preis (ab): <b>${ct} €</b> <span class="notice">(Tarif ${rate.toFixed(2)} €/km)</span>`;
-    bookBtn.disabled=false;
+document.querySelectorAll('[data-count]').forEach(el => {
+  statsObserver.observe(el);
+});
+
+// ===== LIVE NOTIFICATIONS (SOCIAL PROOF) =====
+const notifications = [
+  {name: 'Max M.', city: 'Ulm', service: 'VIP Transfer'},
+  {name: 'Anna K.', city: 'Neu-Ulm', service: 'Shuttle'},
+  {name: 'Thomas B.', city: 'Günzburg', service: 'Flughafentransfer'},
+  {name: 'Lisa W.', city: 'Blaustein', service: 'Business Transfer'},
+  {name: 'Martin S.', city: 'Dornstadt', service: 'Kurierdienst'},
+  {name: 'Sarah M.', city: 'Laupheim', service: 'Seniorenservice'}
+];
+
+function showLiveNotification() {
+  const notif = notifications[Math.floor(Math.random() * notifications.length)];
+  const div = document.createElement('div');
+  div.style.cssText = 'background:linear-gradient(135deg,var(--panel),var(--panel2));border:2px solid var(--accent);border-radius:12px;padding:16px;margin-bottom:12px;box-shadow:0 8px 24px rgba(0,224,255,.3);animation:slideIn .5s ease-out';
+  div.innerHTML = `
+    <div style="display:flex;align-items:center;gap:12px">
+      <div style="width:10px;height:10px;background:#00ff88;border-radius:50%;animation:blink 1.5s infinite"></div>
+      <div style="flex:1">
+        <div style="color:#fff;font-weight:700;font-size:.95rem">${notif.name} aus ${notif.city}</div>
+        <div style="color:var(--muted);font-size:.85rem">hat gerade <strong style="color:var(--accent)">${notif.service}</strong> gebucht</div>
+      </div>
+    </div>
+  `;
+  
+  document.getElementById('liveNotifications').appendChild(div);
+  
+  setTimeout(() => {
+    div.style.animation = 'slideOut .5s ease-out';
+    setTimeout(() => div.remove(), 500);
+  }, 5000);
+}
+
+// Show first notification after 3 seconds, then every 10-15 seconds
+setTimeout(() => {
+  showLiveNotification();
+  setInterval(showLiveNotification, Math.random() * 5000 + 10000);
+}, 3000);
+
+// ===== FLOATING CONTACT BAR =====
+let floatingBarShown = false;
+window.addEventListener('scroll', () => {
+  const scrollPercent = (window.pageYOffset / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+  
+  if(scrollPercent > 30 && !floatingBarShown) {
+    document.getElementById('floatingBar').style.transform = 'translateY(0)';
+    floatingBarShown = true;
   }
-  calcBtn.addEventListener('click',compute);
-})();</script>
+});
+
+document.getElementById('closeFloatingBar')?.addEventListener('click', () => {
+  document.getElementById('floatingBar').style.transform = 'translateY(100%)';
+  floatingBarShown = false;
+});
+
+// ===== THEME TOGGLE (DARK/LIGHT) =====
+let isDarkMode = true;
+document.getElementById('themeToggle')?.addEventListener('click', function() {
+  isDarkMode = !isDarkMode;
+  
+  if(isDarkMode) {
+    document.body.style.background = 'linear-gradient(180deg,#050810,#0a0e18)';
+    this.textContent = '🌓';
+    showNotification('🌙 Dark Mode aktiviert');
+  } else {
+    document.body.style.background = 'linear-gradient(180deg,#f0f4f8,#e1e8ed)';
+    this.textContent = '☀️';
+    showNotification('☀️ Light Mode aktiviert');
+  }
+});
+
+// ===== PARTICLE EFFECTS =====
+const canvas = document.getElementById('particles');
+const ctx = canvas.getContext('2d');
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+const particles = [];
+const particleCount = 50;
+
+class Particle {
+  constructor() {
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height;
+    this.size = Math.random() * 2 + 1;
+    this.speedX = Math.random() * 0.5 - 0.25;
+    this.speedY = Math.random() * 0.5 - 0.25;
+    this.color = ['#00e0ff', '#7f00ff', '#ff006e'][Math.floor(Math.random() * 3)];
+  }
+  
+  update() {
+    this.x += this.speedX;
+    this.y += this.speedY;
+    
+    if(this.x > canvas.width) this.x = 0;
+    if(this.x < 0) this.x = canvas.width;
+    if(this.y > canvas.height) this.y = 0;
+    if(this.y < 0) this.y = canvas.height;
+  }
+  
+  draw() {
+    ctx.fillStyle = this.color;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
+
+for(let i = 0; i < particleCount; i++) {
+  particles.push(new Particle());
+}
+
+function animateParticles() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  
+  for(let particle of particles) {
+    particle.update();
+    particle.draw();
+  }
+  
+  // Draw connections
+  for(let i = 0; i < particles.length; i++) {
+    for(let j = i + 1; j < particles.length; j++) {
+      const dx = particles[i].x - particles[j].x;
+      const dy = particles[i].y - particles[j].y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      
+      if(dist < 100) {
+        ctx.strokeStyle = `rgba(0,224,255,${0.2 - dist / 500})`;
+        ctx.lineWidth = 0.5;
+        ctx.beginPath();
+        ctx.moveTo(particles[i].x, particles[i].y);
+        ctx.lineTo(particles[j].x, particles[j].y);
+        ctx.stroke();
+      }
+    }
+  }
+  
+  requestAnimationFrame(animateParticles);
+}
+
+animateParticles();
+
+window.addEventListener('resize', () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
+
+// ===== SCROLL REVEAL ANIMATIONS =====
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting) {
+      entry.target.style.opacity = '1';
+      entry.target.style.transform = 'translateY(0)';
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, {threshold: 0.1});
+
+// Apply to all cards and sections
+setTimeout(() => {
+  document.querySelectorAll('.card, .service-category, .vehicle-card, .feature-item, .pricing-card').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(30px)';
+    el.style.transition = 'opacity .6s ease-out, transform .6s ease-out';
+    revealObserver.observe(el);
+  });
+}, 100);
+
+// ===== FAQ ACCORDION =====
+document.querySelectorAll('.faq-question').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const faqItem = this.parentElement;
+    const answer = this.nextElementSibling;
+    const icon = this.querySelector('span:last-child');
+    const isOpen = answer.style.maxHeight && answer.style.maxHeight !== '0px';
+    
+    // Close all other FAQs
+    document.querySelectorAll('.faq-answer').forEach(a => {
+      if(a !== answer) {
+        a.style.maxHeight = '0';
+        a.previousElementSibling.querySelector('span:last-child').textContent = '+';
+        a.parentElement.style.borderColor = 'var(--border)';
+      }
+    });
+    
+    // Toggle current
+    if(isOpen) {
+      answer.style.maxHeight = '0';
+      icon.textContent = '+';
+      faqItem.style.borderColor = 'var(--border)';
+    } else {
+      answer.style.maxHeight = answer.scrollHeight + 'px';
+      icon.textContent = '−';
+      faqItem.style.borderColor = 'var(--accent)';
+    }
+  });
+});
+
+// ===== NEWSLETTER =====
+document.getElementById('newsletterForm')?.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const email = e.target.querySelector('input[type="email"]').value;
+  
+  showNotification(`✅ Vielen Dank!\n\n10% Rabatt-Code wurde an ${email} gesendet!`);
+  e.target.reset();
+  
+  setTimeout(() => {
+    alert('🎉 Newsletter-Anmeldung erfolgreich!\n\n✓ Willkommens-E-Mail versendet\n✓ 10% Rabatt-Code: ZENTY10\n✓ Gültig für Ihre erste Buchung\n\nPrüfen Sie Ihr Postfach!');
+  }, 1000);
+});
+
+// ===== COOKIE CONSENT =====
+if(!localStorage.getItem('cookiesAccepted')) {
+  setTimeout(() => {
+    document.getElementById('cookieConsent').style.display = 'block';
+  }, 2000);
+}
+
+document.getElementById('cookieAccept')?.addEventListener('click', () => {
+  localStorage.setItem('cookiesAccepted', 'true');
+  document.getElementById('cookieConsent').style.display = 'none';
+  showNotification('✓ Cookie-Einstellungen gespeichert');
+});
+
+document.getElementById('cookieReject')?.addEventListener('click', () => {
+  document.getElementById('cookieConsent').style.display = 'none';
+  showNotification('Cookie-Banner geschlossen');
+});
+
+// ===== USER LOGIN SYSTEM =====
+let currentUser = null;
+
+// Check if user is logged in
+if(localStorage.getItem('zentyUser')) {
+  currentUser = JSON.parse(localStorage.getItem('zentyUser'));
+  showUserProfile();
+}
+
+// Show login modal
+document.getElementById('loginBtn')?.addEventListener('click', () => {
+  document.getElementById('loginModal').style.display = 'flex';
+});
+
+// Close login modal
+document.getElementById('closeLogin')?.addEventListener('click', () => {
+  document.getElementById('loginModal').style.display = 'none';
+});
+
+// Switch to register form
+document.getElementById('showRegister')?.addEventListener('click', (e) => {
+  e.preventDefault();
+  document.getElementById('loginForm').style.display = 'none';
+  document.getElementById('registerForm').style.display = 'block';
+});
+
+// Switch to login form
+document.getElementById('showLogin')?.addEventListener('click', (e) => {
+  e.preventDefault();
+  document.getElementById('registerForm').style.display = 'none';
+  document.getElementById('loginForm').style.display = 'block';
+});
+
+// Login form submit
+document.getElementById('loginForm')?.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const email = document.getElementById('loginEmail').value;
+  const password = document.getElementById('loginPassword').value;
+  
+  // Simulate login (in production, this would be an API call)
+  if(email && password) {
+    currentUser = {
+      name: email.split('@')[0].charAt(0).toUpperCase() + email.split('@')[0].slice(1),
+      email: email,
+      customerNumber: 'ZE-' + Math.random().toString().slice(2, 8),
+      joinDate: new Date().toLocaleDateString('de-DE')
+    };
+    
+    localStorage.setItem('zentyUser', JSON.stringify(currentUser));
+    
+    showNotification(`✅ Willkommen zurück, ${currentUser.name}!`);
+    
+    setTimeout(() => {
+      document.getElementById('loginModal').style.display = 'none';
+      showUserProfile();
+      
+      alert(`🎉 Login erfolgreich!\n\n👤 Name: ${currentUser.name}\n📧 E-Mail: ${currentUser.email}\n🆔 Kundennummer: ${currentUser.customerNumber}\n\n✨ Sie können jetzt Buchungen verwalten!`);
+    }, 1000);
+  }
+});
+
+// Register form submit
+document.getElementById('registerForm')?.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const name = document.getElementById('registerName').value;
+  const email = document.getElementById('registerEmail').value;
+  const phone = document.getElementById('registerPhone').value;
+  const password = document.getElementById('registerPassword').value;
+  
+  if(name && email && phone && password) {
+    currentUser = {
+      name: name,
+      email: email,
+      phone: phone,
+      customerNumber: 'ZE-' + Math.random().toString().slice(2, 8),
+      joinDate: new Date().toLocaleDateString('de-DE')
+    };
+    
+    localStorage.setItem('zentyUser', JSON.stringify(currentUser));
+    
+    showNotification(`✨ Konto erfolgreich erstellt!\n\nWillkommen, ${currentUser.name}!`);
+    
+    setTimeout(() => {
+      document.getElementById('loginModal').style.display = 'none';
+      showUserProfile();
+      
+      alert(`🎉 Registrierung erfolgreich!\n\n👤 Name: ${currentUser.name}\n📧 E-Mail: ${currentUser.email}\n📱 Telefon: ${currentUser.phone}\n🆔 Kundennummer: ${currentUser.customerNumber}\n\n🎁 10% Willkommens-Rabatt aktiviert!\n\nSie können jetzt Fahrten buchen!`);
+    }, 1000);
+  }
+});
+
+// Social login
+document.querySelectorAll('.social-login').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const provider = this.dataset.provider;
+    showNotification(`🔄 ${provider === 'google' ? 'Google' : 'Apple'} Login wird geöffnet...`);
+    
+    setTimeout(() => {
+      // Simulate successful social login
+      currentUser = {
+        name: 'Demo User',
+        email: `demo@${provider}.com`,
+        customerNumber: 'ZE-' + Math.random().toString().slice(2, 8),
+        joinDate: new Date().toLocaleDateString('de-DE')
+      };
+      
+      localStorage.setItem('zentyUser', JSON.stringify(currentUser));
+      document.getElementById('loginModal').style.display = 'none';
+      showUserProfile();
+      showNotification(`✅ Mit ${provider === 'google' ? 'Google' : 'Apple'} angemeldet!`);
+    }, 1500);
+  });
+});
+
+// Forgot password
+document.getElementById('forgotPassword')?.addEventListener('click', (e) => {
+  e.preventDefault();
+  const email = prompt('📧 Bitte geben Sie Ihre E-Mail-Adresse ein:');
+  if(email) {
+    showNotification(`✅ Passwort-Reset-Link wurde an ${email} gesendet!\n\nBitte überprüfen Sie Ihr Postfach.`);
+  }
+});
+
+// Show user profile
+function showUserProfile() {
+  document.getElementById('loginBtn').style.display = 'none';
+  document.getElementById('userProfile').style.display = 'inline-block';
+  document.getElementById('userName').textContent = currentUser.name;
+  document.getElementById('profileName').textContent = currentUser.name;
+  document.getElementById('profileEmail').textContent = currentUser.email;
+  document.getElementById('customerNumber').textContent = currentUser.customerNumber;
+}
+
+// Profile button click
+document.getElementById('profileBtn')?.addEventListener('click', () => {
+  const menu = document.getElementById('profileMenu');
+  menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+});
+
+// Close profile menu when clicking outside
+document.addEventListener('click', (e) => {
+  const profileBtn = document.getElementById('profileBtn');
+  const profileMenu = document.getElementById('profileMenu');
+  
+  if(profileBtn && profileMenu && !profileBtn.contains(e.target) && !profileMenu.contains(e.target)) {
+    profileMenu.style.display = 'none';
+  }
+});
+
+// Profile menu items
+document.querySelectorAll('.profile-menu-item').forEach(item => {
+  item.addEventListener('click', function(e) {
+    e.preventDefault();
+    const href = this.getAttribute('href');
+    
+    showNotification(`🔄 ${href.replace('#', '').charAt(0).toUpperCase() + href.replace('#', '').slice(1)} wird geladen...`);
+    
+    document.getElementById('profileMenu').style.display = 'none';
+    
+    // Simulate page load
+    setTimeout(() => {
+      if(href === '#dashboard') {
+        showDashboard();
+      } else if(href === '#bookings') {
+        showBookings();
+      } else if(href === '#invoices') {
+        showInvoices();
+      } else if(href === '#settings') {
+        showSettings();
+      }
+    }, 500);
+  });
+});
+
+// Logout
+document.getElementById('logoutBtn')?.addEventListener('click', () => {
+  if(confirm('Möchten Sie sich wirklich abmelden?')) {
+    localStorage.removeItem('zentyUser');
+    currentUser = null;
+    
+    document.getElementById('userProfile').style.display = 'none';
+    document.getElementById('loginBtn').style.display = 'inline-flex';
+    document.getElementById('profileMenu').style.display = 'none';
+    
+    showNotification('👋 Erfolgreich abgemeldet!');
+    
+    setTimeout(() => {
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    }, 500);
+  }
+});
+
+// Dashboard functions (simulated)
+function showDashboard() {
+  alert(`📊 DASHBOARD\n\n👤 ${currentUser.name}\n🆔 ${currentUser.customerNumber}\n📅 Mitglied seit: ${currentUser.joinDate}\n\n📈 Statistiken:\n━━━━━━━━━━━━━━\n✓ Gesamte Fahrten: 12\n✓ Aktive Buchungen: 3\n✓ Gesamt ausgegeben: €1,234.50\n✓ Treuepunkte: 450 Punkte\n\n🎁 Nächster Rabatt bei 500 Punkten!`);
+}
+
+function showBookings() {
+  alert(`🎫 MEINE BUCHUNGEN\n\n━━━━━━━━━━━━━━\n\n📍 AKTIVE BUCHUNGEN (3):\n\n1. Lonsee → Ulm\n   📅 05.11.2025 - 08:30\n   🚗 Mercedes Vito\n   💰 €45.00\n   ✅ Bestätigt\n\n2. Stuttgart Flughafen → München\n   📅 10.11.2025 - 14:00\n   🚗 Mercedes Sprinter\n   💰 €189.00\n   ⏳ Ausstehend\n\n3. Ulm → Frankfurt\n   📅 15.11.2025 - 06:00\n   🚗 VW Caddy\n   💰 €299.00\n   ✅ Bestätigt`);
+}
+
+function showInvoices() {
+  alert(`📄 RECHNUNGEN & BELEGE\n\n━━━━━━━━━━━━━━\n\n2024:\n\n✓ RE-87654321 - €45.00 (Bezahlt)\n   05.11.2024 | Lonsee → Ulm\n   📥 Download PDF\n\n✓ RE-87654320 - €189.00 (Bezahlt)\n   28.10.2024 | Stuttgart → München\n   📥 Download PDF\n\n✓ RE-87654319 - €89.00 (Bezahlt)\n   15.10.2024 | Ulm → Günzburg\n   📥 Download PDF\n\n💰 Gesamt: €1,234.50\n📊 Alle Rechnungen als ZIP herunterladen`);
+}
+
+function showSettings() {
+  alert(`⚙️ EINSTELLUNGEN\n\n━━━━━━━━━━━━━━\n\n👤 PROFIL:\n   Name: ${currentUser.name}\n   E-Mail: ${currentUser.email}\n   Telefon: ${currentUser.phone || 'Nicht angegeben'}\n\n🔔 BENACHRICHTIGUNGEN:\n   ✓ E-Mail-Benachrichtigungen\n   ✓ SMS-Benachrichtigungen\n   ✓ Push-Benachrichtigungen\n\n🌍 SPRACHE: Deutsch\n\n🔒 DATENSCHUTZ:\n   Daten herunterladen\n   Konto löschen\n\n💳 ZAHLUNGSMETHODEN:\n   ✓ PayPal (Standard)\n   ✓ Kreditkarte ****1234\n   Neue Methode hinzufügen`);
+}
+
+// ===== MULTI-LANGUAGE SYSTEM =====
+const i18n = {
+  de: {
+    'nav-services': 'Leistungen',
+    'nav-vehicles': 'Fahrzeuge',
+    'nav-ai': 'AI Features',
+    'nav-prices': 'Preise',
+    'nav-contact': 'Kontakt',
+    'hero-title': 'KI-gestützte Mobilität & Transport',
+    'hero-lead': 'Intelligente Routenoptimierung, Echtzeit-Tracking und verlässliche Transportlösungen. Zenty Express AI revolutioniert Mobilität in Deutschland.',
+    'hero-btn-services': '🗺️ Unsere Services',
+    'hero-btn-contact': '📞 Jetzt anfragen',
+    'badge-certified': 'Zertifiziert',
+    'badge-eu': 'EU-weit'
+  },
+  en: {
+    'nav-services': 'Services',
+    'nav-vehicles': 'Fleet',
+    'nav-ai': 'AI Features',
+    'nav-prices': 'Pricing',
+    'nav-contact': 'Contact',
+    'hero-title': 'AI-Powered Mobility & Transport',
+    'hero-lead': 'Intelligent route optimization, real-time tracking and reliable transport solutions. Zenty Express AI revolutionizes mobility in Germany.',
+    'hero-btn-services': '🗺️ Our Services',
+    'hero-btn-contact': '📞 Get Quote',
+    'badge-certified': 'Certified',
+    'badge-eu': 'EU-wide'
+  },
+  tr: {
+    'nav-services': 'Hizmetler',
+    'nav-vehicles': 'Araçlar',
+    'nav-ai': 'AI Özellikler',
+    'nav-prices': 'Fiyatlar',
+    'nav-contact': 'İletişim',
+    'hero-title': 'AI Destekli Mobilite & Ulaşım',
+    'hero-lead': 'Akıllı rota optimizasyonu, gerçek zamanlı takip ve güvenilir ulaşım çözümleri. Zenty Express AI Almanya\'da mobiliteyi devrim yapıyor.',
+    'hero-btn-services': '🗺️ Hizmetlerimiz',
+    'hero-btn-contact': '📞 Teklif Al',
+    'badge-certified': 'Sertifikalı',
+    'badge-eu': 'AB Çapında'
+  },
+  ru: {
+    'nav-services': 'Услуги',
+    'nav-vehicles': 'Автопарк',
+    'nav-ai': 'AI Функции',
+    'nav-prices': 'Цены',
+    'nav-contact': 'Контакт',
+    'hero-title': 'Мобильность с ИИ',
+    'hero-lead': 'Интеллектуальная оптимизация маршрутов, отслеживание в реальном времени и надежные транспортные решения.',
+    'hero-btn-services': '🗺️ Наши услуги',
+    'hero-btn-contact': '📞 Связаться',
+    'badge-certified': 'Сертифицирован',
+    'badge-eu': 'По всему ЕС'
+  },
+  ar: {
+    'nav-services': 'الخدمات',
+    'nav-vehicles': 'الأسطول',
+    'nav-ai': 'ميزات AI',
+    'nav-prices': 'الأسعار',
+    'nav-contact': 'اتصل بنا',
+    'hero-title': 'التنقل بالذكاء الاصطناعي',
+    'hero-lead': 'تحسين الطريق الذكي، التتبع في الوقت الفعلي وحلول نقل موثوقة.',
+    'hero-btn-services': '🗺️ خدماتنا',
+    'hero-btn-contact': '📞 احصل على عرض',
+    'badge-certified': 'معتمد',
+    'badge-eu': 'في جميع أنحاء الاتحاد الأوروبي'
+  },
+  fr: {
+    'nav-services': 'Services',
+    'nav-vehicles': 'Flotte',
+    'nav-ai': 'Fonctions AI',
+    'nav-prices': 'Tarifs',
+    'nav-contact': 'Contact',
+    'hero-title': 'Mobilité & Transport IA',
+    'hero-lead': 'Optimisation intelligente des itinéraires, suivi en temps réel et solutions de transport fiables.',
+    'hero-btn-services': '🗺️ Nos Services',
+    'hero-btn-contact': '📞 Demander un devis',
+    'badge-certified': 'Certifié',
+    'badge-eu': 'Dans toute l\'UE'
+  }
+};
+
+let currentLanguage = localStorage.getItem('zentyLang') || 'de';
+
+function translatePage(lang) {
+  currentLanguage = lang;
+  localStorage.setItem('zentyLang', lang);
+  
+  // Update all elements with data-i18n attribute
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if(i18n[lang] && i18n[lang][key]) {
+      el.innerHTML = i18n[lang][key];
+    }
+  });
+  
+  // Show notification
+  const langNames = {de: 'Deutsch', en: 'English', tr: 'Türkçe', ru: 'Русский', ar: 'العربية', fr: 'Français'};
+  showNotification(`✓ Sprache geändert zu ${langNames[lang]}`);
+}
+
+function showNotification(message) {
+  const notif = document.createElement('div');
+  notif.style.cssText = 'position:fixed;top:100px;right:24px;z-index:999;background:linear-gradient(135deg,#00e0ff,#7f00ff);color:#fff;padding:16px 24px;border-radius:12px;box-shadow:0 8px 24px rgba(0,224,255,.5);animation:slideIn .3s ease-out;font-weight:600';
+  notif.textContent = message;
+  document.body.appendChild(notif);
+  
+  setTimeout(() => {
+    notif.style.animation = 'slideOut .3s ease-out';
+    setTimeout(() => notif.remove(), 300);
+  }, 3000);
+}
+
+// Language selector
+document.getElementById('languageSelector')?.addEventListener('change', (e) => {
+  translatePage(e.target.value);
+  
+  // Also update chatbot language
+  if(document.getElementById('chatLanguage')) {
+    document.getElementById('chatLanguage').value = e.target.value;
+    if(typeof updateChatLanguage === 'function') {
+      updateChatLanguage();
+    }
+  }
+});
+
+// Set initial language
+if(currentLanguage !== 'de') {
+  document.getElementById('languageSelector').value = currentLanguage;
+  translatePage(currentLanguage);
+}
+
+// Menu Toggle
+const menuBtn = document.getElementById('menuBtn');
+const nav = document.getElementById('nav');
+
+menuBtn?.addEventListener('click', () => {
+  nav.classList.toggle('open');
+  menuBtn.classList.toggle('active');
+});
+
+// Dynamic Year
+document.getElementById('year').textContent = new Date().getFullYear();
+
+// Smooth Scroll
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function(e) {
+    const href = this.getAttribute('href');
+    if(href === '#') return;
+    
+    const target = document.querySelector(href);
+    if(target) {
+      e.preventDefault();
+      target.scrollIntoView({behavior: 'smooth', block: 'start'});
+      nav.classList.remove('open');
+      menuBtn.classList.remove('active');
+    }
+  });
+});
+
+// Scroll Effect for Header
+let lastScroll = 0;
+const header = document.querySelector('.header');
+
+window.addEventListener('scroll', () => {
+  const currentScroll = window.pageYOffset;
+  
+  if(currentScroll > 100) {
+    header.style.padding = '10px 0';
+  } else {
+    header.style.padding = '16px 0';
+  }
+  
+  lastScroll = currentScroll;
+});
+
+// ===== QR CODE GENERATOR =====
+if(typeof QRCode !== 'undefined' && document.getElementById('qr-demo')) {
+  new QRCode(document.getElementById('qr-demo'), {
+    text: 'https://zentyexpress.de/booking?id=DEMO-' + Math.random().toString(36).substr(2, 9).toUpperCase(),
+    width: 180,
+    height: 180,
+    colorDark: '#000000',
+    colorLight: '#ffffff',
+  });
+}
+
+// ===== INTERACTIVE MAP & ROUTE OPTIMIZER =====
+if(typeof L !== 'undefined' && document.getElementById('map')) {
+  const cities = {
+    "Lonsee": [48.5259, 9.9274],
+    "Ulm": [48.4011, 9.9876],
+    "Neu-Ulm": [48.3927, 10.0111],
+    "Blaustein": [48.4177, 9.9410],
+    "Dornstadt": [48.4633, 9.9553],
+    "Günzburg": [48.4553, 10.2728],
+    "Senden": [48.3286, 10.0442],
+    "Ehingen": [48.2829, 9.7276],
+    "Laupheim": [48.2289, 9.8776],
+    "Geislingen": [48.6255, 9.8344],
+    "Biberach": [48.1033, 9.7900],
+    "Langenau": [48.4975, 10.1192],
+    "Weißenhorn": [48.3014, 10.1582]
+  };
+
+  // Initialize map with modern options
+  const map = L.map('map', {
+    zoomControl: false,
+    attributionControl: false,
+    zoomAnimation: true,
+    fadeAnimation: true,
+    markerZoomAnimation: true
+  }).setView([48.5259, 9.9274], 12);
+  
+  // Modern High-Resolution Tile Layers
+  const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 20,
+    attribution: '© OSM'
+  });
+  
+  // Ultra HD Satellite - Esri World Imagery
+  const satLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    maxZoom: 20,
+    attribution: '© Esri'
+  });
+  
+  // Google Hybrid (Satellite + Labels) - Best Quality!
+  const hybridLayer = L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
+    maxZoom: 20,
+    attribution: '© Google'
+  });
+  
+  // Start with hybrid layer (best quality)
+  hybridLayer.addTo(map);
+  
+  // Custom zoom control
+  L.control.zoom({position: 'bottomright'}).addTo(map);
+  
+  // Modern scale control
+  L.control.scale({
+    position: 'bottomleft',
+    imperial: false,
+    metric: true
+  }).addTo(map);
+  
+  let routeLine = null;
+  let startMarker = null;
+  let destMarker = null;
+  
+  // Haversine distance calculation
+  function haversine(lat1, lon1, lat2, lon2) {
+    const R = 6371; // km
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+              Math.sin(dLon/2) * Math.sin(dLon/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return R * c;
+  }
+  
+  // ===== ADVANCED ADDRESS AUTOCOMPLETE =====
+  let startCoords = null;
+  let destCoords = null;
+  let searchTimeout = null;
+  
+  // Quick city buttons
+  document.querySelectorAll('.quick-city').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const target = this.dataset.target;
+      const city = this.dataset.city;
+      const input = document.getElementById(target + 'Address');
+      input.value = city + ', Deutschland';
+      input.focus();
+      
+      // Trigger search
+      searchAddress(city + ', Deutschland', target);
+    });
+    
+    btn.addEventListener('mouseenter', function() {
+      this.style.background = 'rgba(0,224,255,.2)';
+      this.style.borderColor = 'var(--accent)';
+    });
+    
+    btn.addEventListener('mouseleave', function() {
+      this.style.background = 'rgba(0,224,255,.1)';
+      this.style.borderColor = 'rgba(0,224,255,.3)';
+    });
+  });
+  
+  // Address input with autocomplete
+  async function searchAddress(query, type) {
+    if(!query || query.length < 3) return;
+    
+    try {
+      const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&countrycodes=de&addressdetails=1&limit=8`);
+      const results = await response.json();
+      
+      const suggestionsDiv = document.getElementById(type + 'Suggestions');
+      suggestionsDiv.innerHTML = '';
+      
+      if(results.length > 0) {
+        results.forEach(result => {
+          const div = document.createElement('div');
+          div.style.cssText = 'padding:14px 18px;cursor:pointer;border-bottom:1px solid var(--border);transition:.2s;color:#fff;font-weight:600';
+          div.innerHTML = `
+            <div style="font-size:1rem;margin-bottom:4px">${result.display_name.split(',')[0]}</div>
+            <div style="font-size:.85rem;color:var(--muted)">${result.display_name}</div>
+          `;
+          
+          div.addEventListener('mouseenter', () => {
+            div.style.background = 'linear-gradient(135deg,rgba(0,224,255,.15),rgba(127,0,255,.1))';
+          });
+          
+          div.addEventListener('mouseleave', () => {
+            div.style.background = 'transparent';
+          });
+          
+          div.addEventListener('click', () => {
+            document.getElementById(type + 'Address').value = result.display_name;
+            if(type === 'start') {
+              startCoords = {lat: parseFloat(result.lat), lon: parseFloat(result.lon), name: result.display_name};
+            } else {
+              destCoords = {lat: parseFloat(result.lat), lon: parseFloat(result.lon), name: result.display_name};
+            }
+            suggestionsDiv.style.display = 'none';
+            showNotification('✓ Adresse ausgewählt');
+          });
+          
+          suggestionsDiv.appendChild(div);
+        });
+        
+        suggestionsDiv.style.display = 'block';
+      }
+    } catch(error) {
+      console.log('Geocoding error:', error);
+    }
+  }
+  
+  // Start address input
+  document.getElementById('startAddress')?.addEventListener('input', (e) => {
+    const query = e.target.value;
+    
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => {
+      if(query.length >= 3) {
+        searchAddress(query, 'start');
+      } else {
+        document.getElementById('startSuggestions').style.display = 'none';
+      }
+    }, 500);
+  });
+  
+  // Dest address input
+  document.getElementById('destAddress')?.addEventListener('input', (e) => {
+    const query = e.target.value;
+    
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => {
+      if(query.length >= 3) {
+        searchAddress(query, 'dest');
+      } else {
+        document.getElementById('destSuggestions').style.display = 'none';
+      }
+    }, 500);
+  });
+  
+  // Close suggestions when clicking outside
+  document.addEventListener('click', (e) => {
+    if(!e.target.closest('#startAddress') && !e.target.closest('#startSuggestions')) {
+      document.getElementById('startSuggestions').style.display = 'none';
+    }
+    if(!e.target.closest('#destAddress') && !e.target.closest('#destSuggestions')) {
+      document.getElementById('destSuggestions').style.display = 'none';
+    }
+  });
+  
+  // Calculate route
+  document.getElementById('calculateRoute')?.addEventListener('click', async () => {
+    const startAddr = document.getElementById('startAddress').value.trim();
+    const destAddr = document.getElementById('destAddress').value.trim();
+    
+    if(!startAddr || !destAddr) {
+      showNotification('⚠ Bitte geben Sie Start & Ziel ein!\n\n3+ Zeichen eingeben für Vorschläge.');
+      return;
+    }
+    
+    // Show loading
+    showNotification('🔍 Adressen werden gesucht...');
+    
+    // If coords not set, try to geocode
+    if(!startCoords) {
+      try {
+        const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(startAddr)}&countrycodes=de&limit=1`);
+        const results = await response.json();
+        if(results.length > 0) {
+          startCoords = {lat: parseFloat(results[0].lat), lon: parseFloat(results[0].lon), name: results[0].display_name};
+        }
+      } catch(e) {}
+    }
+    
+    if(!destCoords) {
+      try {
+        const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(destAddr)}&countrycodes=de&limit=1`);
+        const results = await response.json();
+        if(results.length > 0) {
+          destCoords = {lat: parseFloat(results[0].lat), lon: parseFloat(results[0].lon), name: results[0].display_name};
+        }
+      } catch(e) {}
+    }
+    
+    if(!startCoords || !destCoords) {
+      showNotification('⚠ Adressen nicht gefunden!\n\nBitte überprüfen Sie die Eingabe.');
+      return;
+    }
+    
+    const start = [startCoords.lat, startCoords.lon];
+    const dest = [destCoords.lat, destCoords.lon];
+    
+    // Remove old markers and route
+    if(routeLine) map.removeLayer(routeLine);
+    if(startMarker) map.removeLayer(startMarker);
+    if(destMarker) map.removeLayer(destMarker);
+    
+    // Add modern animated markers
+    startMarker = L.marker(start, {
+      icon: L.divIcon({
+        className: 'custom-marker-start',
+        html: `
+          <div style="position:relative;width:40px;height:50px">
+            <div style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:40px;height:40px;background:linear-gradient(135deg,#00e0ff,#00b8d4);border-radius:50% 50% 50% 0;transform:rotate(-45deg) translateX(-50%);border:3px solid #fff;box-shadow:0 6px 20px rgba(0,224,255,.6);animation:markerPulse 2s infinite"></div>
+            <div style="position:absolute;top:8px;left:50%;transform:translateX(-50%) rotate(45deg);color:#000;font-size:16px;font-weight:900">📍</div>
+          </div>
+        `,
+        iconSize: [40, 50],
+        iconAnchor: [20, 50]
+      })
+    }).addTo(map).bindPopup(`<div style="font-weight:700;color:#00e0ff;font-size:1.1rem">🚀 Start</div><div style="margin-top:6px;color:#fff;font-size:.9rem">${startCoords ? startCoords.name.split(',').slice(0,2).join(',') : 'Start'}</div>`);
+    
+    destMarker = L.marker(dest, {
+      icon: L.divIcon({
+        className: 'custom-marker-dest',
+        html: `
+          <div style="position:relative;width:40px;height:50px">
+            <div style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:40px;height:40px;background:linear-gradient(135deg,#ff006e,#d00056);border-radius:50% 50% 50% 0;transform:rotate(-45deg) translateX(-50%);border:3px solid #fff;box-shadow:0 6px 20px rgba(255,0,110,.6);animation:markerPulse 2s infinite .5s"></div>
+            <div style="position:absolute;top:8px;left:50%;transform:translateX(-50%) rotate(45deg);color:#fff;font-size:16px;font-weight:900">🎯</div>
+          </div>
+        `,
+        iconSize: [40, 50],
+        iconAnchor: [20, 50]
+      })
+    }).addTo(map).bindPopup(`<div style="font-weight:700;color:#ff006e;font-size:1.1rem">🎯 Ziel</div><div style="margin-top:6px;color:#fff;font-size:.9rem">${destCoords ? destCoords.name.split(',').slice(0,2).join(',') : 'Ziel'}</div>`);
+    
+    // Draw curved route
+    const mid = [(start[0] + dest[0]) / 2, (start[1] + dest[1]) / 2];
+    const dx = dest[1] - start[1];
+    const dy = dest[0] - start[0];
+    const len = Math.sqrt(dx*dx + dy*dy);
+    const nx = -dy / len;
+    const ny = dx / len;
+    const amp = Math.min(0.12, Math.max(0.04, len * 0.25));
+    const ctrl = [mid[0] + ny * amp, mid[1] + nx * amp];
+    
+    function bezierQuad(p0, p1, p2, t) {
+      const u = 1 - t;
+      return [
+        u*u*p0[0] + 2*u*t*p1[0] + t*t*p2[0],
+        u*u*p0[1] + 2*u*t*p1[1] + t*t*p2[1]
+      ];
+    }
+    
+    const routePoints = [];
+    for(let t = 0; t <= 1; t += 0.05) {
+      routePoints.push(bezierQuad(start, ctrl, dest, t));
+    }
+    
+    // Animated gradient route
+    routeLine = L.polyline(routePoints, {
+      color: '#00e0ff',
+      weight: 5,
+      opacity: 0.9,
+      dashArray: '12, 8',
+      className: 'animated-route'
+    }).addTo(map);
+    
+    // Add route shadow for depth
+    L.polyline(routePoints, {
+      color: '#7f00ff',
+      weight: 3,
+      opacity: 0.4,
+      dashArray: '12, 8',
+      offset: 2
+    }).addTo(map);
+    
+    map.fitBounds(L.latLngBounds([start, dest]).pad(0.2));
+    
+    // Calculate distance and price
+    const distance = haversine(start[0], start[1], dest[0], dest[1]);
+    const time = Math.round(distance / 80 * 60); // ~80 km/h average
+    
+    let tariff, totalPrice;
+    if(distance <= 20) {
+      tariff = 1.00;
+    } else if(distance <= 100) {
+      tariff = 0.90;
+    } else {
+      tariff = 0.80;
+    }
+    totalPrice = distance * tariff;
+    
+    // Show results
+    document.getElementById('routeDistance').textContent = distance.toFixed(1) + ' km';
+    document.getElementById('routeTime').textContent = time + ' min';
+    document.getElementById('routeTariff').textContent = tariff.toFixed(2) + ' €/km';
+    document.getElementById('routePrice').textContent = totalPrice.toFixed(2) + ' €';
+    document.getElementById('routeResult').style.display = 'block';
+    
+    // Book now button with payment
+    document.getElementById('bookNowWithPayment').onclick = () => {
+      const price = document.getElementById('routePrice').textContent.replace(' €', '');
+      document.getElementById('totalAmount').textContent = price;
+      document.getElementById('paymentModal').style.display = 'flex';
+    };
+  });
+  
+  // Map style switcher
+  let currentLayer = hybridLayer;
+  
+  document.getElementById('mapStyleStreet')?.addEventListener('click', function() {
+    if(currentLayer !== osmLayer) {
+      map.removeLayer(currentLayer);
+      map.addLayer(osmLayer);
+      currentLayer = osmLayer;
+      this.style.background = 'var(--accent)';
+      this.style.color = '#000';
+      document.getElementById('mapStyleSat').style.background = 'var(--panel2)';
+      document.getElementById('mapStyleSat').style.color = 'var(--text)';
+      document.getElementById('mapStyleSat').style.border = '1px solid var(--border)';
+    }
+  });
+  
+  document.getElementById('mapStyleSat')?.addEventListener('click', function() {
+    if(currentLayer !== hybridLayer) {
+      map.removeLayer(currentLayer);
+      map.addLayer(hybridLayer);
+      currentLayer = hybridLayer;
+      this.style.background = 'var(--accent)';
+      this.style.color = '#000';
+      this.style.border = '0';
+      document.getElementById('mapStyleStreet').style.background = 'var(--panel2)';
+      document.getElementById('mapStyleStreet').style.color = 'var(--text)';
+    }
+  });
+  
+  // 3D View (zoom closer for detail)
+  document.getElementById('zoom3D')?.addEventListener('click', function() {
+    map.setView([48.5259, 9.9274], 17, {
+      animate: true,
+      duration: 1.5
+    });
+    showNotification('🏢 3D Detailansicht aktiviert! Zoomen Sie für Gebäudedetails.');
+  });
+  
+  // Traffic Layer Simulation
+  let trafficActive = false;
+  document.getElementById('trafficLayer')?.addEventListener('click', function() {
+    trafficActive = !trafficActive;
+    if(trafficActive) {
+      this.style.background = 'linear-gradient(135deg,rgba(255,107,107,.2),rgba(255,0,110,.15))';
+      this.style.borderColor = '#ff6b6b';
+      this.textContent = '🚗 Verkehr aktiv';
+      showNotification('🚗 Verkehrsanalyse aktiviert - Echtzeit-Daten werden geladen...');
+    } else {
+      this.style.background = 'var(--panel2)';
+      this.style.borderColor = 'var(--border)';
+      this.textContent = '🚗 Verkehr anzeigen';
+    }
+  });
+  
+  // Fullscreen
+  document.getElementById('fullscreenMap')?.addEventListener('click', function() {
+    const mapDiv = document.getElementById('map');
+    if(mapDiv.requestFullscreen) {
+      mapDiv.requestFullscreen();
+    } else if(mapDiv.webkitRequestFullscreen) {
+      mapDiv.webkitRequestFullscreen();
+    } else if(mapDiv.msRequestFullscreen) {
+      mapDiv.msRequestFullscreen();
+    }
+    showNotification('⛶ Vollbildmodus aktiviert - ESC zum Beenden');
+  });
+}
+
+// ===== PAYMENT MODAL =====
+document.getElementById('closePayment')?.addEventListener('click', () => {
+  document.getElementById('paymentModal').style.display = 'none';
+});
+
+document.querySelectorAll('.payment-method').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const method = this.dataset.method;
+    const amount = document.getElementById('totalAmount').textContent;
+    const methodNames = {
+      paypal: 'PayPal',
+      klarna: 'Klarna',
+      card: 'Kreditkarte',
+      applepay: 'Apple Pay',
+      googlepay: 'Google Pay',
+      sofort: 'Sofort-Überweisung',
+      invoice: 'Rechnung'
+    };
+    
+    // Simulate payment processing
+    const modal = document.getElementById('paymentModal');
+    modal.style.display = 'none';
+    
+    showNotification(`✅ ${methodNames[method]} wird vorbereitet...\n\nBetrag: €${amount}`);
+    
+    setTimeout(() => {
+      // Generate document numbers
+      const invoiceNum = 'RE-' + Date.now().toString().slice(-8);
+      const deliveryNum = 'LS-' + Date.now().toString().slice(-8);
+      const date = new Date().toLocaleDateString('de-DE');
+      
+      alert(`✅ Buchung erfolgreich!\n\n💳 Zahlungsmethode: ${methodNames[method]}\n💰 Betrag: €${amount}\n\n📄 DOKUMENTE ERSTELLT:\n━━━━━━━━━━━━━━━━━━━\n📋 Lieferschein-Nr: ${deliveryNum}\n📊 Rechnung-Nr: ${invoiceNum}\n📅 Datum: ${date}\n\n📧 Dokumente werden per E-Mail versendet:\n  ✓ Rechnung (PDF)\n  ✓ Lieferschein (PDF)\n  ✓ QR-Code für Check-In\n  ✓ Tracking-Link\n\n✨ 10% Neukunden-Rabatt angewendet!\n\n${method === 'paypal' ? '💙 PayPal: paypal.me/zentyexpress' : ''}`);
+      
+      // Show document notification
+      setTimeout(() => {
+        showNotification(`📄 Dokumente erstellt!\n\n✓ Rechnung: ${invoiceNum}\n✓ Lieferschein: ${deliveryNum}\n\nPer E-Mail zugestellt!`);
+      }, 1000);
+      
+      // Reset and redirect
+      document.getElementById('routeResult').style.display = 'none';
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    }, 2000);
+  });
+});
+
+// ===== BOOKING FORM HANDLER =====
+document.getElementById('bookingForm')?.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const formData = new FormData(e.target);
+  const data = Object.fromEntries(formData);
+  
+  // Simulate booking
+  alert(`✅ Buchung erfolgreich!\n\nBestätigung wird an ${data.email} gesendet.\n\nSie erhalten in 5 Minuten:\n• Buchungsbestätigung\n• QR-Code für Check-in\n• Live-Tracking Link\n\n10% Neukunden-Rabatt wurde angewendet!`);
+  
+  e.target.reset();
+  
+  // Scroll to top
+  window.scrollTo({top: 0, behavior: 'smooth'});
+});
+
+// ===== ADVANCED AI CHATBOT =====
+const chatbot = document.getElementById('chatbot');
+const toggleChatbot = document.getElementById('toggleChatbot');
+const closeChatbot = document.getElementById('closeChatbot');
+const chatMessages = document.getElementById('chatMessages');
+const chatInput = document.getElementById('chatInput');
+const chatSend = document.getElementById('chatSend');
+const chatLanguage = document.getElementById('chatLanguage');
+const voiceBtn = document.getElementById('voiceBtn');
+
+let currentLang = 'de';
+
+// Multi-language support
+const translations = {
+  de: {
+    welcome: 'Willkommen! 👋\nIch bin Ihr KI-Assistent. Ich kann Ihnen in 6 Sprachen helfen!',
+    placeholder: 'Ihre Nachricht...',
+    instant: '⚡ Sofort buchen (Express)',
+    whatsapp: '💬 WhatsApp Chat öffnen',
+    telegram: '✈️ Telegram Chat öffnen',
+    call: '📞 Direkt anrufen',
+    email: '📧 E-Mail senden',
+    route: '🗺️ Route berechnen',
+    prices: '💰 Preise ansehen'
+  },
+  en: {
+    welcome: 'Welcome! 👋\nI\'m your AI Assistant. I can help you in 6 languages!',
+    placeholder: 'Your message...',
+    instant: '⚡ Book now (Express)',
+    whatsapp: '💬 Open WhatsApp Chat',
+    telegram: '✈️ Open Telegram Chat',
+    call: '📞 Call directly',
+    email: '📧 Send Email',
+    route: '🗺️ Calculate route',
+    prices: '💰 View prices'
+  },
+  tr: {
+    welcome: 'Hoş geldiniz! 👋\nBen sizin AI Asistanınızım. 6 dilde yardımcı olabilirim!',
+    placeholder: 'Mesajınız...',
+    instant: '⚡ Hemen rezervasyon (Express)',
+    whatsapp: '💬 WhatsApp Chat aç',
+    telegram: '✈️ Telegram Chat aç',
+    call: '📞 Direkt ara',
+    email: '📧 E-posta gönder',
+    route: '🗺️ Rota hesapla',
+    prices: '💰 Fiyatları gör'
+  },
+  ru: {
+    welcome: 'Добро пожаловать! 👋\nЯ ваш AI-помощник. Могу помочь на 6 языках!',
+    placeholder: 'Ваше сообщение...',
+    instant: '⚡ Забронировать сейчас',
+    whatsapp: '💬 Открыть WhatsApp',
+    telegram: '✈️ Открыть Telegram',
+    call: '📞 Позвонить',
+    email: '📧 Отправить Email',
+    route: '🗺️ Рассчитать маршрут',
+    prices: '💰 Посмотреть цены'
+  },
+  ar: {
+    welcome: 'مرحبا! 👋\nأنا مساعد الذكاء الاصطناعي. يمكنني المساعدة بـ 6 لغات!',
+    placeholder: 'رسالتك...',
+    instant: '⚡ احجز الآن',
+    whatsapp: '💬 فتح WhatsApp',
+    telegram: '✈️ فتح Telegram',
+    call: '📞 اتصل مباشرة',
+    email: '📧 إرسال بريد',
+    route: '🗺️ حساب المسار',
+    prices: '💰 عرض الأسعار'
+  },
+  fr: {
+    welcome: 'Bienvenue! 👋\nJe suis votre assistant IA. Je peux vous aider en 6 langues!',
+    placeholder: 'Votre message...',
+    instant: '⚡ Réserver maintenant',
+    whatsapp: '💬 Ouvrir WhatsApp',
+    telegram: '✈️ Ouvrir Telegram',
+    call: '📞 Appeler directement',
+    email: '📧 Envoyer Email',
+    route: '🗺️ Calculer itinéraire',
+    prices: '💰 Voir les prix'
+  }
+};
+
+// Language change
+chatLanguage?.addEventListener('change', (e) => {
+  currentLang = e.target.value;
+  updateChatLanguage();
+  
+  // Sync with main language selector
+  if(document.getElementById('languageSelector')) {
+    document.getElementById('languageSelector').value = currentLang;
+  }
+});
+
+function updateChatLanguage() {
+  const t = translations[currentLang];
+  if(!t) return;
+  
+  chatInput.placeholder = t.placeholder;
+  
+  // Update buttons
+  const buttons = document.querySelectorAll('.chat-option');
+  if(buttons.length >= 7) {
+    buttons[0].textContent = t.instant;
+    buttons[1].textContent = t.whatsapp;
+    buttons[2].textContent = t.telegram;
+    buttons[3].textContent = t.call;
+    buttons[4].textContent = t.email;
+    buttons[5].textContent = t.route;
+    buttons[6].textContent = t.prices;
+  }
+  
+  addChatMessage(t.welcome, 'bot');
+}
+
+// Advanced chat actions
+document.querySelectorAll('.chat-option').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const action = this.dataset.action;
+    
+    if(action === 'instant-booking') {
+      addChatMessage('✅ Express-Buchung wird vorbereitet...', 'bot');
+      setTimeout(() => {
+        window.location.href = '#booking';
+        chatbot.style.display = 'none';
+      }, 1500);
+    }
+    else if(action === 'whatsapp') {
+      addChatMessage('📱 WhatsApp wird geöffnet... Sie werden zu unserem Chat weitergeleitet!', 'bot');
+      setTimeout(() => {
+        window.open('https://api.whatsapp.com/send?phone=491625757957&text=Hallo%20Zenty%20Express%20AI!%20Ich%20möchte%20eine%20Fahrt%20buchen.', '_blank');
+      }, 1000);
+    }
+    else if(action === 'telegram') {
+      addChatMessage('✈️ Telegram wird geöffnet...', 'bot');
+      setTimeout(() => {
+        window.open('https://t.me/ZentyExpressBot', '_blank');
+      }, 1000);
+    }
+    else if(action === 'call') {
+      addChatMessage('📞 Rufnummer: +49 162 5757957\nVerbindung wird hergestellt...', 'bot');
+      setTimeout(() => {
+        window.location.href = 'tel:+491625757957';
+      }, 1000);
+    }
+    else if(action === 'email') {
+      addChatMessage('📧 E-Mail Client wird geöffnet...', 'bot');
+      setTimeout(() => {
+        window.location.href = 'mailto:info@zentyexpress.de?subject=Buchungsanfrage&body=Hallo%20Zenty%20Express%20AI%20Team,%0A%0AIch%20möchte%20gerne%20eine%20Fahrt%20buchen.%0A%0AMit%20freundlichen%20Grüßen';
+      }, 1000);
+    }
+    else if(action === 'route') {
+      addChatMessage('🗺️ Route-Optimizer wird geladen...', 'bot');
+      setTimeout(() => {
+        window.location.href = '#route-optimizer';
+        chatbot.style.display = 'none';
+      }, 1500);
+    }
+    else if(action === 'prices') {
+      addChatMessage('💰 Preisübersicht:\n\nBasic: €1,00/km (bis 20km)\nStandard: €0,90/km (20-100km)\nPremium: €0,80/km (über 100km)\n\n✨ 10% Neukunden-Rabatt!', 'bot');
+    }
+  });
+});
+
+// Voice button
+voiceBtn?.addEventListener('click', () => {
+  voiceBtn.style.animation = 'pulse 1s ease-in-out';
+  addChatMessage('🎤 Sprachfunktion wird in Zukunft verfügbar sein!', 'bot');
+  setTimeout(() => {
+    voiceBtn.style.animation = '';
+  }, 1000);
+});
+
+// Send message
+function sendChatMessage() {
+  const message = chatInput.value.trim();
+  if(!message) return;
+  
+  addChatMessage(message, 'user');
+  chatInput.value = '';
+  
+  // Typing indicator
+  const typingDiv = document.createElement('div');
+  typingDiv.id = 'typing';
+  typingDiv.style.marginBottom = '16px';
+  typingDiv.innerHTML = '<div style="display:inline-block;background:var(--panel);padding:12px 16px;border-radius:12px"><span style="color:var(--accent)">●●●</span> AI tippt...</div>';
+  chatMessages.appendChild(typingDiv);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+  
+  // Simulate AI response
+  setTimeout(() => {
+    document.getElementById('typing')?.remove();
+    
+    // Smart responses based on keywords
+    let response = '';
+    const msg = message.toLowerCase();
+    
+    if(msg.includes('preis') || msg.includes('kosten') || msg.includes('price')) {
+      response = '💰 Unsere Preise:\nBasic: €1,00/km | Standard: €0,90/km | Premium: €0,80/km\n\nSoll ich eine Route berechnen?';
+    }
+    else if(msg.includes('buch') || msg.includes('book') || msg.includes('rezerv')) {
+      response = '📅 Perfekt! Ich öffne das Buchungsformular für Sie. Einen Moment bitte...';
+      setTimeout(() => {
+        window.location.href = '#booking';
+        chatbot.style.display = 'none';
+      }, 2000);
+    }
+    else if(msg.includes('whatsapp')) {
+      response = '💬 WhatsApp wird geöffnet...';
+      setTimeout(() => {
+        window.open('https://api.whatsapp.com/send?phone=491625757957&text=Hallo!', '_blank');
+      }, 1000);
+    }
+    else if(msg.includes('hilfe') || msg.includes('help')) {
+      response = '🤝 Ich helfe Ihnen gerne!\n\nWählen Sie eine Option:\n• Sofort buchen\n• WhatsApp Chat\n• Preise ansehen\n• Route berechnen';
+    }
+    else {
+      const randomResponses = [
+        'Vielen Dank! 👍 Ein Mitarbeiter kontaktiert Sie in <5 Min per WhatsApp oder Anruf.',
+        'Verstanden! 😊 Ich leite Ihre Anfrage an unser Team weiter. Sie werden sofort kontaktiert.',
+        'Perfekt! ✅ Möchten Sie direkt über WhatsApp weitermachen? Schneller Kontakt!'
+      ];
+      response = randomResponses[Math.floor(Math.random() * randomResponses.length)];
+    }
+    
+    addChatMessage(response, 'bot');
+  }, 1500);
+}
+
+chatSend?.addEventListener('click', sendChatMessage);
+chatInput?.addEventListener('keypress', (e) => {
+  if(e.key === 'Enter') sendChatMessage();
+});
+
+function addChatMessage(text, sender) {
+  const isBot = sender === 'bot';
+  const msgDiv = document.createElement('div');
+  msgDiv.style.marginBottom = '16px';
+  msgDiv.style.textAlign = isBot ? 'left' : 'right';
+  msgDiv.style.animation = 'slideIn 0.3s ease-out';
+  
+  const time = new Date().toLocaleTimeString('de-DE', {hour: '2-digit', minute: '2-digit'});
+  
+  msgDiv.innerHTML = `
+    <div style="display:inline-block;background:${isBot ? 'linear-gradient(135deg,rgba(0,224,255,.1),rgba(127,0,255,.1))' : 'linear-gradient(135deg,var(--blue2),var(--accent))'};padding:14px 18px;border-radius:14px;max-width:85%;text-align:left;border:1px solid ${isBot ? 'rgba(0,224,255,.3)' : 'transparent'}">
+      <p style="margin:0;color:${isBot ? 'var(--text)' : '#fff'};font-size:.92rem;line-height:1.6;white-space:pre-line">${text}</p>
+      <span style="font-size:.7rem;color:${isBot ? 'var(--muted)' : 'rgba(255,255,255,.7)'};margin-top:6px;display:block">${time}</span>
+    </div>
+  `;
+  
+  const optionsDiv = document.getElementById('chatOptions');
+  if(optionsDiv && optionsDiv.parentElement === chatMessages) {
+    chatMessages.insertBefore(msgDiv, optionsDiv);
+  } else {
+    chatMessages.appendChild(msgDiv);
+  }
+  
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+toggleChatbot?.addEventListener('click', () => {
+  const isVisible = chatbot.style.display === 'block';
+  chatbot.style.display = isVisible ? 'none' : 'block';
+  toggleChatbot.textContent = isVisible ? '💬' : '✕';
+  
+  if(!isVisible) {
+    chatInput.focus();
+  }
+});
+
+closeChatbot?.addEventListener('click', () => {
+  chatbot.style.display = 'none';
+  toggleChatbot.textContent = '💬';
+});
+
+// Auto-open chatbot with smart timing
+if(!sessionStorage.getItem('chatbotShown')) {
+  setTimeout(() => {
+    chatbot.style.display = 'block';
+    toggleChatbot.textContent = '✕';
+    toggleChatbot.style.animation = 'pulse 2s infinite';
+    sessionStorage.setItem('chatbotShown', 'true');
+    
+    // Welcome message based on time
+    const hour = new Date().getHours();
+    let greeting = 'Guten Tag';
+    if(hour < 12) greeting = 'Guten Morgen';
+    else if(hour >= 18) greeting = 'Guten Abend';
+    
+    setTimeout(() => {
+      addChatMessage(`${greeting}! 🌟\n\nSchneller Kontakt:\n📞 Anruf: +49 162 5757957\n💬 WhatsApp: Sofort chatten\n⚡ Express-Buchung: 2 Min`, 'bot');
+    }, 1000);
+  }, 8000);
+}
+</script>
+
 </body>
 </html>
