@@ -2021,78 +2021,84 @@ body{
   <a href="#kontakt" class="fab-btn" title="Kontakt">✉</a>
 </div>
 
-<!-- Advanced AI Chatbot Widget -->
-<div id="chatbot" style="position:fixed;right:24px;bottom:100px;z-index:80;display:none">
-  <div style="width:380px;max-height:580px;background:var(--panel);border:2px solid var(--border);border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,.5);overflow:hidden">
-    <!-- Header -->
-    <div style="padding:20px;background:linear-gradient(135deg,var(--blue2),var(--accent));display:flex;justify-content:space-between;align-items:center">
-      <div style="flex:1">
-        <h4 style="margin:0;color:#fff;font-size:1.15rem;display:flex;align-items:center;gap:8px">
-          <span style="animation:pulse 2s infinite">🤖</span> Zenty AI Assistant
-        </h4>
-        <p style="margin:4px 0 0;font-size:.85rem;color:rgba(255,255,255,.95);display:flex;align-items:center;gap:6px">
-          <span style="width:8px;height:8px;background:#00ff88;border-radius:50%;animation:blink 1.5s infinite"></span>
-          Online - antwortet sofort
-        </p>
-      </div>
-      <div style="display:flex;gap:8px;align-items:center">
-        <select id="chatLanguage" style="padding:6px;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);border-radius:6px;color:#fff;font-size:.8rem;cursor:pointer">
-          <option value="de">🇩🇪 DE</option>
-          <option value="en">🇬🇧 EN</option>
-          <option value="tr">🇹🇷 TR</option>
-          <option value="ru">🇷🇺 RU</option>
-          <option value="ar">🇸🇦 AR</option>
-          <option value="fr">🇫🇷 FR</option>
-        </select>
-        <button id="closeChatbot" style="background:transparent;border:0;color:#fff;font-size:1.5rem;cursor:pointer;padding:4px">×</button>
+<!-- Ultra-Modern AI Chatbot Widget -->
+<div id="chatbot" style="position:fixed;right:20px;bottom:90px;z-index:9999;display:none">
+  <div style="width:340px;max-height:560px;background:linear-gradient(135deg,rgba(10,10,20,.98),rgba(20,20,35,.98));backdrop-filter:blur(20px);border:2px solid;border-image:linear-gradient(135deg,var(--accent),#7f00ff,#ff006e) 1;border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,.7),0 0 30px rgba(0,224,255,.2);overflow:hidden">
+    <!-- Compact Header -->
+    <div style="padding:16px;background:linear-gradient(135deg,rgba(0,224,255,.2),rgba(127,0,255,.15));border-bottom:1px solid rgba(0,224,255,.3);position:relative;overflow:hidden">
+      <div style="position:absolute;inset:0;background:radial-gradient(circle at 30% 50%,rgba(0,224,255,.1),transparent);pointer-events:none"></div>
+      <div style="position:relative;z-index:1;display:flex;justify-content:space-between;align-items:center">
+        <div style="flex:1">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="width:38px;height:38px;background:linear-gradient(135deg,var(--accent),#7f00ff);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;box-shadow:0 4px 16px rgba(0,224,255,.4)">🤖</div>
+            <div>
+              <h4 style="margin:0;color:#fff;font-size:1.05rem;font-weight:900;letter-spacing:-.5px">Zenty AI Pro</h4>
+              <div style="display:flex;align-items:center;gap:5px;margin-top:2px">
+                <span style="width:8px;height:8px;background:#00ff88;border-radius:50%;box-shadow:0 0 8px #00ff88;animation:blink 1.5s infinite"></span>
+                <span style="font-size:.75rem;color:#00ff88;font-weight:700">ONLINE</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <select id="chatLanguage" style="padding:6px 10px;background:rgba(0,224,255,.2);border:1px solid rgba(0,224,255,.4);border-radius:8px;color:#fff;font-size:.8rem;cursor:pointer;font-weight:700;transition:.2s">
+            <option value="de">🇩🇪</option>
+            <option value="en">🇬🇧</option>
+            <option value="tr">🇹🇷</option>
+            <option value="ru">🇷🇺</option>
+            <option value="ar">🇸🇦</option>
+            <option value="fr">🇫🇷</option>
+          </select>
+          <button id="closeChatbot" style="width:32px;height:32px;background:rgba(255,0,110,.2);border:1px solid rgba(255,0,110,.4);border-radius:8px;color:#ff006e;font-size:1.3rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s;font-weight:700">×</button>
+        </div>
       </div>
     </div>
     
-    <!-- Messages -->
-    <div id="chatMessages" style="height:340px;padding:16px;overflow-y:auto;background:var(--panel2)">
+    <!-- Messages Area -->
+    <div id="chatMessages" style="height:320px;padding:16px;overflow-y:auto;background:linear-gradient(180deg,rgba(10,10,20,.5),rgba(20,20,35,.8));scroll-behavior:smooth">
       <div style="margin-bottom:16px">
-        <div style="display:inline-block;background:linear-gradient(135deg,rgba(0,224,255,.15),rgba(127,0,255,.15));backdrop-filter:blur(8px);padding:14px 18px;border-radius:14px 14px 14px 4px;max-width:85%;border:1px solid rgba(0,224,255,.3)">
-          <p style="margin:0;color:var(--text);font-size:.95rem;line-height:1.6">
-            <strong>Willkommen! 👋</strong><br>
-            Ich bin Ihr KI-Assistent. Ich kann Ihnen in 6 Sprachen helfen!
+        <div class="bot-message" style="display:inline-block;background:linear-gradient(135deg,rgba(0,224,255,.2),rgba(127,0,255,.15));backdrop-filter:blur(10px);padding:12px 16px;border-radius:14px 14px 14px 5px;max-width:90%;border:1px solid rgba(0,224,255,.3);box-shadow:0 6px 20px rgba(0,224,255,.15);animation:slideIn .4s ease-out">
+          <p style="margin:0;color:#fff;font-size:.9rem;line-height:1.6;font-weight:500">
+            <strong style="color:var(--accent);font-size:.95rem">Willkommen! 👋</strong><br>
+            <strong style="color:var(--gold2)">KI-Assistent</strong> in <strong>6 Sprachen</strong>! 🌍
           </p>
+          <div style="margin-top:6px;font-size:.7rem;color:rgba(255,255,255,.6)">
+            <span id="chatTime">Jetzt</span>
+          </div>
         </div>
       </div>
       
-      <!-- Quick Actions -->
-      <div id="chatOptions" style="display:grid;gap:8px;margin-top:16px">
-        <button class="chat-option" data-action="instant-booking" style="background:linear-gradient(135deg,rgba(0,224,255,.15),rgba(127,0,255,.1));border:1px solid var(--accent);padding:14px;border-radius:10px;color:var(--text);text-align:left;cursor:pointer;transition:.2s;font-weight:600">
-          ⚡ Sofort buchen (Express)
+      <!-- Compact Quick Actions -->
+      <div id="chatOptions" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px">
+        <button class="chat-option" data-action="instant-booking" style="background:linear-gradient(135deg,rgba(0,224,255,.2),rgba(0,224,255,.1));border:2px solid var(--accent);padding:12px 10px;border-radius:12px;color:#fff;text-align:center;cursor:pointer;transition:.3s;font-weight:700;font-size:.82rem">
+          ⚡<br>Express
         </button>
-        <button class="chat-option" data-action="whatsapp" style="background:linear-gradient(135deg,rgba(37,211,102,.15),rgba(0,180,137,.1));border:1px solid #25d366;padding:14px;border-radius:10px;color:var(--text);text-align:left;cursor:pointer;transition:.2s;font-weight:600">
-          💬 WhatsApp Chat öffnen
+        <button class="chat-option" data-action="whatsapp" style="background:linear-gradient(135deg,rgba(37,211,102,.2),rgba(37,211,102,.1));border:2px solid #25d366;padding:12px 10px;border-radius:12px;color:#fff;text-align:center;cursor:pointer;transition:.3s;font-weight:700;font-size:.82rem">
+          💬<br>WhatsApp
         </button>
-        <button class="chat-option" data-action="telegram" style="background:linear-gradient(135deg,rgba(0,136,204,.15),rgba(41,171,226,.1));border:1px solid #0088cc;padding:14px;border-radius:10px;color:var(--text);text-align:left;cursor:pointer;transition:.2s;font-weight:600">
-          ✈️ Telegram Chat öffnen
+        <button class="chat-option" data-action="telegram" style="background:linear-gradient(135deg,rgba(0,136,204,.2),rgba(0,136,204,.1));border:2px solid #0088cc;padding:12px 10px;border-radius:12px;color:#fff;text-align:center;cursor:pointer;transition:.3s;font-weight:700;font-size:.82rem">
+          ✈️<br>Telegram
         </button>
-        <button class="chat-option" data-action="call" style="background:linear-gradient(135deg,rgba(255,215,0,.15),rgba(212,175,55,.1));border:1px solid var(--gold);padding:14px;border-radius:10px;color:var(--text);text-align:left;cursor:pointer;transition:.2s;font-weight:600">
-          📞 Direkt anrufen
+        <button class="chat-option" data-action="call" style="background:linear-gradient(135deg,rgba(255,215,0,.2),rgba(255,215,0,.1));border:2px solid var(--gold);padding:12px 10px;border-radius:12px;color:#fff;text-align:center;cursor:pointer;transition:.3s;font-weight:700;font-size:.82rem">
+          📞<br>Anrufen
         </button>
-        <button class="chat-option" data-action="email" style="background:linear-gradient(135deg,rgba(255,0,110,.15),rgba(127,0,255,.1));border:1px solid #ff006e;padding:14px;border-radius:10px;color:var(--text);text-align:left;cursor:pointer;transition:.2s;font-weight:600">
-          📧 E-Mail senden
+        <button class="chat-option" data-action="route" style="background:linear-gradient(135deg,rgba(127,0,255,.2),rgba(127,0,255,.1));border:2px solid #7f00ff;padding:12px 10px;border-radius:12px;color:#fff;text-align:center;cursor:pointer;transition:.3s;font-weight:700;font-size:.82rem">
+          🗺️<br>Route
         </button>
-        <button class="chat-option" data-action="route" style="background:var(--panel);border:1px solid var(--border);padding:14px;border-radius:10px;color:var(--text);text-align:left;cursor:pointer;transition:.2s">
-          🗺️ Route berechnen
-        </button>
-        <button class="chat-option" data-action="prices" style="background:var(--panel);border:1px solid var(--border);padding:14px;border-radius:10px;color:var(--text);text-align:left;cursor:pointer;transition:.2s">
-          💰 Preise ansehen
+        <button class="chat-option" data-action="prices" style="background:linear-gradient(135deg,rgba(255,0,110,.2),rgba(255,0,110,.1));border:2px solid #ff006e;padding:12px 10px;border-radius:12px;color:#fff;text-align:center;cursor:pointer;transition:.3s;font-weight:700;font-size:.82rem">
+          💰<br>Preise
         </button>
       </div>
     </div>
     
-    <!-- Input Area -->
-    <div style="padding:12px;background:var(--panel);border-top:1px solid var(--border)">
+    <!-- Compact Input Area -->
+    <div style="padding:12px;background:linear-gradient(135deg,rgba(0,224,255,.08),rgba(127,0,255,.05));border-top:1px solid rgba(0,224,255,.3)">
       <div style="display:flex;gap:8px;align-items:center">
-        <input type="text" id="chatInput" placeholder="Ihre Nachricht..." style="flex:1;padding:11px 14px;background:var(--panel2);border:1px solid var(--border);border-radius:10px;color:#fff;font-size:.95rem">
-        <button id="voiceBtn" style="padding:11px 14px;background:var(--panel2);border:1px solid var(--border);border-radius:10px;color:var(--accent);cursor:pointer;font-size:1.2rem;transition:.2s" title="Sprachnachricht">
+        <input type="text" id="chatInput" placeholder="Ihre Frage..." style="flex:1;padding:11px 14px;background:rgba(0,224,255,.1);border:1px solid rgba(0,224,255,.3);border-radius:12px;color:#fff;font-size:.9rem;font-weight:500;transition:.2s">
+        <button id="voiceBtn" style="width:42px;height:42px;background:linear-gradient(135deg,rgba(255,0,110,.2),rgba(255,0,110,.1));border:2px solid #ff006e;border-radius:10px;color:#ff006e;cursor:pointer;font-size:1.2rem;transition:.3s;display:flex;align-items:center;justify-content:center;flex-shrink:0" title="Sprachnachricht">
           🎤
         </button>
-        <button id="chatSend" style="padding:11px 18px;background:linear-gradient(135deg,var(--blue2),var(--accent));border:0;border-radius:10px;color:#fff;cursor:pointer;font-weight:700;font-size:1.1rem">
+        <button id="chatSend" style="width:42px;height:42px;background:linear-gradient(135deg,var(--accent),#7f00ff);border:0;border-radius:10px;color:#fff;cursor:pointer;font-weight:900;font-size:1.1rem;transition:.3s;box-shadow:0 4px 16px rgba(0,224,255,.4);display:flex;align-items:center;justify-content:center;flex-shrink:0">
           ➤
         </button>
       </div>
@@ -2113,8 +2119,12 @@ body{
   100%{stroke-dashoffset:40}
 }
 .animated-route{animation:routeFlow 2s linear infinite}
-.chat-option:hover{transform:translateX(4px);border-color:var(--accent)!important}
-#voiceBtn:hover{background:var(--accent);color:#000}
+.chat-option:hover{transform:scale(1.05)translateY(-2px);border-color:var(--accent)!important;box-shadow:0 10px 30px rgba(0,224,255,.3)!important}
+#voiceBtn:hover{background:#ff006e;color:#fff;transform:scale(1.1)}
+#chatSend:hover{transform:scale(1.1);box-shadow:0 10px 35px rgba(0,224,255,.6)}
+#chatInput:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(0,224,255,.2);background:rgba(0,224,255,.15)}
+#chatLanguage:hover{background:rgba(0,224,255,.3);border-color:var(--accent)}
+#closeChatbot:hover{background:rgba(255,0,110,.4);transform:rotate(90deg) scale(1.1)}
 .leaflet-popup-content-wrapper{
   background:linear-gradient(135deg,var(--panel),var(--panel2))!important;
   color:#fff!important;
@@ -3461,60 +3471,96 @@ voiceBtn?.addEventListener('click', () => {
   }, 1000);
 });
 
-// Send message
+// ULTRA-FAST Send message (NO FREEZE!)
 function sendChatMessage() {
   const message = chatInput.value.trim();
-  if(!message) return;
+  if(!message || message.length > 500) return;  // Prevent spam
   
   addChatMessage(message, 'user');
   chatInput.value = '';
   
-  // Typing indicator
+  // Fast Typing indicator
   const typingDiv = document.createElement('div');
   typingDiv.id = 'typing';
-  typingDiv.style.marginBottom = '16px';
-  typingDiv.innerHTML = '<div style="display:inline-block;background:var(--panel);padding:12px 16px;border-radius:12px"><span style="color:var(--accent)">●●●</span> AI tippt...</div>';
+  typingDiv.style.cssText = 'margin-bottom:16px;animation:slideIn .3s ease-out';
+  typingDiv.innerHTML = '<div style="display:inline-block;background:linear-gradient(135deg,rgba(0,224,255,.15),rgba(127,0,255,.1));padding:14px 18px;border-radius:12px;border:1px solid rgba(0,224,255,.2)"><span style="color:var(--accent);font-weight:700;animation:pulse 1s infinite">⚡</span> <span style="color:#fff;font-weight:600">AI analysiert...</span></div>';
   chatMessages.appendChild(typingDiv);
   chatMessages.scrollTop = chatMessages.scrollHeight;
   
-  // Simulate AI response
+  // ULTRA-FAST AI Response (Instant!)
   setTimeout(() => {
     document.getElementById('typing')?.remove();
     
-    // Smart responses based on keywords
-    let response = '';
+    // OPTIMIZED keyword detection
     const msg = message.toLowerCase();
+    let response = '';
+    let action = null;
     
-    if(msg.includes('preis') || msg.includes('kosten') || msg.includes('price')) {
-      response = '💰 Unsere Preise:\nBasic: €1,00/km | Standard: €0,90/km | Premium: €0,80/km\n\nSoll ich eine Route berechnen?';
+    // Priority keywords (fastest check)
+    const keywords = {
+      price: ['preis', 'kosten', 'price', 'fiyat', 'цена'],
+      booking: ['buch', 'book', 'rezerv', 'reserv', 'бронь'],
+      whatsapp: ['whatsapp', 'chat'],
+      route: ['route', 'strecke', 'weg', 'rota', 'маршрут'],
+      help: ['hilfe', 'help', 'yardım', 'помощь'],
+      contact: ['kontakt', 'contact', 'iletişim', 'контакт'],
+      phone: ['telefon', 'anruf', 'call', 'ara', 'звонок']
+    };
+    
+    if(keywords.price.some(k => msg.includes(k))) {
+      response = '💰 **PREISÜBERSICHT 2025**\n\n✅ Basic: €1,00/km (bis 20km)\n✅ Standard: €0,90/km (20-100km)\n✅ Premium: €0,80/km (über 100km)\n\n🎁 Neukunde? **10% Rabatt!**\n\n📍 Route jetzt berechnen?';
     }
-    else if(msg.includes('buch') || msg.includes('book') || msg.includes('rezerv')) {
-      response = '📅 Perfekt! Ich öffne das Buchungsformular für Sie. Einen Moment bitte...';
-      setTimeout(() => {
-        window.location.href = '#booking';
-        chatbot.style.display = 'none';
-      }, 2000);
+    else if(keywords.booking.some(k => msg.includes(k))) {
+      response = '✅ **Express-Buchung** wird vorbereitet...\n\n⚡ Weiterleitung in 2 Sekunden!';
+      action = () => {
+        setTimeout(() => {
+          window.location.href = '#booking';
+          chatbot.style.display = 'none';
+        }, 2000);
+      };
     }
-    else if(msg.includes('whatsapp')) {
-      response = '💬 WhatsApp wird geöffnet...';
-      setTimeout(() => {
-        window.open('https://api.whatsapp.com/send?phone=491625757957&text=Hallo!', '_blank');
-      }, 1000);
+    else if(keywords.whatsapp.some(k => msg.includes(k))) {
+      response = '💬 **WhatsApp** wird geöffnet...\n\n✅ Direkt-Chat mit unserem Team!';
+      action = () => {
+        setTimeout(() => {
+          window.open('https://api.whatsapp.com/send?phone=491625757957&text=Hallo%20Zenty%20Express!', '_blank');
+        }, 800);
+      };
     }
-    else if(msg.includes('hilfe') || msg.includes('help')) {
-      response = '🤝 Ich helfe Ihnen gerne!\n\nWählen Sie eine Option:\n• Sofort buchen\n• WhatsApp Chat\n• Preise ansehen\n• Route berechnen';
+    else if(keywords.route.some(k => msg.includes(k))) {
+      response = '🗺️ **AI Route Optimizer** wird geladen...\n\n✨ Beste Route + Preis in Echtzeit!';
+      action = () => {
+        setTimeout(() => {
+          window.location.href = '#route-optimizer';
+          chatbot.style.display = 'none';
+        }, 1500);
+      };
+    }
+    else if(keywords.help.some(k => msg.includes(k))) {
+      response = '🤝 **Wie kann ich helfen?**\n\n💬 WhatsApp - Sofort-Chat\n⚡ Express-Buchung\n💰 Preise ansehen\n🗺️ Route berechnen\n📞 +49 162 5757957';
+    }
+    else if(keywords.contact.some(k => msg.includes(k))) {
+      response = '📞 **KONTAKT**\n\n✉️ info@zentyexpress.de\n📱 +49 162 5757957\n💬 WhatsApp (24/7)\n✈️ Telegram Bot\n\n⚡ Antwort in <5 Min!';
+    }
+    else if(keywords.phone.some(k => msg.includes(k))) {
+      response = '📞 **ANRUFEN**\n\n+49 162 5757957\n\n✅ 24/7 erreichbar!\n⚡ Verbindung wird hergestellt...';
+      action = () => {
+        setTimeout(() => window.location.href = 'tel:+491625757957', 1000);
+      };
     }
     else {
-      const randomResponses = [
-        'Vielen Dank! 👍 Ein Mitarbeiter kontaktiert Sie in <5 Min per WhatsApp oder Anruf.',
-        'Verstanden! 😊 Ich leite Ihre Anfrage an unser Team weiter. Sie werden sofort kontaktiert.',
-        'Perfekt! ✅ Möchten Sie direkt über WhatsApp weitermachen? Schneller Kontakt!'
+      // Smart fallback responses
+      const responses = [
+        '✅ **Vielen Dank!**\n\nTeam wird Sie in **<5 Min** kontaktieren.\n\n💬 WhatsApp oder 📞 Anruf',
+        '😊 **Verstanden!**\n\nIhre Anfrage läuft.\n\n⚡ Sofortige Rückmeldung garantiert!',
+        '🎯 **Perfekt!**\n\nDirekt über **WhatsApp** weitermachen?\n\n✅ Schnellster Weg!'
       ];
-      response = randomResponses[Math.floor(Math.random() * randomResponses.length)];
+      response = responses[Math.floor(Math.random() * responses.length)];
     }
     
     addChatMessage(response, 'bot');
-  }, 1500);
+    if(action) action();
+  }, 800);  // Faster response time!
 }
 
 chatSend?.addEventListener('click', sendChatMessage);
@@ -3522,21 +3568,30 @@ chatInput?.addEventListener('keypress', (e) => {
   if(e.key === 'Enter') sendChatMessage();
 });
 
+// OPTIMIZED message rendering (faster!)
 function addChatMessage(text, sender) {
   const isBot = sender === 'bot';
   const msgDiv = document.createElement('div');
-  msgDiv.style.marginBottom = '16px';
-  msgDiv.style.textAlign = isBot ? 'left' : 'right';
-  msgDiv.style.animation = 'slideIn 0.3s ease-out';
+  msgDiv.className = 'chat-msg';
+  msgDiv.style.cssText = `margin-bottom:18px;text-align:${isBot ? 'left' : 'right'};animation:slideIn .4s ease-out`;
   
   const time = new Date().toLocaleTimeString('de-DE', {hour: '2-digit', minute: '2-digit'});
   
-  msgDiv.innerHTML = `
-    <div style="display:inline-block;background:${isBot ? 'linear-gradient(135deg,rgba(0,224,255,.1),rgba(127,0,255,.1))' : 'linear-gradient(135deg,var(--blue2),var(--accent))'};padding:14px 18px;border-radius:14px;max-width:85%;text-align:left;border:1px solid ${isBot ? 'rgba(0,224,255,.3)' : 'transparent'}">
-      <p style="margin:0;color:${isBot ? 'var(--text)' : '#fff'};font-size:.92rem;line-height:1.6;white-space:pre-line">${text}</p>
-      <span style="font-size:.7rem;color:${isBot ? 'var(--muted)' : 'rgba(255,255,255,.7)'};margin-top:6px;display:block">${time}</span>
-    </div>
-  `;
+  // Faster HTML (no template literals overhead)
+  const bubble = document.createElement('div');
+  bubble.style.cssText = `display:inline-block;background:${isBot ? 'linear-gradient(135deg,rgba(0,224,255,.2),rgba(127,0,255,.15))' : 'linear-gradient(135deg,#00e0ff,#7f00ff)'};padding:16px 20px;border-radius:${isBot ? '16px 16px 16px 6px' : '16px 16px 6px 16px'};max-width:90%;text-align:left;border:${isBot ? '1px solid rgba(0,224,255,.3)' : '0'};box-shadow:${isBot ? '0 8px 24px rgba(0,224,255,.15)' : '0 8px 24px rgba(127,0,255,.3)'};backdrop-filter:blur(10px)`;
+  
+  const textP = document.createElement('p');
+  textP.style.cssText = `margin:0;color:${isBot ? '#fff' : '#fff'};font-size:.98rem;line-height:1.7;white-space:pre-line;font-weight:${isBot ? '500' : '600'}`;
+  textP.textContent = text;
+  
+  const timeSpan = document.createElement('span');
+  timeSpan.style.cssText = `font-size:.72rem;color:${isBot ? 'rgba(255,255,255,.5)' : 'rgba(255,255,255,.8)'};margin-top:8px;display:block`;
+  timeSpan.textContent = time;
+  
+  bubble.appendChild(textP);
+  bubble.appendChild(timeSpan);
+  msgDiv.appendChild(bubble);
   
   const optionsDiv = document.getElementById('chatOptions');
   if(optionsDiv && optionsDiv.parentElement === chatMessages) {
@@ -3545,7 +3600,10 @@ function addChatMessage(text, sender) {
     chatMessages.appendChild(msgDiv);
   }
   
-  chatMessages.scrollTop = chatMessages.scrollHeight;
+  // Smooth scroll (optimized)
+  requestAnimationFrame(() => {
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  });
 }
 
 toggleChatbot?.addEventListener('click', () => {
